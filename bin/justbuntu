@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source $JUSTBUNTU_PATH/bin/subcommands/header.sh
+source $JUSTBUNTU_PATH/bin/subcommands/menu.sh
