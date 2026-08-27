@@ -20,12 +20,6 @@ Run this command in your terminal:
 curl -s https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
 ```
 
-Or with `wget`:
-
-```bash
-wget -qO- https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
-```
-
 The script runs explicitly in Bash regardless of your default shell.
 
 ## Documentation
@@ -82,7 +76,7 @@ Options:
 - Update components
 - Uninstall components
 - Access documentation
-
+- 
 ## License
 
-Justbuntu is released under the [MIT License](https://opensource.org/licenses/MIT).
+Justbuntu is released under the [MIT License](LICENSE).
