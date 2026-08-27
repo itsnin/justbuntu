@@ -12,15 +12,11 @@ justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or n
 
 ### minimal not decorated
 
-the project installs tools and configures only what is necessary for a solid development baseline. shell customization is kept to the absolute minimum required for the project's own commands to work. the user gets a system that feels like ubuntu, not a themed fork. this principle was chosen over a heavily customized experience because the target audience is developers who want to add their own preferences on top of a stable base, not inherit someone else's aesthetic.
+the project installs tools and configures only what is necessary for a solid development baseline. shell customization is kept to the absolute minimum required for the project's own commands to work. the user gets a system that feels like stock ubuntu. this principle was chosen over a heavily customized experience because the target audience is developers who want to add their own preferences on top of a stable base, not inherit someone else's aesthetic.
 
 ### explicit and reversible
 
 every change the installer makes should be understandable by reading the corresponding script file. optional components are gated behind explicit user choice, not silently included. anything installed gets a corresponding uninstall path. this was chosen over opaque "magic" setup because developers need to trust and understand what runs on their system.
-
-### no forbidden references
-
-the project must never reference the original upstream project or its creators by name anywhere in code, comments, docs, or commit messages. this is a hard boundary with no exceptions. describe generically if a comparison is genuinely needed, or omit the reference entirely.
 
 ### one extension only
 

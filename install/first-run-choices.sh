@@ -6,3 +6,9 @@ export JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --
 AVAILABLE_DBS=("MySQL" "Redis" "PostgreSQL")
 SELECTED_DBS="MySQL,Redis"
 export JUSTBUNTU_FIRST_RUN_DBS=$(gum choose "${AVAILABLE_DBS[@]}" --no-limit --selected "$SELECTED_DBS" --height 5 --header "Select databases (runs in Docker)")
+
+# optional desktop apps only offered when running gnome
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Web Apps")
+  export JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 6 --header "Select optional desktop applications")
+fi
