@@ -7,7 +7,7 @@ Comment=Justbuntu Controls
 Exec=ghostty --class=Justbuntu --title=Justbuntu -e justbuntu
 Terminal=false
 Type=Application
-Icon=/home/$USER/.local/share/justbuntu/app-launchers/icons/Justbuntu.png
+Icon=$HOME/.local/share/justbuntu/app-launchers/icons/Justbuntu.png
 Categories=GTK;
 StartupNotify=false
 EOF

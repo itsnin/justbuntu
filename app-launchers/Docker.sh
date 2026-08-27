@@ -7,7 +7,7 @@ Comment=Manage Docker containers with LazyDocker
 Exec=ghostty --class=Docker --title=Docker -e lazydocker
 Terminal=false
 Type=Application
-Icon=/home/$USER/.local/share/justbuntu/app-launchers/icons/Docker.png
+Icon=$HOME/.local/share/justbuntu/app-launchers/icons/Docker.png
 Categories=GTK;
 StartupNotify=false
 EOF

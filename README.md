@@ -17,10 +17,10 @@ If GNOME is detected, desktop tools and customizations will be installed. On sys
 Run this command in your terminal:
 
 ```bash
-curl -s https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
+wget -qO- https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
 ```
 
-The script runs explicitly in Bash regardless of your default shell.
+The script runs explicitly in Bash regardless of your default shell. Bootstrap installs `curl` and `git` automatically.
 
 ## Documentation
 

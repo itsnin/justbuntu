@@ -16,7 +16,7 @@ echo "=> Justbuntu is for fresh Ubuntu 26.04 LTS or newer installations only!"
 echo -e "\nBegin installation (or abort with ctrl+c)..."
 
 sudo apt-get update >/dev/null
-sudo apt-get install -y git >/dev/null
+sudo apt-get install -y git curl >/dev/null
 
 echo "Cloning Justbuntu..."
 rm -rf ~/.local/share/justbuntu

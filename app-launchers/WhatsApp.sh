@@ -8,7 +8,7 @@ Comment=WhatsApp Messenger
 Exec=google-chrome --app="https://web.whatsapp.com" --name=WhatsApp --class=Whatsapp
 Terminal=false
 Type=Application
-Icon=/home/$USER/.local/share/justbuntu/app-launchers/icons/WhatsApp.png
+Icon=$HOME/.local/share/justbuntu/app-launchers/icons/WhatsApp.png
 Categories=GTK;
 MimeType=text/html;text/xml;application/xhtml_xml;
 StartupNotify=true

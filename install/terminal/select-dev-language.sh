@@ -1,7 +1,7 @@
 #!/bin/bash
 AVAILABLE_LANGUAGES=("Python" "Rust" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
 
-# Use pre-selected languages from first run if available, otherwise prompt
+# use pre-selected languages from first run if available, otherwise prompt
 if [ -n "${JUSTBUNTU_FIRST_RUN_LANGUAGES:-}" ]; then
   SELECTED="$JUSTBUNTU_FIRST_RUN_LANGUAGES"
 else
@@ -9,7 +9,7 @@ else
   SELECTED=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
 fi
 
-# Common development libraries (always installed for any language)
+# common development libraries (always installed for any language)
 sudo apt-get install -y \
   libssl-dev libffi-dev zlib1g-dev libbz2-dev liblzma-dev libreadline-dev libncurses-dev \
   ca-certificates gnupg

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Remove the ImageMagick icon
+# remove the ImageMagick icon
 sudo rm -rf /usr/share/applications/display-im6.q16.desktop
 sudo rm -rf /usr/share/applications/display-im7.q16.desktop
-# Create folders
+# create folders
 gsettings set org.gnome.desktop.app-folders folder-children "['Utilities', 'Sundry', 'YaST', 'Updates', 'Xtra', 'WebApps']"
 gsettings set org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/Updates/ name 'Install & Update'
 gsettings set org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/Updates/ apps "['org.gnome.Software.desktop', 'software-properties-drivers.desktop', 'software-properties-gtk.desktop', 'update-manager.desktop', 'firmware-updater_firmware-updater.desktop', 'snap-store_snap-store.desktop']"

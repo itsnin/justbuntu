@@ -1,5 +1,5 @@
 #!/bin/bash
-# Let user choose which browser to install
+# let user choose which browser to install
 BROWSER_CHOICES=("Chrome" "Brave" "None")
 DEFAULT_BROWSER="Chrome"
 CHOICE=$(gum choose "${BROWSER_CHOICES[@]}" --selected "$DEFAULT_BROWSER" --height 5 --header "Select a browser to install")

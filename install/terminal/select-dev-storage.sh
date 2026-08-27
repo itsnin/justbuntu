@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Install default databases
+# install default databases
 if [[ -v JUSTBUNTU_FIRST_RUN_DBS ]]; then
 	dbs=$JUSTBUNTU_FIRST_RUN_DBS
 else
