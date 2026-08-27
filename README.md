@@ -79,4 +79,4 @@ Options:
 - 
 ## License
 
-Justbuntu is released under the [MIT License](LICENSE).
+JustBuntu is released under the [MIT License](LICENSE).
