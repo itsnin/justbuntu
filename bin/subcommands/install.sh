@@ -1,5 +1,6 @@
 #!/bin/bash
 CHOICES=(
+  "Brave Browser     Privacy-focused web browser"
   "Dev Language      Install programming languages and tools"
   "Dev Database      Install development database in Docker"
   "JetBrains Toolbox Manage JetBrains IDEs"
@@ -9,7 +10,7 @@ CHOICES=(
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 16 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 18 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # Don't install anything
   echo ""
@@ -22,6 +23,7 @@ elif [[ "$CHOICE" == "> All"* ]]; then
 else
   INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
   case "$INSTALLER" in
+  "brave-browser") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-brave.sh" ;;
   "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/select-dev-language.sh" ;;
   "dev-database") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/select-dev-storage.sh" ;;
   "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-jetbrains-toolbox.sh" ;;

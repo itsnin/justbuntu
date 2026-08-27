@@ -8,6 +8,7 @@ source ~/.local/share/justbuntu/install/check-version.sh
 # Ask for development choices
 echo "Get ready to make a few choices..."
 source ~/.local/share/justbuntu/install/terminal/required/app-gum.sh >/dev/null
+source ~/.local/share/justbuntu/install/select-snapd.sh
 source ~/.local/share/justbuntu/install/first-run-choices.sh
 # Install terminal tools (always)
 echo "Installing terminal tools..."
