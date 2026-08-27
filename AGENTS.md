@@ -6,33 +6,62 @@ if you are an ai agent read the whole file do not skim
 
 ## what this project is
 
-[one or two short paragraphs describing what the project does who it is for and what "done right" looks like for it avoid marketing language state the actual constraint that defines success]
+justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or newer installation into a configured web development system. it is for developers who want a reproducible, opinionated starting point without spending hours on manual configuration. "done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no excessive customization, no theme switching, no surprising shell behavior. it targets ubuntu desktop with gnome when available, but degrades gracefully to terminal-only tools on systems without gnome.
 
 ## design philosophy
 
-document the identity of this project here what makes an implementation feel like this project and not a generic default state the concrete decision not just the vibe pixel sizes color values thresholds file formats performance budgets whatever actually encodes the choice and then state why that value was chosen and what it was chosen over a philosophy line that could describe any project is not a philosophy line
+### minimal not decorated
 
-### [principle name for example "minimal not decorated"]
+the project installs tools and configures only what is necessary for a solid development baseline. shell customization is kept to the absolute minimum required for the project's own commands to work. the user gets a system that feels like ubuntu, not a themed fork. this principle was chosen over a heavily customized experience because the target audience is developers who want to add their own preferences on top of a stable base, not inherit someone else's aesthetic.
 
-[the concrete rule that encodes the principle and the reasoning behind it]
+### explicit and reversible
+
+every change the installer makes should be understandable by reading the corresponding script file. optional components are gated behind explicit user choice, not silently included. anything installed gets a corresponding uninstall path. this was chosen over opaque "magic" setup because developers need to trust and understand what runs on their system.
+
+### no forbidden references
+
+the project must never reference the original upstream project or its creators by name anywhere in code, comments, docs, or commit messages. this is a hard boundary with no exceptions. describe generically if a comparison is genuinely needed, or omit the reference entirely.
+
+### one extension only
+
+on gnome, exactly one third-party shell extension is installed: spotlight. default ubuntu extensions may be disabled or configured, but no additional third-party extensions are added. this keeps the shell close to stock behavior and reduces maintenance surface.
 
 ## architecture
 
 ### file layout
 
 ```
-project/
-    [entry point]                short description of what it does
-    [core module or folder]/     one line per file or folder describing its responsibility
-    [config or schema]/          one line describing what it governs
-    [tests]/                     one line describing what it covers
+justbuntu/
+    bootstrap.sh                 curl entry point, clones repo and starts install
+    install.sh                   main orchestrator, sources version check and sub-installers
+    banner.sh                    ascii art banner displayed at start
+    version                      plain text version number
+    bin/
+        justbuntu                cli entry point for post-install management
+        subcommands/             individual menu actions (install, update, uninstall, etc.)
+    app-launchers/               desktop entry files for docker, justbuntu, whatsapp
+        icons/                   png icons for the above launchers
+    configs/
+        bashrc                   minimal bashrc that sources the shell defaults
+    install/
+        check-version.sh         os and architecture validation
+        first-run-choices.sh     interactive prompts for language and database selection
+        terminal.sh              runs all terminal/*.sh installers
+        desktop.sh               runs all desktop/*.sh installers (gnome only)
+        terminal/                core terminal tools: docker, git, fastfetch, etc.
+            required/            prerequisites needed before interactive prompts
+            select-dev-language.sh   selectable language installation (python, rust, node, etc.)
+            select-dev-storage.sh    selectable database installation via docker
+        desktop/                 core desktop apps: chrome, vscode, ghostty, etc.
+            optional/             user-choice apps: jetbrains toolbox, obs studio, spotify, web apps
+    shell-defaults/bash/         minimal shell configuration: path, aliases, functions, prompt
+    uninstall/                   uninstall scripts for every component that can be installed
+    skills/                      skill files for ai agents working on this project
 ```
-
-document the actual layout above one line per top level file or folder is usually enough only describe files a newcomer would not guess
 
 ### execution and module boundaries
 
-if the runtime enforces real boundaries between execution contexts for example a browser process and a worker a main thread and a background service a privileged and unprivileged context document them here name exactly what may and may not cross the boundary and state the actual consequence of violating it a build failure a runtime crash a review rejection not just that it is "not allowed" if no such boundary exists for this project delete this subsection rather than leaving it empty
+the installer runs as a series of sourced bash scripts. each script file is responsible for one component and one component only. the main `install.sh` wires things together and should never contain direct installation logic itself. `terminal.sh` and `desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. no script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
 
 ## code style
 
@@ -56,7 +85,7 @@ if the runtime enforces real boundaries between execution contexts for example a
 - one concept per file one file per concept
 - prefer pure functions with no side effects in utility files
 - every resource acquired during setup is released during teardown if you add a new resource you must add its cleanup in the corresponding teardown path
-- [state the project's language and build constraints here for example no typescript no build step or whatever actually governs this codebase]
+- this project is written in bash only no typescript no build step no compilation. all scripts must run with `set -e` and must be idempotent where practical
 
 ### anti ai-code smells
 
@@ -73,6 +102,7 @@ if the runtime enforces real boundaries between execution contexts for example a
 - do not add defensive null checks that mask bugs instead of handling them
 - do not add "just in case" code for situations that cannot occur
 - do not add comments that describe what a line does only describe why
+- do not add `sudo` to commands that do not require it and do not remove `sudo` from commands that genuinely need it
 
 ### review discipline
 
@@ -96,12 +126,16 @@ if the runtime enforces real boundaries between execution contexts for example a
 
 ### static analysis
 
-[name the actual linter type checker or static analyzer for this project and the exact command to run it]
+run `bash -n` on every modified `.sh` file to check for syntax errors.
 
 ### build and syntax check
 
-[state the actual command that proves the code parses compiles or builds cleanly before it is considered done]
+```bash
+find . -name "*.sh" -exec bash -n {} \;
+```
+
+this command must exit cleanly with no output before any change is considered done.
 
 ### manual testing
 
-[state the actual target environments browsers operating systems runtime or platform versions the project supports test the newest supported target first then at least one older one if applicable the project should behave identically across all supported targets]
+target environment: ubuntu 26.04 lts desktop x86_64 with gnome. the project should also be tested on a system without gnome to verify the graceful degradation path. at minimum, run the bootstrap script in a clean vm or container and confirm: the version check passes, interactive prompts appear, terminal tools install without error, and the `justbuntu` command is available in path after installation.
