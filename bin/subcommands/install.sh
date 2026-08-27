@@ -1,5 +1,6 @@
 #!/bin/bash
 CHOICES=(
+  "Dev Language      Install programming languages and tools"
   "Dev Database      Install development database in Docker"
   "JetBrains Toolbox Manage JetBrains IDEs"
   "OBS Studio        Record screencasts with inputs from display + webcam"
@@ -8,7 +9,7 @@ CHOICES=(
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 14 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 16 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # Don't install anything
   echo ""
@@ -21,6 +22,7 @@ elif [[ "$CHOICE" == "> All"* ]]; then
 else
   INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
   case "$INSTALLER" in
+  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/select-dev-language.sh" ;;
   "dev-database") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/select-dev-storage.sh" ;;
   "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-jetbrains-toolbox.sh" ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/select-web-apps.sh" ;;
