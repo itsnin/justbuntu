@@ -5,8 +5,10 @@ if [ ! -f /etc/os-release ]; then
   exit 1
 fi
 . /etc/os-release
-# check if running on Ubuntu 26.04 or higher
-if [ "$ID" != "ubuntu" ] || [ $(echo "$VERSION_ID >= 26.04" | bc) != 1 ]; then
+# check if running on ubuntu 26.04 or higher using pure bash (no external deps)
+VERSION_MAJOR=$(echo "$VERSION_ID" | cut -d. -f1)
+VERSION_MINOR=$(echo "$VERSION_ID" | cut -d. -f2)
+if [ "$ID" != "ubuntu" ] || [ "$VERSION_MAJOR" -lt 26 ]; then
   echo "$(tput setaf 1)Error: OS requirement not met"
   echo "You are currently running: $ID $VERSION_ID"
   echo "OS required: Ubuntu 26.04 LTS or newer"
@@ -14,12 +16,12 @@ if [ "$ID" != "ubuntu" ] || [ $(echo "$VERSION_ID >= 26.04" | bc) != 1 ]; then
   echo "Installation stopped."
   exit 1
 fi
-# check if running on x86
+# check if running on x86_64 only
 ARCH=$(uname -m)
-if [ "$ARCH" != "x86_64" ] && [ "$ARCH" != "i686" ]; then
+if [ "$ARCH" != "x86_64" ]; then
   echo "$(tput setaf 1)Error: Unsupported architecture detected"
   echo "Current architecture: $ARCH"
-  echo "This installation is only supported on x86 architectures (x86_64 or i686)."
+  echo "This installation is only supported on x86_64."
   echo "Installation stopped."
   exit 1
 fi

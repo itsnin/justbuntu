@@ -18,7 +18,7 @@ sudo apt-get install -y git wget curl >/dev/null
 echo "Cloning JustBuntu..."
 rm -rf ~/.local/share/justbuntu
 git clone https://github.com/itsnin/justbuntu.git ~/.local/share/justbuntu >/dev/null
-if [[ $JUSTBUNTU_REF != "main" ]]; then
+if [[ -n "${JUSTBUNTU_REF:-}" ]] && [[ $JUSTBUNTU_REF != "main" ]]; then
 	cd ~/.local/share/justbuntu
 	git fetch origin "${JUSTBUNTU_REF:-main}" && git checkout "${JUSTBUNTU_REF:-main}"
 	cd -
