@@ -1,0 +1,39 @@
+installer scripts:
+  - changed-files:
+      - any-glob-to-any-file:
+          - install.sh
+          - bootstrap.sh
+          - install/**
+terminal tools:
+  - changed-files:
+      - any-glob-to-any-file:
+          - install/terminal/**
+desktop tools:
+  - changed-files:
+      - any-glob-to-any-file:
+          - install/desktop/**
+app launchers:
+  - changed-files:
+      - any-glob-to-any-file:
+          - app-launchers/**
+shell configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - shell-defaults/**
+          - configs/**
+cli management:
+  - changed-files:
+      - any-glob-to-any-file:
+          - bin/**
+uninstall:
+  - changed-files:
+      - any-glob-to-any-file:
+          - uninstall/**
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+github config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
