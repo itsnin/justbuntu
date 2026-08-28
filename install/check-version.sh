@@ -10,7 +10,7 @@ if [ "$ID" != "ubuntu" ] || [ $(echo "$VERSION_ID >= 26.04" | bc) != 1 ]; then
   echo "$(tput setaf 1)Error: OS requirement not met"
   echo "You are currently running: $ID $VERSION_ID"
   echo "OS required: Ubuntu 26.04 LTS or newer"
-  echo "Justbuntu does not support versions below 26.04."
+  echo "JustBuntu does not support versions below 26.04."
   echo "Installation stopped."
   exit 1
 fi

@@ -1,6 +1,6 @@
-# Justbuntu
+# JustBuntu
 
-Turn a fresh Ubuntu installation into a configured web development system by running a single command. Justbuntu sets up your terminal, development tools, and desktop applications with sensible defaults.
+Turn a fresh Ubuntu installation into a configured web development system by running a single command. JustBuntu sets up your terminal, development tools, and desktop applications with sensible defaults.
 
 **Maintainer**: nin (Nahian I. Nafseen)
 
@@ -20,7 +20,13 @@ Run this command in your terminal:
 wget -qO- https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
 ```
 
-The script runs explicitly in Bash regardless of your default shell. Bootstrap installs `curl` and `git` automatically.
+Or with `curl` (installs curl first if needed):
+
+```bash
+sudo apt install -y curl && curl -s https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
+```
+
+The script runs explicitly in Bash regardless of your default shell. Bootstrap installs `git`, `wget`, and `curl` automatically.
 
 ## Documentation
 

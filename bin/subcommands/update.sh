@@ -1,6 +1,6 @@
 #!/bin/bash
 CHOICES=(
-	"Justbuntu        Update Justbuntu itself"
+	"JustBuntu        Update JustBuntu itself"
 	"LazyDocker    TUI for Docker"
 	"<< Back       "
 )

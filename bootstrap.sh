@@ -1,24 +1,21 @@
 #!/bin/bash
-
 set -e
-
 ascii_art='
-       __           __    __          __          
-  ____/ /_  _______/ /_  / /_  ____  / /___  __  __
- / __  / / / / ___/ __ \/ __ \/ __ \/ //_/ / / / /
-/ /_/ / /_/ (__  ) / / / /_/ / / / / ,< / /_/ /_/ / 
-\__,_/\__,_/____/_/ /_/\____/_/ /_/_/|_|\__/\__, /  
-                                           /____/   
+
+     ___           __    ____                    __           
+    |_  |_  _ ____/ /_  | __ )_  _  ____  __  __/ /___  __  __
+     | || | | |_  / __ \ |  _ \| | | |/_  / / / / / //_/ / / / /
+ /\__/ || |_| |/ / /_/ / | |_) | |_| | / /| |_| | / ,< / /_/ /_/ / 
+ \____/ \__,_/___/\____/  |____/ \__,_/___|\__,_/_/_/|_|\__/\__, /  
+                                                            /____/   
+
 '
-
 echo -e "$ascii_art"
-echo "=> Justbuntu is for fresh Ubuntu 26.04 LTS or newer installations only!"
+echo "=> JustBuntu is for fresh Ubuntu 26.04 LTS or newer installations only!"
 echo -e "\nBegin installation (or abort with ctrl+c)..."
-
 sudo apt-get update >/dev/null
-sudo apt-get install -y git curl >/dev/null
-
-echo "Cloning Justbuntu..."
+sudo apt-get install -y git wget curl >/dev/null
+echo "Cloning JustBuntu..."
 rm -rf ~/.local/share/justbuntu
 git clone https://github.com/itsnin/justbuntu.git ~/.local/share/justbuntu >/dev/null
 if [[ $JUSTBUNTU_REF != "main" ]]; then
@@ -26,6 +23,5 @@ if [[ $JUSTBUNTU_REF != "main" ]]; then
 	git fetch origin "${JUSTBUNTU_REF:-main}" && git checkout "${JUSTBUNTU_REF:-main}"
 	cd -
 fi
-
 echo "Installation starting..."
 source ~/.local/share/justbuntu/install.sh

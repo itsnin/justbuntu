@@ -2,7 +2,7 @@
 # exit immediately if a command exits with a non-zero status
 set -e
 # give people a chance to retry running the installation
-trap 'echo "Justbuntu installation failed! You can retry by running: source ~/.local/share/justbuntu/install.sh"' ERR
+trap 'echo "JustBuntu installation failed! You can retry by running: source ~/.local/share/justbuntu/install.sh"' ERR
 # check the distribution name and version and abort if incompatible
 source ~/.local/share/justbuntu/install/check-version.sh
 # ask for development choices
