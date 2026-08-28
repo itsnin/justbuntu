@@ -9,20 +9,19 @@ source ~/.local/share/justbuntu/install/check-version.sh
 echo "Get ready to make a few choices..."
 source ~/.local/share/justbuntu/install/terminal/required/app-gum.sh >/dev/null
 source ~/.local/share/justbuntu/install/select-snapd.sh
+source ~/.local/share/justbuntu/install/remove-kdump.sh
 source ~/.local/share/justbuntu/install/first-run-choices.sh
 # install terminal tools (always)
 echo "Installing terminal tools..."
 source ~/.local/share/justbuntu/install/terminal.sh
 # desktop software and tweaks will only be installed if we're running GNOME
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  # ensure computer doesn't go to sleep or lock while installing
-  gsettings set org.gnome.desktop.screensaver lock-enabled false
-  gsettings set org.gnome.desktop.session idle-delay 0
   echo "Installing desktop tools and tweaks..."
-  source ~/.local/share/justbuntu/install/desktop.sh
-  # revert to normal idle and lock settings
-  gsettings set org.gnome.desktop.screensaver lock-enabled true
-  gsettings set org.gnome.desktop.session idle-delay 300
+  # temporarily inhibit screen idle/lock using gnome-session-inhibit
+  # inhibitor is automatically released when the wrapped process exits
+  # this avoids permanently modifying user settings
+  gnome-session-inhibit --inhibit idle --reason "JustBuntu installation in progress" \
+    bash -c "source ~/.local/share/justbuntu/install/desktop.sh"
 else
   echo "GNOME not detected. Skipping desktop-specific tools and tweaks."
 fi

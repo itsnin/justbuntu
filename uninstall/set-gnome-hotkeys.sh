@@ -1,0 +1,27 @@
+#!/bin/bash
+# reset all modified keybindings to defaults
+gsettings reset org.gnome.desktop.wm.keybindings close
+gsettings reset org.gnome.desktop.wm.keybindings maximize
+gsettings reset org.gnome.desktop.wm.keybindings begin-resize
+gsettings reset org.gnome.settings-daemon.plugins.media-keys next
+gsettings reset org.gnome.desktop.wm.keybindings toggle-fullscreen
+gsettings reset org.gnome.mutter dynamic-workspaces
+gsettings reset org.gnome.desktop.wm.preferences num-workspaces
+gsettings reset org.gnome.shell.extensions.dash-to-dock hot-keys
+gsettings reset org.gnome.shell.keybindings switch-to-application-1
+gsettings reset org.gnome.shell.keybindings switch-to-application-2
+gsettings reset org.gnome.shell.keybindings switch-to-application-3
+gsettings reset org.gnome.shell.keybindings switch-to-application-4
+gsettings reset org.gnome.shell.keybindings switch-to-application-5
+gsettings reset org.gnome.shell.keybindings switch-to-application-6
+gsettings reset org.gnome.shell.keybindings switch-to-application-7
+gsettings reset org.gnome.shell.keybindings switch-to-application-8
+gsettings reset org.gnome.shell.keybindings switch-to-application-9
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-1
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-2
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-3
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-4
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-5
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-6
+gsettings reset org.gnome.settings-daemon.plugins.media-keys custom-keybindings
+gsettings reset org.gnome.desktop.wm.keybindings switch-input-source
