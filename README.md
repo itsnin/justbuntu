@@ -1,6 +1,6 @@
 # JustBuntu
 
-Single-command provisioning for Ubuntu web development systems.
+Single-command provisioning for Ubuntu development systems.
 
 [![License](https://img.shields.io/badge/License-MIT-00ADD8?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-26.04%2B-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com)
