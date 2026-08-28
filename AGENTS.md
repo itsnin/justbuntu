@@ -6,7 +6,7 @@ if you are an ai agent read the whole file do not skim
 
 ## what this project is
 
-justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or newer installation into a configured web development system. it is for developers who want a reproducible, opinionated starting point without spending hours on manual configuration. "done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no excessive customization, no theme switching, no surprising shell behavior. it targets ubuntu desktop with gnome when available, but degrades gracefully to terminal-only tools on systems without gnome.
+justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or newer installation into a configured development system. it is for developers who want a reproducible, opinionated starting point without spending hours on manual configuration. "done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no excessive customization, no theme switching, no surprising shell behavior. it targets ubuntu desktop with gnome when available, but degrades gracefully to terminal-only tools on systems without gnome.
 
 ## design philosophy
 

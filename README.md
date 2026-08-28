@@ -21,11 +21,11 @@ Or with curl:
 sudo apt install -y curl && curl -s https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
 ```
 
-The bootstrap script installs `git`, `wget`, and `curl` automatically, clones the repository, and begins installation. During the process, you will be presented with a small number of interactive choices: whether to remove snapd, which development tools to install, which databases to provision, which browser to use, and which optional desktop applications to include.
+The bootstrap script installs `git`, `wget`, and `curl` automatically, clones the repository, and begins installation. During the process, you will be presented with a small number of interactive choices: whether to remove snapd, which development tools to install, which databases to provision, and which optional desktop applications to include.
 
 ## The Project
 
-JustBuntu is a single-command provisioning system that transforms a fresh Ubuntu installation into a configured web development environment. It addresses the enduring problem that every developer faces when starting from a clean operating system: hours of repetitive configuration, package installation, and environment tuning that yield no productive value in themselves.
+JustBuntu is a single-command provisioning system that transforms a fresh Ubuntu installation into a configured development environment for all types of developers. It addresses the enduring problem that every developer faces when starting from a clean operating system: hours of repetitive configuration, package installation, and environment tuning that yield no productive value in themselves.
 
 Rather than offering a heavily themed or opinionated aesthetic layer, JustBuntu focuses on what matters for development work: reliable tool installation, sensible baseline configuration, and an architecture that respects the user's desire to customize their own system on top of a stable foundation. The project is intentionally minimal — it installs what is necessary and nothing more, keeping the shell and desktop experience close to stock Ubuntu.
 
@@ -49,13 +49,7 @@ The interface provides options to install additional development languages, data
 
 ## Contributing
 
-There are many ways to participate in this project:
-
-- [Submit bugs and feature requests](https://github.com/itsnin/justbuntu/issues)
-- Review [source code changes](https://github.com/itsnin/justbuntu/pulls)
-- Review the documentation and submit corrections or improvements
-
-Before contributing, please read [AGENTS.md](AGENTS.md), which describes the project's design philosophy, architecture, code style, and verification discipline. All contributions are expected to follow those guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to participate in the project.
 
 ## License
 

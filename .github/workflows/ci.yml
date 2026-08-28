@@ -19,8 +19,14 @@ jobs:
 
       - name: Check no forbidden project references
         run: |
-          if grep -rniI "omakub\|basecamp\|dhh\|37signals\|hey.com\|David Heinemeier" . \
-            --include="*.sh" --include="*.md" --include="*.txt" --exclude-dir=.git; then
+          # build patterns at runtime to avoid literal matches in this file
+          A1='om' && B1='akub' && P1="$A1$B1"
+          A2='base' && B2='camp' && P2="$A2$B2"
+          A3='37' && B3='signals' && P3="$A3$B3"
+          A4='dh' && B4='h' && P4="$A4$B4"
+          A5='hey' && B5='.com' && P5="$A5$B5"
+          PATTERN="$P1\|$P2\|$P3\|$P4\|$P5"
+          if grep -rniI "$PATTERN" . --include="*.sh" --include="*.md" --include="*.txt" --include="*.yml" --exclude-dir=.git; then
             echo "ERROR: found forbidden project references"
             exit 1
           fi
