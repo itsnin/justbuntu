@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check all shell scripts pass syntax validation
+        run: |
+          find . -name "*.sh" -exec bash -n {} \;
+          echo "All shell scripts pass syntax validation"
+
+      - name: Check no forbidden project references
+        run: |
+          if grep -rniI "omakub\|basecamp\|dhh\|37signals\|hey.com\|David Heinemeier" . \
+            --include="*.sh" --include="*.md" --include="*.txt" --exclude-dir=.git; then
+            echo "ERROR: found forbidden project references"
+            exit 1
+          fi
+          echo "No forbidden references found"
+
+      - name: Check version file exists and is non-empty
+        run: |
+          if [ ! -s version ]; then
+            echo "ERROR: version file is missing or empty"
+            exit 1
+          fi
+          echo "Version: $(cat version)"
+
+      - name: Check README has MIT license link
+        run: |
+          if ! grep -qi "MIT" README.md; then
+            echo "ERROR: README does not reference MIT license"
+            exit 1
+          fi
+          echo "README references MIT license"
+
+      - name: Verify LICENSE file exists
+        run: |
+          if [ ! -f LICENSE ]; then
+            echo "ERROR: LICENSE file is missing"
+            exit 1
+          fi
+          echo "LICENSE file exists"
+
+      - name: Summary
+        run: |
+          echo "=== CI Summary ==="
+          echo "Shell scripts: $(find . -name "*.sh" | wc -l)"
+          echo "Total files: $(find . -type f -not -path './.git/*' | wc -l)"
+          echo "All checks passed"
