@@ -10,7 +10,7 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
 else
 	INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
 	case "$INSTALLER" in
-	"justbuntu") INSTALLER_FILE="$JUSTBUNTU_PATH/bin/subcommands/migrate.sh" ;;
+	"justbuntu") INSTALLER_FILE="$JUSTBUNTU_PATH/bin/commands/migrate.sh" ;;
 	esac
 	source $INSTALLER_FILE && gum spin --spinner globe --title "Update completed!" -- sleep 3
 fi

@@ -13,7 +13,7 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
 elif [[ "$CHOICE" == "> All"* ]]; then
-  INSTALLER_FILE=$(gum file $JUSTBUNTU_PATH/install)
+  INSTALLER_FILE=$(gum file $JUSTBUNTU_PATH/provision)
   [[ -n "$INSTALLER_FILE" ]] &&
     gum confirm "Run installer?" &&
     source $INSTALLER_FILE &&
@@ -21,11 +21,11 @@ elif [[ "$CHOICE" == "> All"* ]]; then
 else
   INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
   case "$INSTALLER" in
-  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/select-dev-language.sh" ;;
-  "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-jetbrains-toolbox.sh" ;;
-  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-obs-studio.sh" ;;
-  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/app-spotify.sh" ;;
-  "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/install/desktop/optional/select-web-apps.sh" ;;
+  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/terminal/provision-dev-tooling.sh" ;;
+  "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-jetbrains-toolbox.sh" ;;
+  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-obs-studio.sh" ;;
+  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-spotify.sh" ;;
+  "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
   source $INSTALLER_FILE && gum spin --spinner globe --title "Install completed!" -- sleep 3
 fi

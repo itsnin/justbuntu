@@ -30,38 +30,71 @@ the baseline configuration serves developers first, but the system remains appro
 
 ### file layout
 
+the project is organized into distinct functional domains, each with a clear responsibility. directory and file names communicate intent precisely:
+
 ```
 justbuntu/
-    bootstrap.sh                 curl entry point, clones repo and starts install
-    install.sh                   main orchestrator, sources version check and sub-installers
-    banner.sh                    ascii art banner displayed at start
-    version                      plain text version number
+    bootstrap.sh                 entry point. clones repository and initiates provisioning
+    provision/orchestrate.sh     primary orchestrator. wires together core validation,
+                                 preference gathering, and domain-specific provisioners
+    banner.sh                    ascii art banner displayed at startup
+    version                      plain text version number, calendar-based
     bin/
         justbuntu                cli entry point for post-install management
-        subcommands/             individual menu actions (install, update, uninstall, etc.)
-    app-launchers/               desktop entry files for justbuntu, whatsapp
-        icons/                   png icons for the above launchers
-    configs/
-        bashrc                   minimal bashrc that sources the shell defaults
-    install/
-        check-version.sh         os and architecture validation
-        first-run-choices.sh     interactive prompts for language and database selection
-        terminal.sh              runs all terminal/*.sh installers
-        desktop.sh               runs all desktop/*.sh installers (gnome only)
-        terminal/                core terminal tools: git, fastfetch, etc.
-            required/            prerequisites needed before interactive prompts
-            select-dev-language.sh   selectable language installation (python, rust, node, etc.)
-            select-dev-language.sh   selectable language installation (python, rust, node, etc.)
-        desktop/                 core desktop apps: chrome, vscode, ghostty, etc.
-            optional/             user-choice apps: jetbrains toolbox, obs studio, spotify, web apps
-    shell-defaults/bash/         minimal shell configuration: path, aliases, functions, prompt
-    uninstall/                   uninstall scripts for every component that can be installed
-    skills/                      skill files for ai agents working on this project
+        commands/                individual menu actions: install, update, revert, etc.
+    lib/
+        configuration/           static configuration files (bashrc)
+        desktop-entries/         .desktop file generators for application launchers
+            icons/               png icons referenced by desktop entries
+        shell-profile/           shell environment: path, aliases, functions, prompt
+            bash/
+    provision/
+        orchestrate-terminal.sh  runs all terminal provisioning modules
+        orchestrate-desktop.sh   runs all desktop provisioning modules (gnome only)
+        core/                    foundational setup: system validation, snapd, kdump, preferences
+            validate-system.sh        os and architecture validation
+            configure-snapd.sh         snapd retention or removal choice
+            purge-kdump.sh             kdump-tools removal to free reserved memory
+            gather-preferences.sh      interactive tool and application selection
+        terminal/                terminal environment provisioning
+            prerequisites/            dependencies required before interactive prompts
+                provision-gum.sh      gum tui library installation
+            configure-git.sh          git identity and behavior
+            configure-shell-profile.sh shell profile deployment
+            provision-cli-utilities.sh fastfetch, htop, wget, curl, micro
+            provision-dev-tooling.sh   selectable language and tool installation
+            provision-github-cli.sh    github command-line interface
+            provision-system-libraries.sh common development libraries
+        desktop/                 desktop environment provisioning
+            configure-app-grid.sh          application folder organization
+            configure-browsers.sh          browser selection and installation
+            configure-default-terminal.sh  ghostty as default terminal emulator
+            configure-desktop-preferences.sh window behavior, fonts, calendar
+            configure-dock.sh              dash favorite-apps configuration
+            configure-keybindings.sh       keyboard shortcut customization
+            configure-shell-extensions.sh  spotlight extension deployment
+            extensions/                     user-choice desktop applications
+                provision-jetbrains-toolbox.sh
+                provision-obs-studio.sh
+                provision-spotify.sh
+                provision-web-apps.sh
+            provision-extensions.sh        extension selection orchestrator
+            provision-ghostty.sh            gpu-accelerated terminal emulator
+            provision-gnome-boxes.sh        virtual machine manager
+            provision-gnome-sushi.sh        file preview capability
+            provision-gnome-tweaks.sh       desktop customization interface
+            provision-localsend.sh          cross-platform file transfer
+            provision-obsidian.sh           knowledge base application
+            provision-vlc.sh                media player
+            provision-vscode.sh             code editor
+            register-desktop-entries.sh     desktop entry registration
+    revert/                      revert scripts for every provisioned component
+    skills/                      skill definitions for ai agents
 ```
 
 ### execution and module boundaries
 
-the installer runs as a series of sourced bash scripts. each script file is responsible for one component and one component only. the main `install.sh` wires things together and should never contain direct installation logic itself. `terminal.sh` and `desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. no script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
+the installer runs as a series of sourced bash scripts. each script file is responsible for one component and one component only. the primary `provision/orchestrate.sh` wires things together and should never contain direct installation logic itself. `orchestrate-terminal.sh` and `orchestrate-desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. no script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
 
 ## code style
 

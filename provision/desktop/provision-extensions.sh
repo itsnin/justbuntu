@@ -7,14 +7,14 @@ else
   selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 6 --header "Select optional desktop applications")
 fi
 if [[ "$selected" == *"JetBrains Toolbox"* ]]; then
-  source $JUSTBUNTU_PATH/install/desktop/optional/app-jetbrains-toolbox.sh
+  source $JUSTBUNTU_PATH/provision/desktop/extensions/provision-jetbrains-toolbox.sh
 fi
 if [[ "$selected" == *"OBS Studio"* ]]; then
-  source $JUSTBUNTU_PATH/install/desktop/optional/app-obs-studio.sh
+  source $JUSTBUNTU_PATH/provision/desktop/extensions/provision-obs-studio.sh
 fi
 if [[ "$selected" == *"Spotify"* ]]; then
-  source $JUSTBUNTU_PATH/install/desktop/optional/app-spotify.sh
+  source $JUSTBUNTU_PATH/provision/desktop/extensions/provision-spotify.sh
 fi
 if [[ "$selected" == *"Web Apps"* ]]; then
-  source $JUSTBUNTU_PATH/install/desktop/optional/select-web-apps.sh
+  source $JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh
 fi
