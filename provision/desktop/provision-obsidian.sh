@@ -1,7 +1,5 @@
 #!/bin/bash
 # obsidian is a multi-platform note taking application. see https://obsidian.md
-cd /tmp
-
 # find the latest release that actually has a .deb asset
 # some releases are mobile-only and only ship an apk
 RELEASES=$(curl -s "https://api.github.com/repos/obsidianmd/obsidian-releases/releases?per_page=10")
@@ -20,11 +18,16 @@ sys.exit(1)
 if [ -z "$DEB_URL" ]; then
   echo "warning: could not find a .deb release for obsidian"
   echo "skipping obsidian installation"
-  cd -
   return 0
 fi
 
-wget -O obsidian.deb "$DEB_URL"
-sudo apt install -y ./obsidian.deb
-rm obsidian.deb
-cd -
+# run download and install in a subshell to avoid changing parent working directory
+(
+  cd /tmp
+  if wget -q -O obsidian.deb "$DEB_URL"; then
+    sudo apt install -y ./obsidian.deb || echo "obsidian install failed (continuing)"
+    rm -f obsidian.deb
+  else
+    echo "obsidian download failed (continuing)"
+  fi
+)

@@ -4,11 +4,12 @@ CHOICES=(
   "JetBrains Toolbox Manage JetBrains IDEs"
   "OBS Studio        Record screencasts with inputs from display + webcam"
   "Spotify           Stream music"
+  "Slack             Team communication and collaboration"
   "Web Apps          Install web apps with their own icon and shell"
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 16 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 18 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
@@ -25,6 +26,7 @@ else
   "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-jetbrains-toolbox.sh" ;;
   "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-obs-studio.sh" ;;
   "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-spotify.sh" ;;
+  "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-slack.sh" ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
   source $INSTALLER_FILE && gum spin --spinner globe --title "Install completed!" -- sleep 3

@@ -17,7 +17,7 @@ Briefly describe what this PR changes and why.
 - [ ] No references to forbidden project names anywhere
 - [ ] No `sudo` added to commands that do not require it
 - [ ] No `sudo` removed from commands that genuinely need it
-- [ ] Newly installed components have corresponding uninstall scripts
+- [ ] Newly provisioned components have corresponding revert scripts
 - [ ] Tested on Ubuntu 26.04 LTS (or equivalent)
 
 ## Testing

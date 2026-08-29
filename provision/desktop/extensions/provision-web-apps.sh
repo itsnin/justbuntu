@@ -20,8 +20,8 @@ fi
 
 echo "using $BROWSER for web apps"
 
-WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Contacts" "Tailscale")
-SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 6 --header "Select web apps to install (uses $BROWSER)")
+WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Contacts" "Tailscale" "Facebook" "Messenger" "Instagram" "Reddit")
+SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
 
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
   return 0
@@ -67,4 +67,16 @@ if [[ "$SELECTED_WEB_APPS" == *"Google Contacts"* ]]; then
 fi
 if [[ "$SELECTED_WEB_APPS" == *"Tailscale"* ]]; then
   install_webapp "Tailscale" "https://login.tailscale.com/admin" "https://tailscale.com/favicon.ico"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Facebook"* ]]; then
+  install_webapp "Facebook" "https://www.facebook.com" "https://www.facebook.com/favicon.ico"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Messenger"* ]]; then
+  install_webapp "Messenger" "https://www.messenger.com" "https://www.messenger.com/favicon.ico"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Instagram"* ]]; then
+  install_webapp "Instagram" "https://www.instagram.com" "https://www.instagram.com/favicon.ico"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Reddit"* ]]; then
+  install_webapp "Reddit" "https://www.reddit.com" "https://www.reddit.com/favicon.ico"
 fi

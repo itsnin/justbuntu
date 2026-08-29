@@ -1,6 +1,4 @@
 #!/bin/bash
-cd /tmp
-
 # find the latest release with a linux x86-64 .deb asset
 # asset naming has varied between releases so check multiple
 DEB_URL=$(curl -s "https://api.github.com/repos/localsend/localsend/releases?per_page=10" | python3 -c "
@@ -20,11 +18,16 @@ sys.exit(1)
 if [ -z "$DEB_URL" ]; then
   echo "warning: could not find a localsend .deb release"
   echo "skipping localsend installation"
-  cd -
   return 0
 fi
 
-wget -O localsend.deb "$DEB_URL"
-sudo apt install -y ./localsend.deb
-rm localsend.deb
-cd -
+# run download and install in a subshell to avoid changing parent working directory
+(
+  cd /tmp
+  if wget -q -O localsend.deb "$DEB_URL"; then
+    sudo apt install -y ./localsend.deb || echo "localsend install failed (continuing)"
+    rm -f localsend.deb
+  else
+    echo "localsend download failed (continuing)"
+  fi
+)

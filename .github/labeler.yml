@@ -1,34 +1,43 @@
-installer scripts:
+provisioning:
   - changed-files:
       - any-glob-to-any-file:
-          - install.sh
+          - provision/orchestrate.sh
+          - provision/orchestrate-terminal.sh
+          - provision/orchestrate-desktop.sh
           - bootstrap.sh
-          - install/**
+core:
+  - changed-files:
+      - any-glob-to-any-file:
+          - provision/core/**
 terminal tools:
   - changed-files:
       - any-glob-to-any-file:
-          - install/terminal/**
+          - provision/terminal/**
 desktop tools:
   - changed-files:
       - any-glob-to-any-file:
-          - install/desktop/**
-app launchers:
+          - provision/desktop/**
+extensions:
   - changed-files:
       - any-glob-to-any-file:
-          - app-launchers/**
+          - provision/desktop/extensions/**
+desktop entries:
+  - changed-files:
+      - any-glob-to-any-file:
+          - lib/desktop-entries/**
 shell configuration:
   - changed-files:
       - any-glob-to-any-file:
-          - shell-defaults/**
-          - configs/**
+          - lib/shell-profile/**
+          - lib/configuration/**
 cli management:
   - changed-files:
       - any-glob-to-any-file:
           - bin/**
-uninstall:
+revert:
   - changed-files:
       - any-glob-to-any-file:
-          - uninstall/**
+          - revert/**
 documentation:
   - changed-files:
       - any-glob-to-any-file:

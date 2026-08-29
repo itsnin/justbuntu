@@ -8,4 +8,4 @@ if [ ! -f /etc/apt/sources.list.d/spotify.list ]; then
 fi
 
 sudo apt update
-sudo apt install -y spotify-client
+sudo apt install -y spotify-client || echo "spotify install failed (continuing)"
