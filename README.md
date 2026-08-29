@@ -1,6 +1,6 @@
 # JustBuntu
 
-Single-command provisioning for Ubuntu development systems.
+Single-command provisioning for Ubuntu — the desktop experience Ubuntu should have shipped with.
 
 [![License](https://img.shields.io/badge/License-MIT-00ADD8?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-26.04%2B-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)](https://ubuntu.com)
@@ -25,17 +25,20 @@ The bootstrap script installs `git`, `wget`, and `curl` automatically, clones th
 
 ## The Project
 
-JustBuntu is a single-command provisioning system that transforms a fresh Ubuntu installation into a configured development environment for all types of developers. It addresses the enduring problem that every developer faces when starting from a clean operating system: hours of repetitive configuration, package installation, and environment tuning that yield no productive value in themselves.
+JustBuntu is what Ubuntu should have been all along — an operating system that respects your attention and gets out of your way. It takes a deliberate stance: hold opinions where they reduce friction, step back where they would impose them. The result is a system that arrives configured but not constrained; opinionated in its defaults, yet generous in its reach.
 
-Rather than offering a heavily themed or opinionated aesthetic layer, JustBuntu focuses on what matters for development work: reliable tool installation, sensible baseline configuration, and an architecture that respects the user's desire to customize their own system on top of a stable foundation. The project is intentionally minimal — it installs what is necessary and nothing more, keeping the shell and desktop experience close to stock Ubuntu.
+At its core, JustBuntu eliminates the hours of repetitive configuration that greet every user of a fresh operating system. It installs the tools people actually need, sets sensible baselines, and then fades into the background. No themes. No distractions. No aesthetic layer demanding your attention. Just a system ready for whatever you intend to do with it.
 
-When GNOME is detected, JustBuntu installs desktop applications and a carefully curated set of shell customizations. On systems without GNOME, it degrades gracefully to terminal and development tools only.
+While crafted with developers as the primary audience, JustBuntu avoids narrow specialization. The tools and conventions it establishes serve anyone who wants a clean, capable desktop — writers, designers, students, and tinkerers all find a foundation they can build on.
+
+When GNOME is detected, JustBuntu installs desktop applications and a carefully curated set of shell customizations. On systems without GNOME, it degrades gracefully to terminal and core tools only.
 
 ## Design Principles
 
-- **Minimal, not decorated.** Shell customization is kept to the absolute minimum required for the project's own commands to function. The user inherits a system that feels like Ubuntu, not a derivative distribution.
+- **Unobtrusive by design.** The desktop recedes. Shell customization is kept to the absolute minimum required for the project's own commands to function. What remains is unmistakably Ubuntu, refined rather than replaced.
 - **Explicit and reversible.** Every change the installer makes is understandable by reading the corresponding script file. Optional components are gated behind explicit user choice rather than silently included. Everything installed has a corresponding uninstall path.
 - **One extension only.** On GNOME, exactly one third-party shell extension is installed: Spotlight. Default Ubuntu extensions may be disabled or configured, but no additional third-party extensions are added.
+- **Inclusive defaults.** The baseline configuration serves developers first, but the system remains approachable and useful for non-developers. Opinions are held lightly; utility is held strongly.
 
 ## Post-Installation Usage
 

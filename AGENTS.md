@@ -6,21 +6,25 @@ if you are an ai agent read the whole file do not skim
 
 ## what this project is
 
-justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or newer installation into a configured development system. it is for developers who want a reproducible, opinionated starting point without spending hours on manual configuration. "done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no excessive customization, no theme switching, no surprising shell behavior. it targets ubuntu desktop with gnome when available, but degrades gracefully to terminal-only tools on systems without gnome.
+justbuntu is a one-command setup script that turns a fresh ubuntu 26.04 lts or newer installation into what ubuntu should have been all along. it is opinionated where opinions reduce friction, and restrained where opinions would impose themselves. the result is a system that arrives configured but not constrained. while crafted with developers as the primary audience, it avoids narrow specialization and remains approachable for anyone who wants a clean, capable desktop. "done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no themes, no distractions, no aesthetic layer demanding attention. it targets ubuntu desktop with gnome when available, but degrades gracefully to terminal-only tools on systems without gnome.
 
 ## design philosophy
 
-### minimal not decorated
+### unobtrusive by design
 
-the project installs tools and configures only what is necessary for a solid development baseline. shell customization is kept to the absolute minimum required for the project's own commands to work. the user gets a system that feels like stock ubuntu. this principle was chosen over a heavily customized experience because the target audience is developers who want to add their own preferences on top of a stable base, not inherit someone else's aesthetic.
+the project installs tools and configures only what is necessary for a solid baseline. shell customization is kept to the absolute minimum required for the project's own commands to work. the user gets a system that feels like stock ubuntu, refined rather than replaced. this principle was chosen over a heavily customized experience because the target audience wants a desktop that recedes, not one that announces itself.
 
 ### explicit and reversible
 
-every change the installer makes should be understandable by reading the corresponding script file. optional components are gated behind explicit user choice, not silently included. anything installed gets a corresponding uninstall path. this was chosen over opaque "magic" setup because developers need to trust and understand what runs on their system.
+every change the installer makes should be understandable by reading the corresponding script file. optional components are gated behind explicit user choice, not silently included. anything installed gets a corresponding uninstall path. this was chosen over opaque "magic" setup because users need to trust and understand what runs on their system.
 
 ### one extension only
 
 on gnome, exactly one third-party shell extension is installed: spotlight. default ubuntu extensions may be disabled or configured, but no additional third-party extensions are added. this keeps the shell close to stock behavior and reduces maintenance surface.
+
+### inclusive defaults
+
+the baseline configuration serves developers first, but the system remains approachable and useful for non-developers. opinions are held lightly; utility is held strongly.
 
 ## architecture
 
@@ -35,7 +39,7 @@ justbuntu/
     bin/
         justbuntu                cli entry point for post-install management
         subcommands/             individual menu actions (install, update, uninstall, etc.)
-    app-launchers/               desktop entry files for docker, justbuntu, whatsapp
+    app-launchers/               desktop entry files for justbuntu, whatsapp
         icons/                   png icons for the above launchers
     configs/
         bashrc                   minimal bashrc that sources the shell defaults
@@ -44,10 +48,10 @@ justbuntu/
         first-run-choices.sh     interactive prompts for language and database selection
         terminal.sh              runs all terminal/*.sh installers
         desktop.sh               runs all desktop/*.sh installers (gnome only)
-        terminal/                core terminal tools: docker, git, fastfetch, etc.
+        terminal/                core terminal tools: git, fastfetch, etc.
             required/            prerequisites needed before interactive prompts
             select-dev-language.sh   selectable language installation (python, rust, node, etc.)
-            select-dev-storage.sh    selectable database installation via docker
+            select-dev-language.sh   selectable language installation (python, rust, node, etc.)
         desktop/                 core desktop apps: chrome, vscode, ghostty, etc.
             optional/             user-choice apps: jetbrains toolbox, obs studio, spotify, web apps
     shell-defaults/bash/         minimal shell configuration: path, aliases, functions, prompt

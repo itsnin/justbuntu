@@ -20,13 +20,14 @@ if [[ "$SELECTED_BROWSERS" != *"Chrome"* ]]; then
 fi
 
 if [[ "$SELECTED_BROWSERS" == *"Chrome"* ]]; then
-  # install google chrome
-  cd /tmp
-  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  sudo apt install -y ./google-chrome-stable_current_amd64.deb
-  rm google-chrome-stable_current_amd64.deb
+  # install google chrome via direct .deb
+  # apt-get install resolves chrome's deps, and the .deb postinst
+  # also adds google's apt repo so future apt upgrade pulls chrome updates
+  echo "==> installing google chrome (direct .deb)"
+  wget -q -O /tmp/google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  sudo apt-get install -y /tmp/google-chrome-stable.deb || echo "chrome install failed (continuing)"
+  rm -f /tmp/google-chrome-stable.deb
   xdg-settings set default-web-browser google-chrome.desktop
-  cd -
 fi
 
 if [[ "$SELECTED_BROWSERS" == *"Brave Origin"* ]]; then

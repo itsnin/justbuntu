@@ -1,12 +1,9 @@
 #!/bin/bash
-if [ ! -f /etc/apt/keyrings/packages.microsoft.gpg ] || [ ! -f /usr/share/keyrings/microsoft.gpg ]; then
-  [ -f /etc/apt/keyrings/packages.microsoft.gpg ] && sudo rm /etc/apt/keyrings/packages.microsoft.gpg
-  cd /tmp
-  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
-  sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-  echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list >/dev/null
-  rm -f packages.microsoft.gpg
-  cd -
-fi
-sudo apt update
-sudo apt install -y code
+# install vs code via direct .deb
+# the debconf line below is required or the .deb postinst prompts
+# whether to add microsoft's apt repo, which hangs an unattended script
+echo "==> installing vs code (direct .deb)"
+echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
+wget -q -O /tmp/vscode-stable.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+sudo apt-get install -y /tmp/vscode-stable.deb || echo "vs code install failed (continuing)"
+rm -f /tmp/vscode-stable.deb
