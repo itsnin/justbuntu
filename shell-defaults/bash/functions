@@ -1,3 +1,18 @@
+# detect available chromium-based browser
+_find_browser() {
+  if command -v google-chrome-stable >/dev/null 2>&1; then
+    echo "google-chrome-stable"
+  elif command -v brave >/dev/null 2>&1; then
+    echo "brave"
+  elif command -v brave-browser >/dev/null 2>&1; then
+    echo "brave-browser"
+  elif command -v chromium >/dev/null 2>&1; then
+    echo "chromium"
+  else
+    echo ""
+  fi
+}
+
 # Functions for web app management
 web2app() {
   if [ "$#" -ne 3 ]; then
@@ -7,6 +22,11 @@ web2app() {
   local APP_NAME="$1"
   local APP_URL="$2"
   local ICON_URL="$3"
+  local BROWSER="$(_find_browser)"
+  if [ -z "$BROWSER" ]; then
+    echo "Error: No Chromium-based browser found. Install Chrome or Brave first."
+    return 1
+  fi
   local ICON_DIR="$HOME/.local/share/applications/icons"
   local DESKTOP_FILE="$HOME/.local/share/applications/${APP_NAME}.desktop"
   local ICON_PATH="${ICON_DIR}/${APP_NAME}.png"
@@ -20,7 +40,7 @@ web2app() {
 Version=1.0
 Name=$APP_NAME
 Comment=$APP_NAME
-Exec=google-chrome --app="$APP_URL" --name="$APP_NAME" --class="$APP_NAME" --window-size=800,600
+Exec=$BROWSER --app="$APP_URL" --name="$APP_NAME" --class="$APP_NAME" --window-size=800,600
 Terminal=false
 Type=Application
 Icon=$ICON_PATH

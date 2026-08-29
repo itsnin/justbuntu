@@ -3,8 +3,8 @@
 if [[ -v JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS"
 else
-  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify")
-  selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 5 --header "Select optional desktop applications")
+  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Web Apps")
+  selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 6 --header "Select optional desktop applications")
 fi
 if [[ "$selected" == *"JetBrains Toolbox"* ]]; then
   source $JUSTBUNTU_PATH/install/desktop/optional/app-jetbrains-toolbox.sh
@@ -14,4 +14,7 @@ if [[ "$selected" == *"OBS Studio"* ]]; then
 fi
 if [[ "$selected" == *"Spotify"* ]]; then
   source $JUSTBUNTU_PATH/install/desktop/optional/app-spotify.sh
+fi
+if [[ "$selected" == *"Web Apps"* ]]; then
+  source $JUSTBUNTU_PATH/install/desktop/optional/select-web-apps.sh
 fi
