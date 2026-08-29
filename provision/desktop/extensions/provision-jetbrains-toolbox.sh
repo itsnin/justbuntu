@@ -4,7 +4,7 @@
 (
   TMP_DIR=$(mktemp -d)
   cd "$TMP_DIR"
-  if curl -fsSL "https://data.services.jetbrains.com/products/download?code=TBA&platform=linux" -o jetbrains-toolbox.tar.gz; then
+  if curl -fsSL "https://download.jetbrains.com/toolbox/jetbrains-toolbox-3.7.2.87231.tar.gz" -o jetbrains-toolbox.tar.gz; then
     # extract and install
     tar -xzf jetbrains-toolbox.tar.gz
     TOOLBOX_DIR=$(find . -maxdepth 1 -type d -name "jetbrains-toolbox-*" | head -1)
