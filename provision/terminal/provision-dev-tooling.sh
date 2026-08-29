@@ -1,5 +1,5 @@
 #!/bin/bash
-AVAILABLE_LANGUAGES=("Python" "Rust" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
+AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
 
 # use pre-selected languages from first run if available, otherwise prompt
 if [ -n "${JUSTBUNTU_FIRST_RUN_LANGUAGES:-}" ]; then
@@ -34,6 +34,10 @@ if [[ "$SELECTED" == *"Rust"* ]]; then
   fi
 fi
 
+if [[ "$SELECTED" == *"Go"* ]]; then
+  echo "==> Installing Go..."
+  sudo apt-get install -y golang
+fi
 if [[ "$SELECTED" == *"Node.js"* ]]; then
   echo "==> Installing nvm and Node.js..."
   NVM_INSTALL_CMD='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash && \. "$HOME/.nvm/nvm.sh" && nvm install 24'
