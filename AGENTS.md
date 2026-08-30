@@ -77,8 +77,13 @@ justbuntu/
                 provision-jetbrains-toolbox.sh
                 provision-obs-studio.sh
                 provision-spotify.sh
+                provision-slack.sh
+                provision-discord.sh
                 provision-web-apps.sh
             provision-extensions.sh        extension selection orchestrator
+            provision-ai-assistants.sh     ai assistant selection orchestrator
+            ai/                           ai assistant installers
+                provision-claude-desktop.sh
             provision-ghostty.sh            gpu-accelerated terminal emulator
             provision-gnome-boxes.sh        virtual machine manager
             provision-gnome-sushi.sh        file preview capability

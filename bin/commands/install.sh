@@ -6,11 +6,12 @@ CHOICES=(
   "Spotify           Stream music"
   "Slack             Team communication and collaboration"
   "Discord           Voice, video and text chat"
+  "Claude Desktop    AI assistant with chat, code, and cowork"
   "Web Apps          Install web apps with their own icon and shell"
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 20 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 22 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
@@ -29,6 +30,7 @@ else
   "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-spotify.sh" ;;
   "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-slack.sh" ;;
   "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-discord.sh" ;;
+  "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh" ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
   source $INSTALLER_FILE && gum spin --spinner globe --title "Install completed!" -- sleep 3

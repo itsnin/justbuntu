@@ -14,12 +14,6 @@ Requires Ubuntu 26.04 LTS or newer on x86_64.
 wget -qO- https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
 ```
 
-With curl:
-
-```bash
-sudo apt install -y curl && curl -s https://raw.githubusercontent.com/itsnin/justbuntu/main/bootstrap.sh | bash
-```
-
 ---
 
 ## After Install
@@ -43,6 +37,7 @@ justbuntu
 | `provision/terminal/` | Terminal tools, languages, shell configuration |
 | `provision/desktop/` | Desktop applications, browser, extensions |
 | `provision/desktop/extensions/` | Optional applications (Spotify, Slack, Discord, etc.) |
+| `provision/desktop/ai/` | AI assistants (Claude Desktop, etc.) |
 | `revert/` | Revert scripts — one per provisioned component |
 | `share/` | Shared assets: desktop entry generators and icons |
 | `shell/` | Shell environment: PATH, aliases, functions |
