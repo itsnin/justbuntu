@@ -1,5 +1,0 @@
-source ~/.local/share/justbuntu/lib/shell-profile/bash/shell
-source ~/.local/share/justbuntu/lib/shell-profile/bash/aliases
-source ~/.local/share/justbuntu/lib/shell-profile/bash/functions
-source ~/.local/share/justbuntu/lib/shell-profile/bash/prompt
-source ~/.local/share/justbuntu/lib/shell-profile/bash/init

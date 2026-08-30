@@ -43,11 +43,11 @@ justbuntu/
         justbuntu                cli entry point for post-install management
         commands/                individual menu actions: install, update, revert, etc.
     lib/
-        configuration/           static configuration files (bashrc)
-        desktop-entries/         .desktop file generators for application launchers
-            icons/               png icons referenced by desktop entries
-        shell-profile/           shell environment: path, aliases, functions, prompt
-            bash/
+    config/                     static configuration files (bashrc)
+    share/                      shared assets: .desktop entry generators and icons
+        icons/                  png icons referenced by desktop entries
+    shell/                      shell environment: path, aliases, functions, prompt
+        bash/
     provision/
         orchestrate-terminal.sh  runs all terminal provisioning modules
         orchestrate-desktop.sh   runs all desktop provisioning modules (gnome only)
@@ -61,7 +61,7 @@ justbuntu/
                 provision-gum.sh      gum tui library installation
             configure-git.sh          git identity and behavior
             configure-shell-profile.sh shell profile deployment
-            provision-cli-utilities.sh fastfetch, htop, wget, curl, micro
+            provision-cli-utilities.sh fastfetch, btop, wget, curl, micro
             provision-dev-tooling.sh   selectable language and tool installation
             provision-github-cli.sh    github command-line interface
             provision-system-libraries.sh common development libraries

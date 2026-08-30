@@ -32,6 +32,24 @@ justbuntu
 
 ---
 
+## Project Structure
+
+| Directory | Purpose |
+|-----------|---------|
+| `bin/` | CLI entry points and subcommands |
+| `config/` | Static configuration files |
+| `provision/` | System provisioning logic |
+| `provision/core/` | Foundation: validation, snapd choice, preferences |
+| `provision/terminal/` | Terminal tools, languages, shell configuration |
+| `provision/desktop/` | Desktop applications, browser, extensions |
+| `provision/desktop/extensions/` | Optional applications (Spotify, Slack, Discord, etc.) |
+| `revert/` | Revert scripts — one per provisioned component |
+| `share/` | Shared assets: desktop entry generators and icons |
+| `shell/` | Shell environment: PATH, aliases, functions |
+| `skills/` | Agent skill definitions |
+
+---
+
 ## Documentation
 
 Please help improve JustBuntu's documentation at the [docs site repository](https://github.com/itsnin/justbuntu).

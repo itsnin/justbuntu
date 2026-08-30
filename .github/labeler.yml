@@ -21,15 +21,15 @@ extensions:
   - changed-files:
       - any-glob-to-any-file:
           - provision/desktop/extensions/**
-desktop entries:
+shared assets:
   - changed-files:
       - any-glob-to-any-file:
-          - lib/desktop-entries/**
+          - share/**
 shell configuration:
   - changed-files:
       - any-glob-to-any-file:
-          - lib/shell-profile/**
-          - lib/configuration/**
+          - shell/**
+          - config/**
 cli management:
   - changed-files:
       - any-glob-to-any-file:

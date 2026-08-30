@@ -21,7 +21,7 @@ Comment=WhatsApp Messenger
 Exec=$BROWSER --app="https://web.whatsapp.com" --name=WhatsApp --class=Whatsapp
 Terminal=false
 Type=Application
-Icon=$HOME/.local/share/justbuntu/lib/desktop-entries/icons/WhatsApp.png
+Icon=$HOME/.local/share/justbuntu/share/icons/WhatsApp.png
 Categories=GTK;
 MimeType=text/html;text/xml;application/xhtml_xml;
 StartupNotify=true
