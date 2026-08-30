@@ -89,7 +89,22 @@ justbuntu/
             provision-vscode.sh             code editor
             register-desktop-entries.sh     desktop entry registration
     revert/                      revert scripts for every provisioned component
-    skills/                      skill definitions for ai agents
+    skills/                      skill definitions for ai agents and code standards
+        scripting-style-guide/        naming, formatting, aesthetics, structure
+        strict-mode-error-handling/   set -euo pipefail, trap, error patterns
+        defensive-programming/        input validation, dry-run, idempotency, mktemp
+        security-anti-patterns/       eval avoidance, command injection, quoting
+        variables-and-quoting/        variable scope, expansion, quoting rules
+        functions-and-modularity/     function design, return codes, sourcing
+        conditionals-control-flow/    [[ vs [, case, loops, subshell pitfalls
+        arrays-argument-parsing/      array usage, getopts, safe argument passing
+        portability-compatibility/    shebang choices, POSIX vs bash, macOS vs Linux
+        logging-observability/        log levels, structured logging, verbosity
+        testing-and-linting/          shellcheck, bats, syntax check, CI
+        filesystem-operations/        mktemp, atomic writes, locking, glob safety
+        process-management/           background jobs, signals, trap, wait
+        command-execution-patterns/   command substitution, pipes, xargs, cd safety
+        code-review-checklist/        mandatory review checklist for all changes
 ```
 
 ### execution and module boundaries

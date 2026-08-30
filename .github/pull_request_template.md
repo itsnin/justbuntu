@@ -10,14 +10,19 @@ Briefly describe what this PR changes and why.
 - [ ] Documentation update
 - [ ] Code style cleanup
 
-## Checklist
+## Review Checklist
+
+Reviewer must verify against `skills/code-review-checklist/SKILL.md`. Minimum requirements:
 
 - [ ] All shell scripts pass `bash -n` syntax check
+- [ ] ShellCheck passes (or warnings are justified)
 - [ ] Comments are lowercase with no punctuation (unless meaning requires it)
 - [ ] No references to forbidden project names anywhere
 - [ ] No `sudo` added to commands that do not require it
 - [ ] No `sudo` removed from commands that genuinely need it
 - [ ] Newly provisioned components have corresponding revert scripts
+- [ ] Downloads and `cd` operations are failure-protected
+- [ ] `gum confirm` is never standalone (always in `if` or `&&` chain)
 - [ ] Tested on Ubuntu 26.04 LTS (or equivalent)
 
 ## Testing
