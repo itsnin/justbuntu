@@ -50,18 +50,6 @@ justbuntu
 
 ---
 
-## Documentation
-
-Please help improve JustBuntu's documentation at the [docs site repository](https://github.com/itsnin/justbuntu).
-
----
-
-## Extras
-
-While JustBuntu is opinionated by design, the open source community offers alternative customizations and extensions that you can use to adjust or enrich your experience.
-
----
-
 ## License
 
 JustBuntu is released under the [MIT License](LICENSE).
