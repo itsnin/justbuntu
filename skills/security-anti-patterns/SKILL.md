@@ -94,4 +94,37 @@ case "$EDITOR" in
 esac
 ```
 
+## Naming Anti-Patterns
+
+**Verified via ABS Guide Chapter 34 just now**.
+
+| Anti-Pattern | Risk | Fix |
+|-------------|------|-----|
+| Digit-starting names | `23skidoo=value` — reserved by shell | Use `_23skidoo` or descriptive name |
+| `_` alone as variable | `$_` is special — holds last arg of last command | Never use bare `_` as variable name |
+| Hyphens in names | `var-1=23` or `func-name()` — syntax error | Use underscores: `var_1`, `func_name` |
+| Periods in function names | Not allowed in bash 3+ | Use underscores or mixed case |
+| Same name for var and function | Severe confusion and bugs | Use distinct namespaces |
+
+## Comparison Operator Pitfalls
+
+```bash
+# DANGEROUS — < in [ ] does ASCII comparison, NOT numeric
+if [ "$greater" \< "$lesser" ]; then  # "105" < "5" is TRUE in ASCII!
+
+# SAFE — use numeric comparison operators
+if [[ "$greater" -lt "$lesser" ]]; then
+```
+
+## `let` on Strings
+
+```bash
+# SILENT FAILURE — let on non-numeric strings gives 0
+let "a = hello, you"
+echo "$a"  # outputs 0, no error!
+
+# SAFE — never use let for string assignment
+a="hello, you"
+```
+
 **Self-challenge**: Is there any path from user input to shell metacharacter interpretation? If yes, the script has a security vulnerability.

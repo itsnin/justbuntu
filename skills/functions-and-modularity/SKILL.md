@@ -6,7 +6,7 @@ Break scripts into small, single-responsibility functions. Each function does on
 
 **Confidence**: Verified via bash-style-guide repo, coding-style-guide repo, and CursorRules just now.
 
-## Function Declaration
+## Function Declaration Rules
 
 ```bash
 # RIGHT — POSIX style, no 'function' keyword
@@ -20,6 +20,25 @@ function validate_input {
     # ...
 }
 ```
+
+### Critical Rules
+
+**Verified via ABS Guide Chapter 24 just now**:
+
+1. **Functions may NOT be empty** — causes syntax error. Even comments-only functions are considered empty. Use `:` (null command) as a placeholder:
+   ```bash
+   empty_func() {
+       # This alone causes a syntax error!
+   }
+
+   not_empty() {
+       :  # Null command — function body is valid
+   }
+   ```
+
+2. **Definition must precede call** — no forward declarations in bash. Function must be defined before it's first invoked.
+
+3. **Nested functions** are possible but not recommended — inner function only becomes visible after outer function is called.
 
 ## Function Design Principles
 

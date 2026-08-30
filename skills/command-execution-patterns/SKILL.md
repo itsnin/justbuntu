@@ -116,4 +116,34 @@ cd -
 # Parent shell cwd is unchanged
 ```
 
+## Process Substitution
+
+**Verified via ABS Guide Chapter 23 just now**. Feed output of multiple commands into another command.
+
+```bash
+# Template: <(command_list) or >(command_list)
+# NO SPACE between < or > and (
+
+# Compare outputs of two commands
+diff <(sort file1.txt) <(sort file2.txt)
+
+# Count lines from a filtered source
+wc -l <(grep "error" /var/log/syslog)
+
+# Process substitution avoids subshell variable loss
+# DANGEROUS — pipeline creates subshell, last_line never propagates
+last_line=""
+your_command | while read -r line; do
+    last_line="$line"
+done
+# $last_line is still "" here!
+
+# SAFE — process substitution keeps everything in one shell
+last_line=""
+while read -r line; do
+    last_line="$line"
+done < <(your_command)
+# $last_line is correctly set
+```
+
 **Self-challenge**: If this command fails, does the script continue in a broken state? Under `set -e`, it will abort — but only if the failure is not masked by being in a conditional or `||` chain.

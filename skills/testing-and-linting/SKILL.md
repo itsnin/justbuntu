@@ -36,7 +36,7 @@ find . -name "*.sh" -exec shellcheck {} +
 | SC2181 | Check exit code directly | `if cmd; then` instead of `cmd; if [[ $? -eq 0 ]]` |
 | SC2207 | Array from `$(...)` splits on IFS | Use `mapfile -t` or `while read` loop |
 
-## Syntax Checking
+## Syntax Checking and Debugging
 
 ```bash
 # Quick syntax check — catches parse errors
@@ -44,6 +44,41 @@ bash -n script.sh
 
 # In CI: check all scripts
 find . -name "*.sh" -exec bash -n {} \;
+```
+
+### Debugging Modes
+
+**Verified via ABS Guide Chapter 32 just now**.
+
+```bash
+# Verbose mode: print each command BEFORE expansion
+bash -v script.sh
+
+# Xtrace mode: print each command AFTER expansion (most useful for debugging)
+bash -x script.sh
+
+# Enable from shebang
+#!/bin/bash -x
+
+# Toggle within a script
+set -x    # start tracing
+# ... code to debug ...
+set +x    # stop tracing
+```
+
+**Critical insight**: Error messages may reference the line where the interpreter DISCOVERS the error, not where the actual bug is. For example, a missing `done` keyword may be reported at the last line of the file.
+
+### Conditional Debug Echo Pattern
+
+```bash
+# Echo only when DEBUG is set
+debecho() {
+    if [[ -n "${DEBUG:-}" ]]; then
+        echo "[DEBUG] $*" >&2
+    fi
+}
+
+DEBUG=1 ./script.sh
 ```
 
 ## Unit Testing with Bats

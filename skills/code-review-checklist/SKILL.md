@@ -15,6 +15,9 @@ Every bash script change must pass this review. Use this checklist before mergin
 - [ ] **No `sudo` added** to commands that don't genuinely need root
 - [ ] **No `sudo` removed** from commands that genuinely need root
 - [ ] **No path traversal** — user-supplied paths validated against allowlist or canonicalized
+- [ ] **No dangerous naming** — no digit-starting variable names, no hyphens in names, no bare `_` variable
+- [ ] **No empty functions** — use `:` null command if placeholder needed
+- [ ] **`<` in `[ ]`** — never does numeric comparison; use `-lt` or `[[ ]]` instead
 
 ## ⚠️ Error Handling and Robustness
 
