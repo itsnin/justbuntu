@@ -7,7 +7,7 @@ CHOICES=(
 CHOICE=$(gum choose "${CHOICES[@]}" --height 8 --header "Revert provisioned components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   clear
-  source $JUSTBUNTU_PATH/bin/justbuntu
+  source "$JUSTBUNTU_PATH"/bin/justbuntu
   exit 0
 fi
 if [[ "$CHOICE" == "Reset All Components"* ]]; then
@@ -24,4 +24,4 @@ else
   fi
 fi
 clear
-source $JUSTBUNTU_PATH/bin/justbuntu
+source "$JUSTBUNTU_PATH"/bin/justbuntu

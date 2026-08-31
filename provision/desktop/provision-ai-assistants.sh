@@ -7,5 +7,5 @@ else
   selected=$(gum choose "${AI_OPTIONS[@]}" --no-limit --height 6 --header "Select AI assistants (optional)")
 fi
 if [[ "$selected" == *"Claude Desktop"* ]]; then
-  source $JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh
+  source "$JUSTBUNTU_PATH"/provision/desktop/ai/provision-claude-desktop.sh
 fi

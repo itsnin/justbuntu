@@ -15,4 +15,4 @@ else
 	source $INSTALLER_FILE && gum spin --spinner globe --title "Update completed!" -- sleep 3
 fi
 clear
-source $JUSTBUNTU_PATH/bin/justbuntu
+source "$JUSTBUNTU_PATH"/bin/justbuntu

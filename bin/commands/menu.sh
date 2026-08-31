@@ -6,4 +6,4 @@ else
 	SUB=$1
 fi
 
-[ -n "$SUB" ] && [ "$SUB" != "quit" ] && source $JUSTBUNTU_PATH/bin/commands/$SUB.sh
+[ -n "$SUB" ] && [ "$SUB" != "quit" ] && source "$JUSTBUNTU_PATH"/bin/commands/$SUB.sh

@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0
+sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0 || echo "shell extension deps install failed (continuing)"
 pipx install gnome-extensions-cli --system-site-packages
 # turn off default Ubuntu extensions
 gnome-extensions disable tiling-assistant@ubuntu.com 2>/dev/null || true
