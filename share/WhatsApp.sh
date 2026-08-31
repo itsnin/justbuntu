@@ -6,6 +6,8 @@ elif command -v brave >/dev/null 2>&1; then
   BROWSER="brave"
 elif command -v brave-browser >/dev/null 2>&1; then
   BROWSER="brave-browser"
+elif command -v brave-origin >/dev/null 2>&1; then
+  BROWSER="brave-origin"
 elif command -v chromium >/dev/null 2>&1; then
   BROWSER="chromium"
 else

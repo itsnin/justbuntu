@@ -93,7 +93,10 @@ justbuntu/
             provision-vlc.sh                media player
             provision-vscode.sh             code editor
             register-desktop-entries.sh     desktop entry registration
-    revert/                      revert scripts for every provisioned component
+    revert/                      revert scripts for every provisioned component.
+                                 important: revert scripts never touch justbuntu core files.
+                                 the cli, desktop icon, shell config, and ~/.local/share/justbuntu/
+                                 are permanent once installed. users can re-provision at any time.
     skills/                      skill definitions for ai agents and code standards
         scripting-style-guide/        naming, formatting, aesthetics, structure
         strict-mode-error-handling/   set -euo pipefail, trap, error patterns
