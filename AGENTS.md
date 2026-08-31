@@ -97,6 +97,8 @@ justbuntu/
                                  important: revert scripts never touch justbuntu core files.
                                  the cli, desktop icon, shell config, and ~/.local/share/justbuntu/
                                  are permanent once installed. users can re-provision at any time.
+                                 revert-all-components.sh runs all revert scripts (full reset option).
+                                 uninstall menu offers: reset all components, or select individual items.
     skills/                      skill definitions for ai agents and code standards
         scripting-style-guide/        naming, formatting, aesthetics, structure
         strict-mode-error-handling/   set -euo pipefail, trap, error patterns
