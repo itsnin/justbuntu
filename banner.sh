@@ -1,28 +1,26 @@
 #!/bin/bash
 ascii_art='
-
-     ___           __    ____                    __           
-    |_  |_  _ ____/ /_  | __ )_  _  ____  __  __/ /___  __  __
-     | || | | |_  / __ \ |  _ \| | | |/_  / / / / / //_/ / / / /
- /\__/ || |_| |/ / /_/ / | |_) | |_| | / /| |_| | / ,< / /_/ /_/ / 
- \____/ \__,_/___/\____/  |____/ \__,_/___|\__,_/_/_/|_|\__/\__, /  
-                                                            /____/   
-
+       _               _    ____            _       
+      | |_   _   ___  | |_ | __ ) _   _  _ __ | |_ _   _
+      | || | | |/ __| | __||  _ \| | | || '"'"'__|| __| | | |
+      | || |_| |\__ \ | |_ | |_) | |_| || |   | |_| |_| |
+      |_| \__,_||___/  \__||____/ \__,_||_|    \__|\__,_|
 '
-# define the color gradient (shades of cyan and blue)
+# green gradient shades. green holds special significance as the
+# primary symbolic color in islam, associated with paradise in the quran.
 colors=(
-	'\033[38;5;81m' # cyan
-	'\033[38;5;75m' # light blue
-	'\033[38;5;69m' # sky blue
-	'\033[38;5;63m' # dodger blue
-	'\033[38;5;57m' # deep sky blue
-	'\033[38;5;51m' # cornflower blue
-	'\033[38;5;45m' # royal blue
+	'\033[38;5;46m'  # bright green
+	'\033[38;5;82m'  # green
+	'\033[38;5;76m'  # sea green
+	'\033[38;5;70m'  # dark sea green
+	'\033[38;5;64m'  # dark green
 )
-# split the ASCII art into lines
+# split the ascii art into lines
 IFS=$'\n' read -rd '' -a lines <<<"$ascii_art"
-# print each line with the corresponding color
+# print each line with the corresponding color from the gradient
 for i in "${!lines[@]}"; do
 	color_index=$((i % ${#colors[@]}))
 	echo -e "${colors[color_index]}${lines[i]}"
 done
+# reset terminal color
+echo -ne '\033[0m'
