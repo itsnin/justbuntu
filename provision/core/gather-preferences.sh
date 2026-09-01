@@ -24,9 +24,9 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     export JUSTBUNTU_FIRST_RUN_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select specific web apps to install")
   fi
 
-  # ai assistants — separate category, optional
-  AVAILABLE_AI=("Claude Desktop")
-  export JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS=$(gum choose "${AVAILABLE_AI[@]}" --no-limit --height 6 --header "Select AI assistants (optional)")
+  # ai tools — separate category, optional. all require post-install authentication.
+  AVAILABLE_AI=("Claude Desktop" "Claude Code CLI" "OpenCode CLI" "Antigravity CLI (Google)" "Codex CLI (OpenAI)")
+  export JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS=$(gum choose "${AVAILABLE_AI[@]}" --no-limit --height 8 --header "Select AI tools (optional, all require account login after install)")
 
   # gnome extensions — requires accepting some confirmations during install
   if gum confirm "Install GNOME extensions? (requires accepting some confirmations during setup)"; then

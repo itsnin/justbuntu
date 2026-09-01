@@ -28,25 +28,27 @@ gext install caffeine@patapon.info || echo "caffeine extension install failed (c
 # this is the standard method that allows gsettings to configure extensions.
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 SCHEMAS_DIR="/usr/share/glib-2.0/schemas"
-# Space Bar schemas
-if [ -f "$EXTENSIONS_DIR/space-bar@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml" ]; then
-  sudo cp "$EXTENSIONS_DIR/space-bar@luchrioh/schemas/org.gnome.shell.extensions.space-bar.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
-else
-  # space-bar may ship multiple schema files
-  for schema in "$EXTENSIONS_DIR/space-bar@luchrioh"/schemas/*.gschema.xml; do
-    [ -f "$schema" ] && sudo cp "$schema" "$SCHEMAS_DIR/" 2>/dev/null || true
-  done
-fi
-# Just Perfection schema
+# copy all Space Bar schemas (ships 4 separate files: appearance, behavior, shortcuts, state)
+for schema in "$EXTENSIONS_DIR/space-bar@luchrioh"/schemas/*.gschema.xml; do
+  [ -f "$schema" ] && sudo cp "$schema" "$SCHEMAS_DIR/" 2>/dev/null || true
+done
+# copy Just Perfection schema
 [ -f "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" ] && \
   sudo cp "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
 # compile all schemas
 sudo glib-compile-schemas "$SCHEMAS_DIR/" 2>/dev/null || true
 # configure Space Bar extension preferences
-# Toggle overview = OFF, Switch to workspace = ON, Move to workspace = ON
+# Toggle overview = OFF (behavior schema)
+gsettings set org.gnome.shell.extensions.space-bar.behavior toggle-overview false 2>/dev/null || true
+# Switch to workspace shortcuts = ON (shortcuts schema)
 gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts true 2>/dev/null || true
+# Move to workspace with current window = ON (shortcuts schema)
 gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true 2>/dev/null || true
-gsettings set org.gnome.shell.extensions.space-bar.shortcuts open-menu "@as []" 2>/dev/null || true
+# resolve keybinding conflict: Space Bar's activate-1-key..activate-10-key use Super+1..Super+0
+# which conflict with our custom switch-to-workspace-N bindings. clear the native ones.
+for i in 1 2 3 4 5 6 7 8 9; do
+  gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" "@as []" 2>/dev/null || true
+done
 # configure Just Perfection extension preferences
 # Dash (Visibility tab) = OFF
 gsettings set org.gnome.shell.extensions.just-perfection dash false 2>/dev/null || true

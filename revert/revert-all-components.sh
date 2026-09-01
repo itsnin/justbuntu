@@ -10,12 +10,12 @@ position=0
 success_count=0
 total=0
 # count total scripts first (excluding this one)
-for script in "$REVERT_DIR"/revert-*.sh; do
+for script in "$REVERT_DIR/revert-"*.sh; do
   [[ "$(basename "$script")" == "revert-all-components.sh" ]] && continue
   total=$((total + 1))
 done
 # run each revert script with graceful failure
-for script in "$REVERT_DIR"/revert-*.sh; do
+for script in "$REVERT_DIR/revert-"*.sh; do
   [[ "$(basename "$script")" == "revert-all-components.sh" ]] && continue
   position=$((position + 1))
   name=$(basename "$script" .sh | sed 's/^revert-//')

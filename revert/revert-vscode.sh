@@ -1,4 +1,4 @@
 #!/bin/bash
 
 sudo apt purge -y code
-rm -rf ~/.config/Code/User
+rm -rf "$HOME/.config/Code/User"

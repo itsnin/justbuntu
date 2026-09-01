@@ -84,7 +84,7 @@ justbuntu/
                 provision-discord.sh
                 provision-web-apps.sh
             provision-extensions.sh        extension selection orchestrator
-            provision-ai-assistants.sh     ai assistant selection orchestrator
+            provision-ai-assistants.sh     ai tools orchestrator (Claude Desktop + 4 CLI tools)
             ai/                           ai assistant installers
                 provision-claude-desktop.sh
             provision-ghostty.sh            gpu-accelerated terminal emulator
