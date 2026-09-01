@@ -36,13 +36,12 @@ the project is organized into distinct functional domains, each with a clear res
 justbuntu/
     bootstrap.sh                 entry point. clones repository and initiates provisioning
     provision/orchestrate.sh     primary orchestrator. wires together core validation,
-                                 preference gathering, and domain-specific provisioners
+                                 preference gathering, logging, error recovery, and domain-specific provisioners
     banner.sh                    ascii art banner displayed at startup
     version                      plain text version number, calendar-based
     bin/
         justbuntu                cli entry point for post-install management
         commands/                individual menu actions: install, update, revert, etc.
-    lib/
     config/                     static configuration files (bashrc)
     share/                      shared assets: .desktop entry generators and icons
         icons/                  png icons referenced by desktop entries
@@ -51,6 +50,10 @@ justbuntu/
     provision/
         orchestrate-terminal.sh  runs all terminal provisioning modules
         orchestrate-desktop.sh   runs all desktop provisioning modules (gnome only)
+        helpers/                   install logging to /var/log/justbuntu-install.log and
+                                   sophisticated error handling with retry menu
+            logging.sh                  tee-based log redirection, start/stop timing
+            errors.sh                   ERR trap, retry menu, log viewer, graceful recovery
         core/                    foundational setup: system validation, snapd, kdump, preferences
             validate-system.sh        os and architecture validation
             configure-snapd.sh         snapd retention or removal choice
@@ -69,10 +72,10 @@ justbuntu/
             configure-app-grid.sh          application folder organization
             configure-browsers.sh          browser selection and installation
             configure-default-terminal.sh  ghostty as default terminal emulator
-            configure-desktop-preferences.sh window behavior, fonts, calendar
+            configure-desktop-preferences.sh window behavior, calendar, ambient sensors
             configure-dock.sh              dash favorite-apps configuration
             configure-keybindings.sh       keyboard shortcut customization
-            configure-shell-extensions.sh  spotlight extension deployment
+            configure-shell-extensions.sh  gnome extensions: spotlight, space-bar, just-perfection, gsconnect, caffeine
             extensions/                     user-choice desktop applications
                 provision-jetbrains-toolbox.sh
                 provision-obs-studio.sh

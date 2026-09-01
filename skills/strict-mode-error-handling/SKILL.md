@@ -26,6 +26,7 @@ set -euo pipefail
 |------|------|--------|
 | `-C` / `noclobber` | No overwrite | Prevent accidental file overwriting via redirection. Override with `>\|`. |
 | `-f` / `noglob` | No globbing | Disable filename expansion (wildcards). Useful when processing user input that might contain `*` or `?`. |
+| `-E` / `errtrace` | ERR trace | ERR traps are inherited by shell functions. Critical when using `trap ... ERR` for error handling. |
 | `-a` / `allexport` | Auto-export | Export all defined variables automatically. |
 | `-v` / `verbose` | Verbose | Print each command to stderr before executing. Useful for debugging. |
 | `-x` / `xtrace` | Trace | Print expanded commands to stderr. Indispensable debugging tool. |

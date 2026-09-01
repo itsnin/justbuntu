@@ -1,8 +1,13 @@
 #!/bin/bash
-# exit immediately if a command exits with a non-zero status
-set -euo pipefail
-# give people a chance to retry running the installation
-trap 'echo "JustBuntu installation failed! You can retry by running: source $HOME/.local/share/justbuntu/provision/orchestrate.sh"' ERR
+# exit immediately if a command exits with a non-zero status.
+# -E preserves ERR traps inside functions, required for error handling.
+set -eEuo pipefail
+# load helpers — logging duplicates output to /var/log/justbuntu-install.log,
+# errors provides graceful recovery with retry menu and log inspection.
+source "$HOME/.local/share/justbuntu/provision/helpers/logging.sh"
+source "$HOME/.local/share/justbuntu/provision/helpers/errors.sh"
+# begin logging
+start_install_log
 # check the distribution name and version and abort if incompatible
 source "$HOME/.local/share/justbuntu/provision/core/validate-system.sh"
 # ask for development choices
@@ -25,3 +30,5 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
 else
   echo "GNOME not detected. Skipping desktop-specific tools and tweaks."
 fi
+# finalize log
+stop_install_log

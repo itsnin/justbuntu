@@ -19,7 +19,7 @@ elif [[ "$CHOICE" == "> All"* ]]; then
   INSTALLER_FILE=$(gum file $JUSTBUNTU_PATH/provision)
   [[ -n "$INSTALLER_FILE" ]] &&
     gum confirm "Run installer?" &&
-    source $INSTALLER_FILE &&
+    source "$INSTALLER_FILE" &&
     gum spin --spinner globe --title "Install completed!" -- sleep 3
 else
   INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
@@ -33,7 +33,7 @@ else
   "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh" ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
-  source $INSTALLER_FILE && gum spin --spinner globe --title "Install completed!" -- sleep 3
+  source "$INSTALLER_FILE" && gum spin --spinner globe --title "Install completed!" -- sleep 3
 fi
 clear
 source "$JUSTBUNTU_PATH"/bin/justbuntu

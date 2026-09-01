@@ -55,7 +55,7 @@ log ERROR "download failed for $url"
 ## Log to File and Terminal
 
 ```bash
-LOG_FILE="/var/log/justbuntu.log"
+LOG_FILE="/var/log/justbuntu-install.log"
 
 # Redirect all output to both terminal and log file
 exec > >(tee -a "$LOG_FILE") 2>&1
