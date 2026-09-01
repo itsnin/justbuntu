@@ -62,11 +62,12 @@ justbuntu/
         terminal/                terminal environment provisioning
             prerequisites/            dependencies required before interactive prompts
                 provision-gum.sh      gum tui library installation
+                provision-homebrew.sh   homebrew package manager for linux (mandatory)
             configure-git.sh          git identity and behavior
             configure-shell-profile.sh shell profile deployment
             provision-cli-utilities.sh fastfetch, btop, wget, curl, micro
             provision-dev-tooling.sh   selectable language and tool installation
-            provision-github-cli.sh    github cli, optional gh auth login + setup-git
+            provision-github-cli.sh    github cli via apt repo
             provision-system-libraries.sh common development libraries
         desktop/                 desktop environment provisioning
             configure-app-grid.sh          application folder organization

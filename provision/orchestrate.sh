@@ -12,6 +12,8 @@ start_install_log
 run_script "$HOME/.local/share/justbuntu/provision/core/validate-system.sh"
 # install gum first, needed for interactive prompts
 run_script "$HOME/.local/share/justbuntu/provision/terminal/prerequisites/provision-gum.sh"
+# install homebrew early — mandatory package manager
+run_script "$HOME/.local/share/justbuntu/provision/terminal/prerequisites/provision-homebrew.sh"
 # === ALL INTERACTIVE CHOICES HAPPEN HERE ===
 # gather all preferences upfront before any system modifications begin
 echo "Get ready to make a few choices..."
@@ -32,6 +34,10 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gnome-session-inhibit --inhibit idle --reason "JustBuntu installation in progress" \
     bash -c "
       set -eEuo pipefail
+      # ensure homebrew is available in this subshell
+      if [ -x '/home/linuxbrew/.linuxbrew/bin/brew' ]; then
+        eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)\"
+      fi
       source '$HOME/.local/share/justbuntu/provision/helpers/logging.sh'
       source '$HOME/.local/share/justbuntu/provision/helpers/errors.sh'
       source '$HOME/.local/share/justbuntu/provision/orchestrate-desktop.sh'

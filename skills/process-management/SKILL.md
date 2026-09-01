@@ -117,3 +117,25 @@ The standard method to configure GNOME shell extensions from scripts:
 Important: Always verify key names against the actual schema XML files shipped with each extension. For example, Space Bar "Toggle overview" is `toggle-overview` in the behavior schema, NOT in the shortcuts schema. Guessing key names leads to silent failures.
 
 This is the proper system-native approach. Using --schemadir per call or dconf write are workarounds, not the standard method.
+
+## Homebrew on Linux
+
+Install path: `/home/linuxbrew/.linuxbrew`. To add to current shell:
+```bash
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+fi
+```
+Add this check to shell config files for persistence. When spawning subshells (e.g., `bash -c "..."` inside `gnome-session-inhibit`), the parent's PATH additions are NOT inherited — re-run the shellenv eval inside the subshell.
+
+## Git Identity Configuration
+
+Never prompt interactively for git user.name/user.email. Instead, accept them via environment variables:
+```bash
+if [[ -n "${JUSTBUNTU_GIT_USER_NAME:-}" ]]; then
+  git config --global user.name "$JUSTBUNTU_GIT_USER_NAME"
+fi
+if [[ -n "${JUSTBUNTU_GIT_USER_EMAIL:-}" ]]; then
+  git config --global user.email "$JUSTBUNTU_GIT_USER_EMAIL"
+fi
+```

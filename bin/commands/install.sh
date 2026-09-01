@@ -11,12 +11,11 @@ CHOICES=(
   "OpenCode CLI      AI coding agent in your terminal (Anomaly)"
   "Antigravity CLI   AI coding agent in your terminal (Google)"
   "Codex CLI         AI coding agent in your terminal (OpenAI)"
-  "GitHub Auth       Authenticate GitHub CLI (gh auth login)"
   "Web Apps          Install web apps with their own icon and shell"
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 26 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 24 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
@@ -40,12 +39,6 @@ else
   "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-opencode-cli.sh" ;;
   "antigravity-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-antigravity-cli.sh" ;;
   "codex-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-codex-cli.sh" ;;
-  "github-auth")
-    echo "==> starting github authentication (browser-based)"
-    gh auth login --web --git-protocol https 2>/dev/null || echo "github auth skipped or failed"
-    gh auth setup-git 2>/dev/null || true
-    INSTALLER_FILE=""
-    ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
   if [[ -n "$INSTALLER_FILE" ]]; then
