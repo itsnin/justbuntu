@@ -12,7 +12,7 @@ else
 	case "$INSTALLER" in
 	"justbuntu") INSTALLER_FILE="$JUSTBUNTU_PATH/bin/commands/migrate.sh" ;;
 	esac
-	source $INSTALLER_FILE && gum spin --spinner globe --title "Update completed!" -- sleep 3
+	source "$INSTALLER_FILE" && gum spin --spinner globe --title "Update completed!" -- sleep 3
 fi
 clear
-source "$JUSTBUNTU_PATH"/bin/justbuntu
+source "$JUSTBUNTU_PATH/bin/justbuntu"

@@ -1,5 +1,5 @@
-source ~/.local/share/justbuntu/shell/bash/shell
-source ~/.local/share/justbuntu/shell/bash/aliases
-source ~/.local/share/justbuntu/shell/bash/functions
-source ~/.local/share/justbuntu/shell/bash/prompt
-source ~/.local/share/justbuntu/shell/bash/init
+source "$HOME/.local/share/justbuntu/shell/bash/shell"
+source "$HOME/.local/share/justbuntu/shell/bash/aliases"
+source "$HOME/.local/share/justbuntu/shell/bash/functions"
+source "$HOME/.local/share/justbuntu/shell/bash/prompt"
+source "$HOME/.local/share/justbuntu/shell/bash/init"

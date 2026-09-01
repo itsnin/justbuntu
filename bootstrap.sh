@@ -16,7 +16,7 @@ echo -e "\nBegin installation (or abort with ctrl+c)..."
 sudo apt-get update >/dev/null
 sudo apt-get install -y git wget curl >/dev/null
 echo "Cloning JustBuntu..."
-rm -rf ~/.local/share/justbuntu
+rm -rf "$HOME/.local/share/justbuntu"
 git clone https://github.com/itsnin/justbuntu.git ~/.local/share/justbuntu >/dev/null
 if [[ -n "${JUSTBUNTU_REF:-}" ]] && [[ $JUSTBUNTU_REF != "main" ]]; then
 	cd ~/.local/share/justbuntu

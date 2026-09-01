@@ -8,7 +8,7 @@ HISTFILESIZE="${HISTSIZE}"
 source /usr/share/bash-completion/bash_completion
 
 # Set complete path
-export PATH="./bin:$HOME/.local/bin:$HOME/.local/share/justbuntu/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.local/share/justbuntu/bin:$PATH"
 set +h
 
 export JUSTBUNTU_PATH="$HOME/.local/share/justbuntu"

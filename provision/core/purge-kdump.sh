@@ -8,4 +8,4 @@ if command -v update-grub >/dev/null 2>&1; then
 fi
 # clean up orphans
 echo "==> autoremoving orphans"
-sudo apt-get autoremove -y --purge
+sudo apt-get autoremove -y --purge || echo "autoremove failed (continuing)"

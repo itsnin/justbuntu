@@ -1,5 +1,5 @@
 #!/bin/bash
-cat <<EOF >~/.local/share/applications/JustBuntu.desktop
+cat <<EOF >"$HOME/.local/share/applications/JustBuntu.desktop"
 [Desktop Entry]
 Version=1.0
 Name=JustBuntu

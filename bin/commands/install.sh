@@ -16,7 +16,7 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
 elif [[ "$CHOICE" == "> All"* ]]; then
-  INSTALLER_FILE=$(gum file $JUSTBUNTU_PATH/provision)
+  INSTALLER_FILE=$(gum file "$JUSTBUNTU_PATH/provision")
   [[ -n "$INSTALLER_FILE" ]] &&
     gum confirm "Run installer?" &&
     source "$INSTALLER_FILE" &&
@@ -36,4 +36,4 @@ else
   source "$INSTALLER_FILE" && gum spin --spinner globe --title "Install completed!" -- sleep 3
 fi
 clear
-source "$JUSTBUNTU_PATH"/bin/justbuntu
+source "$JUSTBUNTU_PATH/bin/justbuntu"

@@ -11,11 +11,11 @@ elif command -v brave-origin >/dev/null 2>&1; then
 elif command -v chromium >/dev/null 2>&1; then
   BROWSER="chromium"
 else
-  echo "no chromium-based browser found. install chrome or brave first."
-  exit 1
+  echo "warning: no chromium-based browser found. skipping whatsapp desktop entry."
+  return 0
 fi
 
-cat <<EOF >~/.local/share/applications/WhatsApp.desktop
+cat <<EOF >"$HOME/.local/share/applications/WhatsApp.desktop"
 [Desktop Entry]
 Version=1.0
 Name=WhatsApp

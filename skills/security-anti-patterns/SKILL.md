@@ -127,4 +127,4 @@ echo "$a"  # outputs 0, no error!
 a="hello, you"
 ```
 
-**Self-challenge**: Is there any path from user input to shell metacharacter interpretation? If yes, the script has a security vulnerability.
+ If yes, the script has a security vulnerability.

@@ -74,7 +74,7 @@ justbuntu/
             configure-default-terminal.sh  ghostty as default terminal emulator
             configure-desktop-preferences.sh window behavior, calendar, ambient sensors
             configure-dock.sh              dash favorite-apps configuration
-            configure-keybindings.sh       keyboard shortcut customization
+            configure-keybindings.sh       keyboard shortcuts: Super+w close, Super+Up maximize, Super+e files, 6 workspaces, Alt+1-9 apps, Super+1-6 workspaces
             configure-shell-extensions.sh  gnome extensions: spotlight, space-bar, just-perfection, gsconnect, caffeine
             extensions/                     user-choice desktop applications
                 provision-jetbrains-toolbox.sh

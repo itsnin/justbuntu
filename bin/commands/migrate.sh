@@ -1,4 +1,4 @@
 #!/bin/bash
-cd $JUSTBUNTU_PATH
+cd "$JUSTBUNTU_PATH"
 git pull
 cd -
