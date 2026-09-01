@@ -1,8 +1,12 @@
 #!/bin/bash
-# let user select which browsers to install. multi-select possible.
-BROWSER_OPTIONS=("Chrome" "Brave Origin" "None")
-DEFAULT_BROWSER="Chrome"
-SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select enabled)")
+# install browsers based on first-run preference (or prompt if running directly)
+if [[ -n "${JUSTBUNTU_FIRST_RUN_BROWSERS:-}" ]]; then
+  SELECTED_BROWSERS="$JUSTBUNTU_FIRST_RUN_BROWSERS"
+else
+  BROWSER_OPTIONS=("Chrome" "Brave Origin" "None")
+  DEFAULT_BROWSER="Chrome"
+  SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select enabled)")
+fi
 
 if [[ "$SELECTED_BROWSERS" == *"None"* ]] && [[ -n "$SELECTED_BROWSERS" ]]; then
   echo "note: no browser selected. web applications feature requires chrome to function."

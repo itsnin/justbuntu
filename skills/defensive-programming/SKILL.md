@@ -95,3 +95,10 @@ fi
 # Only create directory if it doesn't exist
 [[ -d "$target_dir" ]] || mkdir -p "$target_dir"
 ```
+
+## Desktop Entries Need Absolute Paths
+
+Desktop-launched applications inherit their environment from the systemd user session, NOT from .bashrc. Commands that rely on PATH entries set in shell config files will fail with "command not found" or "exec: AccessDenied." Always use absolute paths in .desktop Exec= lines.
+
+Bad: Exec=justbuntu
+Good: Exec=/home/user/.local/share/justbuntu/bin/justbuntu

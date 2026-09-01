@@ -105,3 +105,13 @@ fi
 ```
 
 **Self-challenge**: Are you using `kill -9` as the first option? It should be the LAST option — processes killed with SIGKILL cannot clean up temp files, flush buffers, or release locks gracefully.
+
+## GNOME Extension Preferences via CLI
+
+The standard method to configure GNOME shell extensions from scripts:
+
+1. Copy the extension's schema XML files from ~/.local/share/gnome-shell/extensions/<uuid>/schemas/*.gschema.xml to /usr/share/glib-2.0/schemas/
+2. Run: sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+3. Set preferences: gsettings set org.gnome.shell.extensions.<name> <key> <value>
+
+This is the proper system-native approach. Using --schemadir per call or dconf write are workarounds, not the standard method.

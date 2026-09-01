@@ -58,7 +58,7 @@ justbuntu/
             validate-system.sh        os and architecture validation
             configure-snapd.sh         snapd retention or removal choice
             purge-kdump.sh             kdump-tools removal to free reserved memory
-            gather-preferences.sh      interactive tool and application selection
+            gather-preferences.sh      ALL interactive choices upfront: snapd, dev languages, browsers, optional apps, web apps, AI assistants, gnome extensions
         terminal/                terminal environment provisioning
             prerequisites/            dependencies required before interactive prompts
                 provision-gum.sh      gum tui library installation
@@ -74,8 +74,8 @@ justbuntu/
             configure-default-terminal.sh  ghostty as default terminal emulator
             configure-desktop-preferences.sh window behavior, calendar, ambient sensors
             configure-dock.sh              dash favorite-apps configuration
-            configure-keybindings.sh       keyboard shortcuts: Super+w close, Super+Up maximize, Super+e files, 6 workspaces, Alt+1-9 apps, Super+1-6 workspaces
-            configure-shell-extensions.sh  gnome extensions: spotlight, space-bar, just-perfection, gsconnect, caffeine
+            configure-keybindings.sh       keyboard shortcuts: Super+w close, Super+Up maximize, Super+e files, 9 fixed workspaces, Alt+1-9 apps, Super+1-9 workspaces
+            configure-shell-extensions.sh  install 5 extensions, disable 6 ubuntu extensions, copy schemas + compile, set Space Bar + Just Perfection prefs
             extensions/                     user-choice desktop applications
                 provision-jetbrains-toolbox.sh
                 provision-obs-studio.sh

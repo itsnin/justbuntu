@@ -78,4 +78,11 @@ set -euo pipefail
 
 ❌ **Avoid**: Complex business logic, data processing, API clients, JSON/YAML parsing, scripts requiring unit testing, scripts > 200 lines. Use Python/Go instead.
 
+## Interactive Flow: All Choices Upfront
+
+Never interleave installation/removal actions with interactive prompts. Ask ALL questions first, gather all preferences into environment variables, THEN execute all system changes. This gives the user a clean decision phase followed by an uninterrupted execution phase. Exceptions only when a choice truly cannot be made without prior system state.
+
+Good: gather all preferences into env vars first, then execution scripts check those vars.
+Bad: install something, prompt user, remove something else, prompt again.
+
 **Self-challenge**: Is this script growing beyond 200 lines? If yes, consider whether a higher-level language would be more maintainable.

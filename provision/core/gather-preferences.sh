@@ -1,12 +1,37 @@
 #!/bin/bash
+# snapd choice first — fundamental system decision
+SNAPD_OPTIONS=("Remove snapd" "Keep snapd")
+DEFAULT_CHOICE="Remove snapd"
+export JUSTBUNTU_SNAPD_CHOICE=$(gum choose "${SNAPD_OPTIONS[@]}" --selected "$DEFAULT_CHOICE" --height 3 --header "Ubuntu ships with snapd by default. Remove it?")
+
 AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
 SELECTED_LANGUAGES="Python,Node.js"
 export JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
+
 # optional desktop apps only offered when running gnome
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  # browsers first — web apps depend on this choice
+  BROWSER_OPTIONS=("Chrome" "Brave Origin" "None")
+  DEFAULT_BROWSER="Chrome"
+  export JUSTBUNTU_FIRST_RUN_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select)")
+
   AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Slack" "Discord" "Web Apps")
   export JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 10 --header "Select optional desktop applications")
+
+  # if web apps selected, ask which specific ones
+  if [[ "$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS" == *"Web Apps"* ]]; then
+    WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+    export JUSTBUNTU_FIRST_RUN_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select specific web apps to install")
+  fi
+
   # ai assistants — separate category, optional
   AVAILABLE_AI=("Claude Desktop")
   export JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS=$(gum choose "${AVAILABLE_AI[@]}" --no-limit --height 6 --header "Select AI assistants (optional)")
+
+  # gnome extensions — requires accepting some confirmations during install
+  if gum confirm "Install GNOME extensions? (requires accepting some confirmations during setup)"; then
+    export JUSTBUNTU_INSTALL_EXTENSIONS="true"
+  else
+    export JUSTBUNTU_INSTALL_EXTENSIONS="false"
+  fi
 fi

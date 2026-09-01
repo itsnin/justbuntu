@@ -23,5 +23,8 @@ gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-3
 gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-4
 gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-5
 gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-6
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-7
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-8
+gsettings reset org.gnome.desktop.wm.keybindings switch-to-workspace-9
 gsettings reset org.gnome.settings-daemon.plugins.media-keys custom-keybindings
 gsettings reset org.gnome.desktop.wm.keybindings switch-input-source

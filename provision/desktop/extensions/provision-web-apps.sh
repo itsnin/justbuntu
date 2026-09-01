@@ -19,8 +19,13 @@ if [ -z "$BROWSER" ]; then
   return 0
 fi
 echo "using $BROWSER for web apps"
-WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
-SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
+# use first-run preference if available, otherwise prompt
+if [[ -n "${JUSTBUNTU_FIRST_RUN_WEB_APPS:-}" ]]; then
+  SELECTED_WEB_APPS="$JUSTBUNTU_FIRST_RUN_WEB_APPS"
+else
+  WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+  SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
+fi
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
   return 0
 fi
@@ -64,6 +69,9 @@ if [[ "$SELECTED_WEB_APPS" == *"ChatGPT"* ]]; then
 fi
 if [[ "$SELECTED_WEB_APPS" == *"Google Photos"* ]]; then
   install_webapp "Google Photos" "https://photos.google.com"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Google Keep"* ]]; then
+  install_webapp "Google Keep" "https://keep.google.com"
 fi
 if [[ "$SELECTED_WEB_APPS" == *"YouTube"* ]]; then
   install_webapp "YouTube" "https://www.youtube.com"
