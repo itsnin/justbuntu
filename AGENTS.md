@@ -66,7 +66,7 @@ justbuntu/
             configure-shell-profile.sh shell profile deployment
             provision-cli-utilities.sh fastfetch, btop, wget, curl, micro
             provision-dev-tooling.sh   selectable language and tool installation
-            provision-github-cli.sh    github command-line interface
+            provision-github-cli.sh    github cli, optional gh auth login + setup-git
             provision-system-libraries.sh common development libraries
         desktop/                 desktop environment provisioning
             configure-app-grid.sh          application folder organization

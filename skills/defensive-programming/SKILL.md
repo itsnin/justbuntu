@@ -102,3 +102,17 @@ Desktop-launched applications inherit their environment from the systemd user se
 
 Bad: Exec=justbuntu
 Good: Exec=/home/user/.local/share/justbuntu/bin/justbuntu
+
+## Network Install Commands Need Robustness
+
+When piping curl into bash for third-party installers, always add retry logic and graceful failure:
+
+```bash
+if curl -fsSL --retry 3 --retry-delay 5 https://example.com/install.sh | bash; then
+  echo "installed"
+else
+  echo "install failed (continuing)"
+fi
+```
+
+For high-traffic endpoints that may be down (e.g., opencode.ai), add a fallback installation method such as direct binary download from GitHub releases.

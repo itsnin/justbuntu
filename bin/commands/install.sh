@@ -7,11 +7,16 @@ CHOICES=(
   "Slack             Team communication and collaboration"
   "Discord           Voice, video and text chat"
   "Claude Desktop    AI assistant with chat, code, and cowork"
+  "Claude Code CLI   AI coding agent in your terminal (Anthropic)"
+  "OpenCode CLI      AI coding agent in your terminal (Anomaly)"
+  "Antigravity CLI   AI coding agent in your terminal (Google)"
+  "Codex CLI         AI coding agent in your terminal (OpenAI)"
+  "GitHub Auth       Authenticate GitHub CLI (gh auth login)"
   "Web Apps          Install web apps with their own icon and shell"
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 22 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 26 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
@@ -31,9 +36,21 @@ else
   "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-slack.sh" ;;
   "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-discord.sh" ;;
   "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh" ;;
+  "claude-code-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-code-cli.sh" ;;
+  "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-opencode-cli.sh" ;;
+  "antigravity-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-antigravity-cli.sh" ;;
+  "codex-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-codex-cli.sh" ;;
+  "github-auth")
+    echo "==> starting github authentication (browser-based)"
+    gh auth login --web --git-protocol https 2>/dev/null || echo "github auth skipped or failed"
+    gh auth setup-git 2>/dev/null || true
+    INSTALLER_FILE=""
+    ;;
   "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh" ;;
   esac
-  source "$INSTALLER_FILE" && gum spin --spinner globe --title "Install completed!" -- sleep 3
+  if [[ -n "$INSTALLER_FILE" ]]; then
+    source "$INSTALLER_FILE" && gum spin --spinner globe --title "Install completed!" -- sleep 3
+  fi
 fi
 clear
 source "$JUSTBUNTU_PATH/bin/justbuntu"

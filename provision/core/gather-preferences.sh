@@ -7,6 +7,12 @@ export JUSTBUNTU_SNAPD_CHOICE=$(gum choose "${SNAPD_OPTIONS[@]}" --selected "$DE
 AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
 SELECTED_LANGUAGES="Python,Node.js"
 export JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
+# github authentication — optional, runs gh auth login after github cli is installed
+if gum confirm "Set up GitHub authentication? (runs gh auth login after GitHub CLI install)"; then
+  export JUSTBUNTU_GITHUB_AUTH="true"
+else
+  export JUSTBUNTU_GITHUB_AUTH="false"
+fi
 
 # optional desktop apps only offered when running gnome
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
