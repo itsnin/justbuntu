@@ -52,7 +52,7 @@ justbuntu/
         orchestrate-desktop.sh   runs all desktop provisioning modules (gnome only)
         helpers/                   install logging to /var/log/justbuntu-install.log and
                                    sophisticated error handling with retry menu
-            logging.sh                  tee-based log redirection, start/stop timing
+            logging.sh                  tee-based log redirection, run_script helper with CURRENT_SCRIPT tracking, start/stop timing
             errors.sh                   ERR trap, retry menu, log viewer, graceful recovery
         core/                    foundational setup: system validation, snapd, kdump, preferences
             validate-system.sh        os and architecture validation

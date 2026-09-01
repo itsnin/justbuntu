@@ -14,6 +14,21 @@
       # create symlink for easy access
       mkdir -p "$HOME/.local/bin"
       ln -sf "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox" "$HOME/.local/bin/jetbrains-toolbox"
+      # create desktop entry so it appears in the app grid
+      mkdir -p "$HOME/.local/share/applications"
+      cat > "$HOME/.local/share/applications/jetbrains-toolbox.desktop" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=JetBrains Toolbox
+Comment=Manage your JetBrains IDEs
+Exec=$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox
+Icon=$HOME/.local/share/JetBrains/Toolbox/toolbox.svg
+Terminal=false
+Categories=Development;IDE;
+StartupNotify=true
+EOF
+      chmod +x "$HOME/.local/share/applications/jetbrains-toolbox.desktop"
     fi
   else
     echo "jetbrains toolbox download failed (continuing)"

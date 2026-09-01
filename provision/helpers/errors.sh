@@ -26,6 +26,9 @@ catch_errors() {
   echo
   clear_logo
   gum style --foreground 1 "JustBuntu installation stopped!"
+  if [[ -n ${CURRENT_SCRIPT:-} ]]; then
+    gum style "Failed script: $CURRENT_SCRIPT"
+  fi
   if [[ -n ${BASH_COMMAND:-} ]]; then
     gum style "Failed command: $BASH_COMMAND (exit code $exit_code)"
   fi

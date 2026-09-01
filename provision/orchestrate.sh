@@ -9,13 +9,13 @@ source "$HOME/.local/share/justbuntu/provision/helpers/errors.sh"
 # begin logging
 start_install_log
 # check the distribution name and version and abort if incompatible
-source "$HOME/.local/share/justbuntu/provision/core/validate-system.sh"
-# ask for development choices
+run_script "$HOME/.local/share/justbuntu/provision/core/validate-system.sh"
+# install gum first, needed for interactive prompts
 echo "Get ready to make a few choices..."
-source "$HOME/.local/share/justbuntu/provision/terminal/prerequisites/provision-gum.sh" >/dev/null
-source "$HOME/.local/share/justbuntu/provision/core/configure-snapd.sh"
-source "$HOME/.local/share/justbuntu/provision/core/purge-kdump.sh"
-source "$HOME/.local/share/justbuntu/provision/core/gather-preferences.sh"
+run_script "$HOME/.local/share/justbuntu/provision/terminal/prerequisites/provision-gum.sh"
+run_script "$HOME/.local/share/justbuntu/provision/core/configure-snapd.sh"
+run_script "$HOME/.local/share/justbuntu/provision/core/purge-kdump.sh"
+run_script "$HOME/.local/share/justbuntu/provision/core/gather-preferences.sh"
 # install terminal tools (always)
 echo "Installing terminal tools..."
 source "$HOME/.local/share/justbuntu/provision/orchestrate-terminal.sh"
@@ -26,7 +26,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # inhibitor is automatically released when the wrapped process exits
   # this avoids permanently modifying user settings
   gnome-session-inhibit --inhibit idle --reason "JustBuntu installation in progress" \
-    bash -c "source $HOME/.local/share/justbuntu/provision/orchestrate-desktop.sh"
+    bash -c "
+      set -eEuo pipefail
+      source '$HOME/.local/share/justbuntu/provision/helpers/logging.sh'
+      source '$HOME/.local/share/justbuntu/provision/helpers/errors.sh'
+      source '$HOME/.local/share/justbuntu/provision/orchestrate-desktop.sh'
+    "
 else
   echo "GNOME not detected. Skipping desktop-specific tools and tweaks."
 fi

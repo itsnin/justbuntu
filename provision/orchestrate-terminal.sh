@@ -6,4 +6,6 @@ sudo apt upgrade -y
 sudo apt install -y curl git unzip
 
 # run terminal installers
-for installer in "$HOME/.local/share/justbuntu/provision/terminal/"*.sh; do source "$installer"; done
+for installer in "$HOME/.local/share/justbuntu/provision/terminal/"*.sh; do
+  run_script "$installer"
+done

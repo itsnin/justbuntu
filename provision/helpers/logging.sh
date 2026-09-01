@@ -28,3 +28,14 @@ stop_install_log() {
     } >>"$JUSTBUNTU_INSTALL_LOG_FILE"
   fi
 }
+# run a provisioning script with log markers and CURRENT_SCRIPT tracking.
+# sources the script so environment changes persist between scripts.
+run_script() {
+  local script="$1"
+  local script_name
+  script_name=$(basename "$script")
+  export CURRENT_SCRIPT="$script_name"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting: $script_name"
+  source "$script"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed: $script_name"
+}

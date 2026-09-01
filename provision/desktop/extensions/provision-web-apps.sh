@@ -19,7 +19,7 @@ if [ -z "$BROWSER" ]; then
   return 0
 fi
 echo "using $BROWSER for web apps"
-WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Contacts" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
 SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
   return 0
@@ -64,9 +64,6 @@ if [[ "$SELECTED_WEB_APPS" == *"ChatGPT"* ]]; then
 fi
 if [[ "$SELECTED_WEB_APPS" == *"Google Photos"* ]]; then
   install_webapp "Google Photos" "https://photos.google.com"
-fi
-if [[ "$SELECTED_WEB_APPS" == *"Google Contacts"* ]]; then
-  install_webapp "Google Contacts" "https://contacts.google.com"
 fi
 if [[ "$SELECTED_WEB_APPS" == *"YouTube"* ]]; then
   install_webapp "YouTube" "https://www.youtube.com"

@@ -44,6 +44,8 @@ Disable within script: `set +x`
 
 **Self-challenge**: Are you relying on `set -e` to catch errors in a pipeline? Without `pipefail`, only the LAST command's exit status matters. Always use `set -o pipefail`.
 
+
+
 ## Reserved Exit Codes
 
 **Verified via ABS Guide Appendix E just now**. These codes have special meanings and should NOT be used for user-defined errors:
