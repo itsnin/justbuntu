@@ -67,6 +67,20 @@ gsettings set org.gnome.shell.extensions.copyous show-indicator false 2>/dev/nul
 gsettings set org.gnome.shell.extensions.copyous wiggle-indicator false 2>/dev/null || true
 # Open clipboard dialog shortcut = Super+V (default is Super+Shift+V)
 gsettings set org.gnome.shell.extensions.copyous open-clipboard-dialog-shortcut "['<Super>v']" 2>/dev/null || true
+# Profile = Compact (verified from profiles.js source code)
+gsettings set org.gnome.shell.extensions.copyous show-at-pointer true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous clipboard-orientation 'vertical' 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous clipboard-position-vertical 'fill' 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous clipboard-position-horizontal 'top' 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous auto-hide-search true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous item-width 300 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous item-height 100 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous dynamic-item-height true 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous show-header false 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous header-controls-visibility 'visible-on-hover' 2>/dev/null || true
+# child schemas for Compact profile
+gsettings set org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ file-preview-visibility 'file-info' 2>/dev/null || true
+gsettings set org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ link-preview-orientation 'horizontal' 2>/dev/null || true
 # resolve GNOME Super+V conflict: default toggle-message-tray uses ['<Super>v', '<Super>m']
 # remove Super+V, keep Super+M for message tray
 gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']" 2>/dev/null || true

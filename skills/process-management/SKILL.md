@@ -179,3 +179,27 @@ gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
 # Fix: disable entirely so emoji-copy extension can use it
 gsettings set org.freedesktop.ibus.panel.emoji hotkey "@as []"
 ```
+
+## Copyous Extension Profiles (Verified from Source)
+
+The Copyous preferences UI has a "Profiles" section with Default/Compact/Custom toggles. These are NOT gsettings keys — they are presets applied in JavaScript. To apply the Compact profile via gsettings, set these individual keys:
+
+```bash
+# Main schema
+gsettings set org.gnome.shell.extensions.copyous show-at-pointer true
+gsettings set org.gnome.shell.extensions.copyous clipboard-orientation 'vertical'
+gsettings set org.gnome.shell.extensions.copyous clipboard-position-vertical 'fill'
+gsettings set org.gnome.shell.extensions.copyous clipboard-position-horizontal 'top'  # alias: left
+gsettings set org.gnome.shell.extensions.copyous auto-hide-search true
+gsettings set org.gnome.shell.extensions.copyous item-width 300
+gsettings set org.gnome.shell.extensions.copyous item-height 100
+gsettings set org.gnome.shell.extensions.copyous dynamic-item-height true
+gsettings set org.gnome.shell.extensions.copyous show-header false
+gsettings set org.gnome.shell.extensions.copyous header-controls-visibility 'visible-on-hover'
+
+# Child schemas (require relocatable path syntax)
+gsettings set org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ file-preview-visibility 'file-info'
+gsettings set org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ link-preview-orientation 'horizontal'
+```
+
+**Rule**: When an extension's preferences UI has "profiles" or "presets", always dig into the actual source code (profiles.js or similar) to find the exact gsettings values. Schema XML alone won't reveal preset combinations.

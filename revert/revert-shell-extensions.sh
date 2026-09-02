@@ -13,6 +13,8 @@ gsettings reset-recursively org.gnome.shell.extensions.space-bar.appearance 2>/d
 gsettings reset-recursively org.gnome.shell.extensions.space-bar.state 2>/dev/null || true
 gsettings reset-recursively org.gnome.shell.extensions.just-perfection 2>/dev/null || true
 gsettings reset-recursively org.gnome.shell.extensions.copyous 2>/dev/null || true
+gsettings reset-recursively org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ 2>/dev/null || true
+gsettings reset-recursively org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ 2>/dev/null || true
 gsettings reset-recursively org.gnome.shell.extensions.emoji-copy 2>/dev/null || true
 # restore GNOME keybindings we modified
 gsettings reset org.gnome.shell.keybindings toggle-message-tray 2>/dev/null || true

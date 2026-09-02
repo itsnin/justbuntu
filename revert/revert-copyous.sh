@@ -1,6 +1,8 @@
 #!/bin/bash
 # revert copyous clipboard manager extension
 gsettings reset-recursively org.gnome.shell.extensions.copyous 2>/dev/null || true
+gsettings reset-recursively org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ 2>/dev/null || true
+gsettings reset-recursively org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ 2>/dev/null || true
 gsettings reset org.gnome.shell.keybindings toggle-message-tray 2>/dev/null || true
 sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.copyous.gschema.xml 2>/dev/null || true
 sudo glib-compile-schemas /usr/share/glib-2.0/schemas/ 2>/dev/null || true
