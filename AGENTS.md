@@ -76,7 +76,7 @@ justbuntu/
             configure-desktop-preferences.sh window behavior, calendar, ambient sensors
             configure-dock.sh              dash favorite-apps configuration
             configure-keybindings.sh       keyboard shortcuts: Super+w close, Super+Up maximize, Super+e files, 9 fixed workspaces, Alt+1-9 apps, Super+1-9 workspaces
-            configure-shell-extensions.sh  install 5 extensions, disable 6 ubuntu extensions, copy schemas + compile, set Space Bar + Just Perfection prefs
+            configure-shell-extensions.sh  install 7 extensions, disable 6 ubuntu extensions, copy schemas + compile, set prefs, resolve Super+V and Super+. keybinding conflicts
             extensions/                     user-choice desktop applications
                 provision-jetbrains-toolbox.sh
                 provision-obs-studio.sh

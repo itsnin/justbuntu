@@ -18,12 +18,14 @@ elif [[ "$JUSTBUNTU_INSTALL_EXTENSIONS" == "false" ]]; then
   echo "skipping gnome extension installation (disabled in preferences)"
   return 0
 fi
-# install all 5 extensions
+# install all extensions
 gext install spotlight@nin || echo "spotlight extension install failed (continuing)"
 gext install space-bar@luchrioh || echo "space-bar extension install failed (continuing)"
 gext install just-perfection-desktop@just-perfection || echo "just-perfection extension install failed (continuing)"
 gext install gsconnect@andyholmes.github.io || echo "gsconnect extension install failed (continuing)"
 gext install caffeine@patapon.info || echo "caffeine extension install failed (continuing)"
+gext install copyous@boerdereinar.dev || echo "copyous extension install failed (continuing)"
+gext install emoji-copy@felipeftn || echo "emoji-copy extension install failed (continuing)"
 # copy extension gsettings schemas system-wide and compile them.
 # this is the standard method that allows gsettings to configure extensions.
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
@@ -35,9 +37,15 @@ done
 # copy Just Perfection schema
 [ -f "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" ] && \
   sudo cp "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
+# copy Copyous schema
+[ -f "$EXTENSIONS_DIR/copyous@boerdereinar.dev/schemas/org.gnome.shell.extensions.copyous.gschema.xml" ] && \
+  sudo cp "$EXTENSIONS_DIR/copyous@boerdereinar.dev/schemas/org.gnome.shell.extensions.copyous.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
+# copy Emoji Copy schema
+[ -f "$EXTENSIONS_DIR/emoji-copy@felipeftn/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml" ] && \
+  sudo cp "$EXTENSIONS_DIR/emoji-copy@felipeftn/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
 # compile all schemas
 sudo glib-compile-schemas "$SCHEMAS_DIR/" 2>/dev/null || true
-# configure Space Bar extension preferences
+# === Space Bar extension preferences ===
 # Toggle overview = OFF (behavior schema)
 gsettings set org.gnome.shell.extensions.space-bar.behavior toggle-overview false 2>/dev/null || true
 # Switch to workspace shortcuts = ON (shortcuts schema)
@@ -49,6 +57,22 @@ gsettings set org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-work
 for i in 1 2 3 4 5 6 7 8 9; do
   gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" "@as []" 2>/dev/null || true
 done
-# configure Just Perfection extension preferences
+# === Just Perfection extension preferences ===
 # Dash (Visibility tab) = OFF
 gsettings set org.gnome.shell.extensions.just-perfection dash false 2>/dev/null || true
+# === Copyous extension preferences ===
+# Show indicator on top panel = OFF
+gsettings set org.gnome.shell.extensions.copyous show-indicator false 2>/dev/null || true
+# Wiggle indicator on copy = OFF
+gsettings set org.gnome.shell.extensions.copyous wiggle-indicator false 2>/dev/null || true
+# Open clipboard dialog shortcut = Super+V (default is Super+Shift+V)
+gsettings set org.gnome.shell.extensions.copyous open-clipboard-dialog-shortcut "['<Super>v']" 2>/dev/null || true
+# resolve GNOME Super+V conflict: default toggle-message-tray uses ['<Super>v', '<Super>m']
+# remove Super+V, keep Super+M for message tray
+gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']" 2>/dev/null || true
+# === Emoji Copy extension preferences ===
+# Always show indicator on top panel = OFF
+gsettings set org.gnome.shell.extensions.emoji-copy always-show false 2>/dev/null || true
+# resolve GNOME Super+Period (.) emoji picker conflict
+# disable ibus emoji hotkey so emoji-copy extension's Super+. works exclusively
+gsettings set org.freedesktop.ibus.panel.emoji hotkey "@as []" 2>/dev/null || true

@@ -139,3 +139,43 @@ if [[ -n "${JUSTBUNTU_GIT_USER_EMAIL:-}" ]]; then
   git config --global user.email "$JUSTBUNTU_GIT_USER_EMAIL"
 fi
 ```
+
+## GNOME Extension Configuration
+
+### Schema Verification
+Never trust documentation or memory for extension gsettings keys. Always extract the actual ZIP and read the schema XML:
+```bash
+unzip -q extension.zip -d /tmp/ext/
+cat /tmp/ext/schemas/*.gschema.xml
+```
+This reveals exact key names, types, defaults, and enums.
+
+### Standard Installation Pattern
+```bash
+gext install extension@uuid
+# copy schema system-wide
+sudo cp ~/.local/share/gnome-shell/extensions/extension@uuid/schemas/*.xml /usr/share/glib-2.0/schemas/
+sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+# configure via gsettings
+gsettings set org.gnome.shell.extensions.extension-name key value
+```
+
+### Known GNOME Keybinding Conflicts
+
+**Super+V** — opens notification list (message tray):
+```bash
+# Schema: org.gnome.shell.keybindings
+# Key: toggle-message-tray
+# Default: ['<Super>v', '<Super>m']
+# Fix: keep only Super+M, free up Super+V for clipboard managers
+gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
+```
+
+**Super+Period (.)** — opens IBus emoji picker:
+```bash
+# Schema: org.freedesktop.ibus.panel.emoji
+# Key: hotkey
+# Default: ['<Super>period']
+# Fix: disable entirely so emoji-copy extension can use it
+gsettings set org.freedesktop.ibus.panel.emoji hotkey "@as []"
+```
