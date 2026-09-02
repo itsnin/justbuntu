@@ -117,9 +117,11 @@ fi
 
 For high-traffic endpoints that may be down (e.g., opencode.ai), add a fallback installation method such as direct binary download from GitHub releases.
 
-## GitHub Release Downloads
+## GitHub Release Downloads — MANDATORY PATTERN
 
-For projects that ship .deb assets, always query the last 10 releases and iterate to find a matching asset. Never hardcode a single version URL:
+For ANY package fetched from GitHub releases, ALWAYS query the last 10 releases and iterate to find a matching asset. The "latest" release is frequently broken, missing assets, or a prerelease. This pattern is not optional:
+
+**Rule**: Every GitHub release download MUST use the last-10-releases fallback pattern.
 
 ```bash
 DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/OWNER/REPO/releases?per_page=10" | python3 -c "

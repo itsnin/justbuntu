@@ -23,7 +23,7 @@ echo "using $BROWSER for web apps"
 if [[ -n "${JUSTBUNTU_FIRST_RUN_WEB_APPS:-}" ]]; then
   SELECTED_WEB_APPS="$JUSTBUNTU_FIRST_RUN_WEB_APPS"
 else
-  WEB_APP_OPTIONS=("ChatGPT" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+  WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
   SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
 fi
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
@@ -66,6 +66,9 @@ EOF
 }
 if [[ "$SELECTED_WEB_APPS" == *"ChatGPT"* ]]; then
   install_webapp "ChatGPT" "https://chat.openai.com"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"Google Drive"* ]]; then
+  install_webapp "Google Drive" "https://drive.google.com"
 fi
 if [[ "$SELECTED_WEB_APPS" == *"Google Photos"* ]]; then
   install_webapp "Google Photos" "https://photos.google.com"

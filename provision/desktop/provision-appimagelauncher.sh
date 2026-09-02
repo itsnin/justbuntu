@@ -1,0 +1,38 @@
+#!/bin/bash
+# install AppImageLauncher — integrates AppImage files into the system
+# query last 10 releases, skip prereleases, find first amd64 .deb
+# prefer non-xenial assets (bionic or plain work on newer ubuntu)
+DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/TheAssassin/AppImageLauncher/releases?per_page=10" | python3 -c "
+import json, sys
+releases = json.load(sys.stdin)
+for release in releases:
+    if release.get('prerelease', False):
+        continue
+    assets = release.get('assets', [])
+    candidates = [a for a in assets if a.get('name', '').endswith('.deb') and 'amd64' in a.get('name', '').lower()]
+    if not candidates:
+        continue
+    # prefer non-xenial (bionic or plain) for newer ubuntu
+    non_xenial = [a for a in candidates if 'xenial' not in a.get('name', '').lower()]
+    chosen = non_xenial[0] if non_xenial else candidates[0]
+    print(chosen['browser_download_url'])
+    sys.exit(0)
+sys.exit(1)
+" 2>/dev/null)
+
+if [ -z "$DEB_URL" ]; then
+  echo "warning: could not find an appimagelauncher .deb release"
+  echo "skipping appimagelauncher installation"
+  return 0
+fi
+
+# download and install
+(
+  cd /tmp
+  if curl -fsSL --retry 2 -o appimagelauncher.deb "$DEB_URL"; then
+    sudo apt install -y ./appimagelauncher.deb || echo "appimagelauncher install failed (continuing)"
+    rm -f appimagelauncher.deb
+  else
+    echo "appimagelauncher download failed (continuing)"
+  fi
+)
