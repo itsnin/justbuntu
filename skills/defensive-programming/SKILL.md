@@ -116,3 +116,23 @@ fi
 ```
 
 For high-traffic endpoints that may be down (e.g., opencode.ai), add a fallback installation method such as direct binary download from GitHub releases.
+
+## GitHub Release Downloads
+
+For projects that ship .deb assets, always query the last 10 releases and iterate to find a matching asset. Never hardcode a single version URL:
+
+```bash
+DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/OWNER/REPO/releases?per_page=10" | python3 -c "
+import json, sys
+for release in json.load(sys.stdin):
+    if release.get('prerelease', False):
+        continue
+    for asset in release.get('assets', []):
+        name = asset.get('name', '')
+        if name.endswith('.deb') and 'amd64' in name.lower():
+            print(asset['browser_download_url'])
+            sys.exit(0)
+sys.exit(1)
+")
+```
+Skip prereleases. Gracefully handle "no asset found" by returning early.

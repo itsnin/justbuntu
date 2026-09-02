@@ -6,6 +6,7 @@ CHOICES=(
   "Spotify           Stream music"
   "Slack             Team communication and collaboration"
   "Discord           Voice, video and text chat"
+  "GitHub Desktop    Git client with GUI and PR/code review"
   "Claude Desktop    AI assistant with chat, code, and cowork"
   "Claude Code CLI   AI coding agent in your terminal (Anthropic)"
   "OpenCode CLI      AI coding agent in your terminal (Anomaly)"
@@ -15,7 +16,7 @@ CHOICES=(
   "> All             Re-run any of the default installers"
   "<< Back           "
 )
-CHOICE=$(gum choose "${CHOICES[@]}" --height 24 --header "Install additional components")
+CHOICE=$(gum choose "${CHOICES[@]}" --height 26 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # don't install anything
   echo ""
@@ -34,6 +35,7 @@ else
   "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-spotify.sh" ;;
   "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-slack.sh" ;;
   "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-discord.sh" ;;
+  "github-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/extensions/provision-github-desktop.sh" ;;
   "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh" ;;
   "claude-code-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-code-cli.sh" ;;
   "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/desktop/ai/provision-opencode-cli.sh" ;;
