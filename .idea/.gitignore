@@ -1,0 +1,5 @@
+# jetbrains ide files are user-specific and not portable.
+# ignore everything in this directory except this .gitignore file itself,
+# which exists so the .idea/ folder structure is preserved in the repository.
+*
+!.gitignore

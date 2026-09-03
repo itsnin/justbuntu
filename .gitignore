@@ -1,1 +1,90 @@
+# ============================================
+# operating system generated files
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+# windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# linux
+*~
 
+# ============================================
+# editor and ide files
+# ============================================
+# vim / neovim
+*.swp
+*.swo
+*.swn
+# vs code — ignore everything except shared settings and extensions
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+# other editors
+*.code-workspace
+.atom/
+.sublime-project
+.sublime-workspace
+
+# ============================================
+# backup and temporary files
+# ============================================
+*.bak
+*.backup
+*.tmp
+*.temp
+*.old
+*.orig
+*.rej
+
+# ============================================
+# log files
+# ============================================
+*.log
+logs/
+
+# ============================================
+# archives and large binaries
+# ============================================
+*.tar.gz
+*.tgz
+*.zip
+*.deb
+*.rpm
+*.dmg
+*.iso
+
+# ============================================
+# environment and secrets
+# ============================================
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+*.p12
+
+# ============================================
+# shell script specific
+# ============================================
+# script test artifacts
+test-*/
+temp/
+tmp/
+.cache/
+
+# ============================================
+# misc
+# ============================================
+# node_modules (if any javascript tooling is used locally)
+node_modules/
+# python (if any local tooling)
+__pycache__/
+*.pyc
+venv/
+.venv/

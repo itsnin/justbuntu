@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "timonwong.shellcheck",
+    "esbenp.prettier-vscode",
+    "EditorConfig.EditorConfig",
+    "redhat.vscode-yaml",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "ms-azuretools.vscode-docker"
+  ],
+  "unwantedRecommendations": []
+}
