@@ -1,23 +1,16 @@
 # Command Execution Patterns
 
-## Overview
-
-Execute external commands safely, correctly, and efficiently.
-
-**Confidence**: Verified via security-anti-patterns sources, bash-style-guide repo, and OWASP guidance just now.
-
 ## Command Substitution
 
 ```bash
 # PREFERRED — $() syntax, nestable
 files=$(ls *.txt)
 
-# AVOID — backticks, hard to nest, readability poor
+# AVOID — backticks, hard to nest
 files=`ls *.txt`
 
 # ALWAYS quote the expansion unless you want word splitting
-echo "$files"    # RIGHT
-echo $files      # WRONG — word splitting and glob expansion
+echo "$files"
 ```
 
 ## Checking Command Success
@@ -38,25 +31,24 @@ fi
 # WRONG — $? captures the 'echo' exit code, not the wget exit code
 wget -q -O file.tar.gz "$url"
 echo "download done"
-if [[ $? -eq 0 ]]; then ...   # $? is from echo, always 0!
+if [[ $? -eq 0 ]]; then ...
 ```
 
 ## Pipes and `pipefail`
 
 ```bash
 # Without pipefail — only grep's exit code matters
-# If find fails, the pipeline still "succeeds"
 find / -name "*.conf" | grep "network"
 
 # WITH set -o pipefail — any failure in the pipeline is caught
 set -o pipefail
-find / -name "*.conf" | grep "network"   # find failure = pipeline failure
+find / -name "*.conf" | grep "network"
 ```
 
 ## `xargs` Safety
 
 ```bash
-# DANGEROUS — breaks on filenames with spaces/newlines
+# DANGEROUS — breaks on filenames with spaces or newlines
 find . -name "*.txt" | xargs rm
 
 # SAFE — null-delimited, handles any filename
@@ -68,7 +60,7 @@ find . -name "*.txt" -print0 | xargs -0 rm
 ```bash
 # DANGEROUS — word splitting, cannot handle spaces
 cmd="wget -O my file.tar.gz $url"
-$cmd   # Breaks: "my" and "file.tar.gz" treated as separate args
+$cmd
 
 # SAFE — use arrays
 cmd_args=(wget -O "my file.tar.gz" "$url")
@@ -85,23 +77,18 @@ cmd_args=(wget -O "my file.tar.gz" "$url")
 ## Download Safety
 
 ```bash
-# Wrap downloads in conditionals
 if wget -q -O "$dest" "$url"; then
     process_file "$dest"
 else
     echo "download failed: $url" >&2
     return 1
 fi
-
-# Follow redirects
-wget -L -O "$dest" "$url"   # -L follows redirects
-curl -fsSL -o "$dest" "$url"  # -f fail silently, -s silent, -S show errors, -L follow redirects
 ```
 
 ## `cd` in Subshells
 
 ```bash
-# DANGEROUS — if script crashes mid-execution, parent shell's cwd is /tmp
+# DANGEROUS — if script crashes, parent shell's cwd is changed
 cd /tmp
 wget ...
 tar xf ...
@@ -113,37 +100,17 @@ cd -
     wget ...
     tar xf ...
 )
-# Parent shell cwd is unchanged
 ```
 
 ## Process Substitution
 
-**Verified via ABS Guide Chapter 23 just now**. Feed output of multiple commands into another command.
-
 ```bash
-# Template: <(command_list) or >(command_list)
-# NO SPACE between < or > and (
-
 # Compare outputs of two commands
 diff <(sort file1.txt) <(sort file2.txt)
 
-# Count lines from a filtered source
-wc -l <(grep "error" /var/log/syslog)
-
-# Process substitution avoids subshell variable loss
-# DANGEROUS — pipeline creates subshell, last_line never propagates
-last_line=""
-your_command | while read -r line; do
-    last_line="$line"
-done
-# $last_line is still "" here!
-
-# SAFE — process substitution keeps everything in one shell
+# Avoid subshell variable loss with process substitution
 last_line=""
 while read -r line; do
     last_line="$line"
 done < <(your_command)
-# $last_line is correctly set
 ```
-
-**Self-challenge**: If this command fails, does the script continue in a broken state? Under `set -e`, it will abort — but only if the failure is not masked by being in a conditional or `||` chain.

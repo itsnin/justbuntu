@@ -1,11 +1,5 @@
 # Scripting Style Guide
 
-## Overview
-
-Definitive standards for writing bash scripts that are safe, predictable, and maintainable. These rules are verified against the bash-style-guide (Dave Eddy / YSAP series) and coding-style-guide (Tyler Dukes).
-
-**Confidence**: Verified via cloned GitHub repos just now (bash-style-guide, coding-style-guide)
-
 ## Naming Conventions
 
 | Item | Convention | Example |
@@ -19,44 +13,17 @@ Definitive standards for writing bash scripts that are safe, predictable, and ma
 
 ## Formatting
 
-- **Indentation**: 2 spaces. Never tabs.
-- **Line length**: Maximum 80 characters.
-- **Semicolons**: Avoid unless required in control statements.
-- **`then`** on same line as **`if`**: `if [[ ... ]]; then`
-- **`do`** on same line as **`while`** / **`for`**: `while [[ ... ]]; do`
-
-```bash
-# right
-if [[ -n "$name" ]]; then
-    echo "hello $name"
-fi
-
-# wrong
-if [[ -n "$name" ]]
-then
-    echo "hello $name"
-fi
-```
+- Indentation: 2 spaces. Never tabs.
+- Line length: Maximum 80 characters where practical.
+- Semicolons: Avoid unless required in control statements.
+- `then` on same line as `if`: `if [[ ... ]]; then`
+- `do` on same line as `while` / `for`: `while [[ ... ]]; do`
 
 ## Functions
 
 - Do NOT use the `function` keyword. Use POSIX-style declaration.
 - All variables inside functions must be `local`.
 - Return via exit codes (0 = success, non-zero = failure), not stdout for status.
-
-```bash
-# right
-compute_sum() {
-    local a="$1"
-    local b="$2"
-    echo $((a + b))
-}
-
-# wrong
-function compute_sum {
-    result=$((a + b))  # result leaks to global scope
-}
-```
 
 ## Script Header
 
@@ -67,22 +34,15 @@ Every script must start with:
 #
 # script-name.sh — one-line description of purpose
 #
-# usage: ./script-name.sh [options] <arguments>
-#
 set -euo pipefail
 ```
 
 ## When to Use Bash
 
-✅ **Good**: Simple automation (< 200 lines), system administration, CI/CD pipeline steps, environment setup, file manipulation.
+Good for: simple automation under 200 lines, system administration, CI/CD pipeline steps, environment setup, file manipulation.
 
-❌ **Avoid**: Complex business logic, data processing, API clients, JSON/YAML parsing, scripts requiring unit testing, scripts > 200 lines. Use Python/Go instead.
+Avoid for: complex business logic, data processing, API clients, JSON/YAML parsing, scripts requiring unit testing, scripts over 200 lines. Use Python or Go instead.
 
 ## Interactive Flow: All Choices Upfront
 
-Never interleave installation/removal actions with interactive prompts. Ask ALL questions first, gather all preferences into environment variables, THEN execute all system changes. This gives the user a clean decision phase followed by an uninterrupted execution phase. Exceptions only when a choice truly cannot be made without prior system state.
-
-Good: gather all preferences into env vars first, then execution scripts check those vars.
-Bad: install something, prompt user, remove something else, prompt again.
-
-**Self-challenge**: Is this script growing beyond 200 lines? If yes, consider whether a higher-level language would be more maintainable.
+Never interleave installation or removal actions with interactive prompts. Ask all questions first, gather all preferences into environment variables, then execute all system changes. This gives the user a clean decision phase followed by an uninterrupted execution phase.

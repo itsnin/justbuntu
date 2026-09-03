@@ -1,18 +1,18 @@
-## getting help with justbuntu
+## Getting help with JustBuntu
 
-if justbuntu is not working as expected, check these first
+If JustBuntu is not working as expected, check these first:
 
-- read the readme for installation and usage instructions
-- check the issues tab for existing reports of the same problem
+- Read the README for installation and usage instructions
+- Check the issues tab for existing reports of the same problem
 
-## reporting a bug
+## Reporting a bug
 
-open a bug report issue using the bug report template. it asks for the information needed to reproduce and fix the problem, including ubuntu version, architecture, and relevant log output.
+Open a bug report issue using the bug report template. It asks for the information needed to reproduce and fix the problem, including Ubuntu version, architecture, and relevant log output.
 
-## requesting a feature
+## Requesting a feature
 
-open a feature request issue using the feature request template.
+Open a feature request issue using the feature request template.
 
-## security issues
+## Security issues
 
-do not open a public issue for a security vulnerability. see [SECURITY.md](../SECURITY.md) for the private reporting process.
+Do not open a public issue for a security vulnerability. See [SECURITY.md](../SECURITY.md) for the private reporting process.

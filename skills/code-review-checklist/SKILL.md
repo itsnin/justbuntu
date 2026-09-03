@@ -1,12 +1,8 @@
 # Code Review Checklist
 
-## Overview
+Every bash script change must pass this review.
 
-Every bash script change must pass this review. Use this checklist before merging.
-
-**Confidence**: Synthesized from all skill guides, Google Shell Style Guide principles, and OWASP security guidance. Verified against multiple authoritative sources just now.
-
-## 🚨 Critical Security
+## Critical Security
 
 - [ ] **No `eval`** on untrusted input or user-controlled data
 - [ ] **All variables quoted** — no unquoted `$var` unless word splitting is explicitly intended
@@ -15,21 +11,19 @@ Every bash script change must pass this review. Use this checklist before mergin
 - [ ] **No `sudo` added** to commands that don't genuinely need root
 - [ ] **No `sudo` removed** from commands that genuinely need root
 - [ ] **No path traversal** — user-supplied paths validated against allowlist or canonicalized
-- [ ] **No dangerous naming** — no digit-starting variable names, no hyphens in names, no bare `_` variable
-- [ ] **No empty functions** — use `:` null command if placeholder needed
-- [ ] **`<` in `[ ]`** — never does numeric comparison; use `-lt` or `[[ ]]` instead
+- [ ] **No dangerous naming** — no digit-starting variable names, no hyphens in names
 
-## ⚠️ Error Handling and Robustness
+## Error Handling and Robustness
 
 - [ ] **`set -euo pipefail`** at the top of every script
 - [ ] **`trap` cleanup** for temp files and resources
 - [ ] **`cd` failures handled** — `cd /path || exit 1` or wrapped in subshell
-- [ ] **Downloads wrapped** in `if wget/curl ...; then ... fi` with graceful fallback
-- [ ] **`gum confirm` in conditionals** — never standalone (would abort under `set -e` on "No")
+- [ ] **Downloads wrapped** in conditionals with graceful fallback
+- [ ] **`gum confirm` in conditionals** — never standalone
 - [ ] **`command -v` checks** for required dependencies before use
 - [ ] **Argument validation** — count, format, and allowlist checks
 
-## 📐 Style and Maintainability
+## Style and Maintainability
 
 - [ ] **Syntax check passes** — `bash -n script.sh`
 - [ ] **ShellCheck passes** — or each warning is understood and justified
@@ -37,33 +31,30 @@ Every bash script change must pass this review. Use this checklist before mergin
 - [ ] **`local` variables** in all functions
 - [ ] **`then` on same line** as `if`, `do` on same line as `while`
 - [ ] **2-space indentation** — no tabs
-- [ ] **Line length ≤ 80 chars** (where practical)
-- [ ] **Comments are lowercase** with no trailing punctuation (unless meaning requires it)
+- [ ] **Comments are lowercase** with no trailing punctuation unless meaning requires it
 - [ ] **Verb-prefixed file names** — `provision-*.sh`, `configure-*.sh`, `revert-*.sh`
 - [ ] **kebab-case.sh** for script file names
 
-## 🔄 Reversibility
+## Reversibility
 
 - [ ] **Every newly provisioned component** has a corresponding revert script
-- [ ] **Revert scripts are tested** or at minimum reviewed for correctness
+- [ ] **Revert scripts reviewed** for correctness
 - [ ] **No orphaned state** left behind if script is interrupted
 
-## 📚 Documentation
+## Documentation
 
-- [ ] **Script header** present — shebang, description, usage
+- [ ] **Script header** present — shebang, description
 - [ ] **Non-obvious decisions** explained in comments
 - [ ] **README updated** if user-facing behavior changed
 - [ ] **AGENTS.md updated** if architecture or standards changed
 
-## 🧪 Testing
+## Testing
 
 - [ ] **Run twice** — second run is safe (idempotency)
 - [ ] **Error paths tested** — what happens when download fails?
-- [ ] **Spaces in paths** — tested with filenames containing spaces
+- [ ] **Spaces in paths** tested
 - [ ] **Ctrl+C cleanup** — temp files removed on interrupt
 
-## 🚫 Forbidden References
+## Forbidden References
 
 - [ ] **No references** to forbidden project names anywhere in code or docs
-
-**Self-challenge**: If this script failed at the worst possible moment, what state would the system be left in? Could it be worse than if the script had never run?

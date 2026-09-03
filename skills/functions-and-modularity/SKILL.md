@@ -1,116 +1,61 @@
 # Functions and Modularity
 
-## Overview
-
-Break scripts into small, single-responsibility functions. Each function does one thing well.
-
-**Confidence**: Verified via bash-style-guide repo, coding-style-guide repo, and CursorRules just now.
-
-## Function Declaration Rules
+## Function Declaration
 
 ```bash
 # RIGHT — POSIX style, no 'function' keyword
 validate_input() {
     local input="$1"
-    # ...
 }
 
 # WRONG — non-POSIX 'function' keyword
-function validate_input {
-    # ...
-}
+function validate_input { }
 ```
 
-### Critical Rules
+## Critical Rules
 
-**Verified via ABS Guide Chapter 24 just now**:
-
-1. **Functions may NOT be empty** — causes syntax error. Even comments-only functions are considered empty. Use `:` (null command) as a placeholder:
-   ```bash
-   empty_func() {
-       # This alone causes a syntax error!
-   }
-
-   not_empty() {
-       :  # Null command — function body is valid
-   }
-   ```
-
-2. **Definition must precede call** — no forward declarations in bash. Function must be defined before it's first invoked.
-
-3. **Nested functions** are possible but not recommended — inner function only becomes visible after outer function is called.
+1. Functions may NOT be empty. Even comments-only functions cause syntax errors. Use `:` (null command) as a placeholder.
+2. Definition must precede call. No forward declarations in bash.
+3. Nested functions are possible but not recommended.
 
 ## Function Design Principles
 
-1. **Single responsibility** — one function does one thing
-2. **Local variables** — all internal variables must be `local`
-3. **Explicit inputs** — pass data as arguments, don't rely on global variables
-4. **Return via exit code** — `return 0` for success, `return 1` for failure
-5. **Output via stdout** — computed values go to stdout, caller captures with `$()`
-
-```bash
-# GOOD: explicit inputs, local variables, clear return
-file_exists() {
-    local file="$1"
-    [[ -f "$file" ]]
-}
-
-if file_exists "/etc/passwd"; then
-    echo "exists"
-fi
-```
+1. Single responsibility — one function does one thing
+2. Local variables — all internal variables must be `local`
+3. Explicit inputs — pass data as arguments, don't rely on global variables
+4. Return via exit code — `return 0` for success, `return 1` for failure
+5. Output via stdout — computed values go to stdout, caller captures with `$()`
 
 ## Avoid Global Variable Leaks
 
 ```bash
 # DANGEROUS: variable leaks to global scope
 count_items() {
-    count=$(ls | wc -l)  # 'count' is now global!
-    echo "$count"
+    count=$(ls | wc -l)  # 'count' is now global
 }
 
 # SAFE: local variable
 count_items() {
     local count
     count=$(ls | wc -l)
-    echo "$count"
 }
 ```
 
 ## Sourcing Modular Files
 
-Library scripts (collections of functions) should be sourced, not executed directly:
-
-```bash
-# At the top of a script that needs functions
-source "$JUSTBUNTU_PATH/shell/bash/functions"
-```
-
-Library scripts should:
-- Define only functions and variables
-- NOT execute any logic at top level
-- Document each function's purpose, inputs, outputs, and return codes
+Library scripts should be sourced, not executed directly. They should define only functions and variables, not execute logic at top level.
 
 ## Error Handling in Functions
 
-```bash
-# Return non-zero on failure, caller decides
-download_file() {
-    local url="$1"
-    local dest="$2"
+Return non-zero on failure, caller decides:
 
+```bash
+download_file() {
+    local url="$1" dest="$2"
     if ! wget -q -O "$dest" "$url"; then
         echo "error: download failed: $url" >&2
         return 1
     fi
     return 0
 }
-
-# Caller handles the error
-if ! download_file "$URL" "/tmp/data"; then
-    echo "aborting" >&2
-    exit 1
-fi
 ```
-
-**Self-challenge**: Can this function be understood and tested in isolation? If it depends on 5 global variables, it's not modular — pass them as arguments.

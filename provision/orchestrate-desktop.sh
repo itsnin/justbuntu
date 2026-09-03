@@ -6,9 +6,7 @@ run_script "$HOME/.local/share/justbuntu/provision/desktop/configure-keybindings
 
 # gnome extensions next — they have interactive popups that need user attention
 # while they are still at the keyboard. space bar extension may clear Super+1-9
-# shortcuts (set above) to avoid conflicts, so it must run after keybindings.
-# prerequisites (gir packages, pipx, gnome-extensions-cli) are installed inside
-# the script itself via sudo apt.
+# shortcuts (set above) to avoid conflicts, must run after keybindings.
 if [[ "${JUSTBUNTU_INSTALL_EXTENSIONS:-}" == "true" ]]; then
   run_script "$HOME/.local/share/justbuntu/provision/desktop/configure-shell-extensions.sh"
 fi
