@@ -91,7 +91,7 @@ restructure it: either distribute the comments among the code they describe, or 
 the material to a markdown document where extended exposition belongs.
 
 if in doubt which register applies: is this text in a `.md` file, a commit message, or a
-PR description uses docs rule. is this text a `//` or `#` comment inside a source file →
+PR description uses docs rule. is this text a `//` or `#` comment inside a source file uses
 code comment rule. the file type decides it, not how the sentence "feels."
 
 ## no trash talk, anywhere, about anything
