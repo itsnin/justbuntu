@@ -19,6 +19,8 @@ run_script "$HOME/.local/share/justbuntu/provision/terminal/prerequisites/provis
 echo "Get ready to make a few choices..."
 run_script "$HOME/.local/share/justbuntu/provision/core/gather-preferences.sh"
 # === END OF INTERACTIVE CHOICES ===
+# refresh sudo credentials cache so user is not re-prompted during long install
+sudo -v
 # now apply all system changes based on gathered preferences
 run_script "$HOME/.local/share/justbuntu/provision/core/configure-snapd.sh"
 run_script "$HOME/.local/share/justbuntu/provision/core/purge-kdump.sh"
@@ -34,6 +36,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gnome-session-inhibit --inhibit idle --reason "JustBuntu installation in progress" \
     bash -c "
       set -eEuo pipefail
+      export PATH="\$HOME/.local/bin:\$PATH"
       # ensure homebrew is available in this subshell
       if [ -x '/home/linuxbrew/.linuxbrew/bin/brew' ]; then
         eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)\"

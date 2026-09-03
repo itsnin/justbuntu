@@ -229,3 +229,46 @@ chmod +x bin/scriptname
 git add bin/scriptname
 ```
 Add defense-in-depth `chmod +x` in provisioning scripts.
+
+## Sudo Credential Caching
+
+After long interactive prompts, the sudo timestamp may expire (default 15 min).
+Refresh credentials explicitly before long non-interactive phases:
+```bash
+sudo -v   # extends sudo cache for another 15 min from this point
+```
+
+## Subshell PATH Inheritance
+
+`bash -c "..."` is NOT a login shell and does NOT source `~/.profile`.
+Tools installed via `pipx` (to `$HOME/.local/bin`) or other user-local paths
+will be MISSING from PATH unless explicitly added:
+```bash
+bash -c "
+  export PATH="\$HOME/.local/bin:\$PATH"
+  # now gext and other pipx tools work
+"
+```
+
+## Interactive Phase Ordering
+
+Any installation step with user-facing popups (GNOME extension confirmations,
+license dialogs, etc.) should run as early as possible in the desktop phase,
+immediately after the user finishes answering interactive questions. The user
+is already at the keyboard and paying attention.
+
+## Multi-select Defaults
+
+For `gum choose --no-limit`, the `--selected` flag accepts a comma-separated
+list of values that must exactly match the option strings. To default ALL:
+```bash
+OPTIONS=("A" "B" "C" "D")
+SELECTED="A,B,C,D"
+gum choose "${OPTIONS[@]}" --no-limit --selected "$SELECTED" ...
+```
+
+## Redundant "None" Options in Multi-select
+
+In multi-select with `--no-limit`, a "None" option is redundant — users can
+achieve the same by deselecting everything. Remove it. The empty-string case
+should still be handled explicitly.

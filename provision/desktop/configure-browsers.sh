@@ -3,14 +3,9 @@
 if [[ -n "${JUSTBUNTU_FIRST_RUN_BROWSERS:-}" ]]; then
   SELECTED_BROWSERS="$JUSTBUNTU_FIRST_RUN_BROWSERS"
 else
-  BROWSER_OPTIONS=("Chrome" "Brave Origin" "None")
+  BROWSER_OPTIONS=("Chrome" "Brave Origin")
   DEFAULT_BROWSER="Chrome"
-  SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select enabled)")
-fi
-
-if [[ "$SELECTED_BROWSERS" == *"None"* ]] && [[ -n "$SELECTED_BROWSERS" ]]; then
-  echo "note: no browser selected. web applications feature requires chrome to function."
-  return 0
+  SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 5 --header "Select browsers to install (multi-select enabled)")
 fi
 
 if [[ -z "$SELECTED_BROWSERS" ]]; then

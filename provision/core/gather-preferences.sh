@@ -5,12 +5,12 @@ DEFAULT_CHOICE="Remove snapd"
 export JUSTBUNTU_SNAPD_CHOICE=$(gum choose "${SNAPD_OPTIONS[@]}" --selected "$DEFAULT_CHOICE" --height 3 --header "Ubuntu ships with snapd by default. Remove it?")
 
 AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
-SELECTED_LANGUAGES="Python,Node.js"
+SELECTED_LANGUAGES="Python,Rust,Go,Node.js,Java,C/C++ Build Tools,PostgreSQL,Web Tools"
 export JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
 # optional desktop apps only offered when running gnome
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # browsers first — web apps depend on this choice
-  BROWSER_OPTIONS=("Chrome" "Brave Origin" "None")
+  BROWSER_OPTIONS=("Chrome" "Brave Origin")
   DEFAULT_BROWSER="Chrome"
   export JUSTBUNTU_FIRST_RUN_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select)")
 
