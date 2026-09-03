@@ -173,3 +173,45 @@ curl -sL -o icon.png "https://${DOMAIN}/favicon.ico"
 # fallback: Google S2 service
 curl -sL -o icon.png "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}"
 ```
+
+## JetBrains Product Downloads
+
+Never hardcode JetBrains download URLs. Use their official public API:
+```bash
+TOOLBOX_URL=$(curl -fsSL "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+print(data['TBA'][0]['downloads']['linux']['link'])
+")
+```
+Product codes: TBA=Toolbox App, IIU=IntelliJ Ultimate, PCP=PyCharm Professional, etc.
+
+## Web App Icons — Curated CDN Pattern
+
+Google's S2 favicon service returns GENERIC icons for Google products (Drive shows a G, not the Drive logo). Use the **homarr-labs/dashboard-icons** CDN (1800+ curated icons) for known apps:
+```bash
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-drive.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-keep.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-photos.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/youtube.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/chatgpt.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/facebook.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/facebook-messenger.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/instagram.png
+https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/reddit.png
+```
+Fallback: direct `/favicon.ico` → Google S2 service.
+
+## Subshells vs Functions
+
+Inside a subshell `( ... )`, use `exit` to terminate early. `return` only works in functions or sourced scripts. This is a common bash pitfall.
+
+## CLI Executable Bits in Git
+
+Always verify CLI entry points have mode `100755` in git:
+```bash
+git ls-files --stage bin/scriptname   # 100755 = executable, 100644 = not
+chmod +x bin/scriptname
+git add bin/scriptname
+```
+Add defense-in-depth `chmod +x` in provisioning scripts.

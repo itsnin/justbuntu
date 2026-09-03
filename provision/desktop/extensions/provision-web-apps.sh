@@ -46,10 +46,28 @@ install_webapp() {
   DOMAIN=$(_get_domain "$URL")
   local DESKTOP_FILE="$HOME/.local/share/applications/${NAME}.desktop"
   local ICON_PATH="${ICON_DIR}/${NAME}.png"
-  # try direct favicon first (better for Google products like Drive, Keep)
-  # fall back to Google S2 favicon service if direct fetch fails
-  if ! curl -sL --max-time 5 -o "$ICON_PATH" "https://${DOMAIN}/favicon.ico" 2>/dev/null || [ ! -s "$ICON_PATH" ]; then
-    curl -sL --max-time 5 -o "$ICON_PATH" "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}" 2>/dev/null || true
+  # use curated high-quality icons from dashboard-icons CDN for known apps
+  # fall back to direct favicon + Google S2 for unknown apps
+  declare -A ICON_MAP
+  ICON_MAP["ChatGPT"]="chatgpt"
+  ICON_MAP["Google Drive"]="google-drive"
+  ICON_MAP["Google Photos"]="google-photos"
+  ICON_MAP["Google Keep"]="google-keep"
+  ICON_MAP["YouTube"]="youtube"
+  ICON_MAP["Facebook"]="facebook"
+  ICON_MAP["Messenger"]="facebook-messenger"
+  ICON_MAP["Instagram"]="instagram"
+  ICON_MAP["Reddit"]="reddit"
+
+  ICON_SLUG="${ICON_MAP[$NAME]:-}"
+  if [ -n "$ICON_SLUG" ]; then
+    curl -sL --max-time 5 -o "$ICON_PATH" "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/${ICON_SLUG}.png" 2>/dev/null || true
+  fi
+  # if CDN icon failed or unknown app, try direct favicon, then Google S2 fallback
+  if [ ! -s "$ICON_PATH" ]; then
+    if ! curl -sL --max-time 5 -o "$ICON_PATH" "https://${DOMAIN}/favicon.ico" 2>/dev/null || [ ! -s "$ICON_PATH" ]; then
+      curl -sL --max-time 5 -o "$ICON_PATH" "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}" 2>/dev/null || true
+    fi
   fi
   cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]

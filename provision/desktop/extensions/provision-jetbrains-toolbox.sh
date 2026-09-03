@@ -4,7 +4,22 @@
 (
   TMP_DIR=$(mktemp -d)
   cd "$TMP_DIR"
-  if curl -fsSL "https://download.jetbrains.com/toolbox/jetbrains-toolbox-3.7.2.87231.tar.gz" -o jetbrains-toolbox.tar.gz; then
+  # query official jetbrains api for latest version download url
+  TOOLBOX_URL=$(curl -fsSL --retry 2 "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+tba = data.get('TBA', [])[0]
+print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
+" 2>/dev/null)
+
+  if [ -z "$TOOLBOX_URL" ]; then
+    echo "warning: could not determine latest jetbrains toolbox download url"
+    echo "skipping jetbrains toolbox installation"
+    rm -rf "$TMP_DIR"
+    exit 0
+  fi
+
+  if curl -fsSL --retry 2 "$TOOLBOX_URL" -o jetbrains-toolbox.tar.gz; then
     # extract and install
     tar -xzf jetbrains-toolbox.tar.gz
     TOOLBOX_DIR=$(find . -maxdepth 1 -type d -name "jetbrains-toolbox-*" | head -1)
