@@ -79,7 +79,7 @@ flowchart TD
     classDef terminal fill:#3d1f5c,stroke:#9b7cc9,stroke-width:2px,color:#ffffff
     classDef desktop fill:#1f4d4d,stroke:#5fb3b3,stroke-width:2px,color:#ffffff
     classDef decision fill:#5c1a1a,stroke:#c95a5a,stroke-width:2px,color:#ffffff
-    classDef end fill:#333333,stroke:#777777,stroke-width:2px,color:#ffffff
+    classDef done fill:#333333,stroke:#777777,stroke-width:2px,color:#ffffff
 
     A[bootstrap.sh]:::entry --> B[orchestrate.sh]:::core
     B --> C[validate-system.sh]:::core
@@ -91,7 +91,7 @@ flowchart TD
     H --> I[purge-kdump.sh]:::core
     I --> J[orchestrate-terminal.sh<br/>apt update + all terminal tools]:::terminal
     J --> K{GNOME detected?}:::decision
-    K -->|No| L[Done]:::end
+    K -->|No| L[Done]:::done
     K -->|Yes| M[gnome-session-inhibit<br/>subshell]:::desktop
     M --> N[orchestrate-desktop.sh]:::desktop
     N --> O[configure-keybindings.sh]:::desktop

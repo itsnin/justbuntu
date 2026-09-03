@@ -1,3 +1,3 @@
 #!/bin/bash
-
-sudo apt install -y gnome-tweak-tool || echo "gnome-tweak-tool install failed (continuing)"
+# Install GNOME Tweaks for advanced desktop settings
+sudo apt install -y gnome-tweaks || echo "GNOME Tweaks install failed (continuing)"
