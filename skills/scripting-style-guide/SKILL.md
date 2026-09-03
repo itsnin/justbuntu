@@ -52,3 +52,13 @@ Avoid for: complex business logic, data processing, API clients, JSON/YAML parsi
 ## Interactive Flow: All Choices Upfront
 
 Never interleave installation or removal actions with interactive prompts. Ask all questions first, gather all preferences into environment variables, then execute all system changes. This gives the user a clean decision phase followed by an uninterrupted execution phase.
+
+## Shell Directives for Non-Executable Shell Files
+
+Files like `.bashrc` that are sourced rather than executed directly do not need a shebang. For ShellCheck, add:
+
+```bash
+# shellcheck shell=bash
+```
+
+as the first line. This prevents SC2148 errors.

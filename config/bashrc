@@ -1,1 +1,2 @@
+# shellcheck shell=bash
 source "$HOME/.local/share/justbuntu/shell/bash/rc"

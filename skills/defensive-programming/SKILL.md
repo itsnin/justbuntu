@@ -173,6 +173,17 @@ Product codes: TBA=Toolbox App, IIU=IntelliJ Ultimate, PCP=PyCharm Professional.
 
 Toolbox creates its own `.desktop` file on first launch at `~/.local/share/applications/`.
 
+
+## Slack Desktop Downloads
+
+Slack does not provide a clean "latest" URL. Parse the download page HTML to extract the current direct .deb URL:
+
+```bash
+SLACK_DEB_URL=$(curl -fsSL --retry 2 "https://slack.com/downloads/linux" | grep -oP 'https://downloads\.slack-edge\.com[^"]+amd64\.deb' | head -1)
+```
+
+Fallback: if the parse fails, skip gracefully with a warning rather than hardcoding a version that will become stale.
+
 ## Subshells vs Functions
 
 Inside a subshell `( ... )`, use `exit` to terminate early. `return` only works in functions or sourced scripts.
