@@ -25,7 +25,7 @@ print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
     TOOLBOX_DIR=$(find . -maxdepth 1 -type d -name "jetbrains-toolbox-*" | head -1)
     if [ -n "$TOOLBOX_DIR" ]; then
       mkdir -p "$HOME/.local/share/JetBrains/Toolbox"
-      mv "$TOOLBOX_DIR"/* "$HOME/.local/share/JetBrains/Toolbox/"
+      mv "$TOOLBOX_DIR"/bin/* "$HOME/.local/share/JetBrains/Toolbox/"
       # ensure toolbox binary is executable
       chmod +x "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox"
       # create symlink for easy access
@@ -33,14 +33,8 @@ print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
       ln -sf "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox" "$HOME/.local/bin/jetbrains-toolbox"
       # create desktop entry so it appears in the app grid
       mkdir -p "$HOME/.local/share/applications"
-      # find icon file (name varies between versions)
-      TOOLBOX_ICON=""
-      for icon_name in "toolbox.svg" "jetbrains-toolbox.svg" "icon.svg"; do
-        if [ -f "$HOME/.local/share/JetBrains/Toolbox/$icon_name" ]; then
-          TOOLBOX_ICON="$HOME/.local/share/JetBrains/Toolbox/$icon_name"
-          break
-        fi
-      done
+      # icon is at known path after moving bin/ contents
+      TOOLBOX_ICON="$HOME/.local/share/JetBrains/Toolbox/toolbox.svg"
       cat > "$HOME/.local/share/applications/jetbrains-toolbox.desktop" <<EOF
 [Desktop Entry]
 Version=1.0

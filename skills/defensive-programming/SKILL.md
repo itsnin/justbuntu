@@ -176,7 +176,19 @@ curl -sL -o icon.png "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}
 
 ## JetBrains Product Downloads
 
-Never hardcode JetBrains download URLs. Use their official public API:
+**CRITICAL VERIFIED FACT**: JetBrains Toolbox tarball structure is:
+```
+jetbrains-toolbox-<version>/
+  bin/
+    jetbrains-toolbox    ← binary is INSIDE bin/ subdirectory
+    toolbox.svg          ← icon is INSIDE bin/ subdirectory
+    jetbrains-toolbox.desktop
+    lib/
+    jre/
+```
+Use `mv "$TOOLBOX_DIR"/bin/* target/` NOT `mv "$TOOLBOX_DIR"/* target/`.
+
+Never hardcode download URLs. Use official public API:
 ```bash
 TOOLBOX_URL=$(curl -fsSL "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
 import json, sys
@@ -185,6 +197,8 @@ print(data['TBA'][0]['downloads']['linux']['link'])
 ")
 ```
 Product codes: TBA=Toolbox App, IIU=IntelliJ Ultimate, PCP=PyCharm Professional, etc.
+
+**Official behavior**: Toolbox creates its own `.desktop` file on first launch at `~/.local/share/applications/`.
 
 ## Web App Icons — Curated CDN Pattern
 
