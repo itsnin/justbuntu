@@ -1,5 +1,5 @@
 #!/bin/bash
-# revert emoji-copy extension
+# Revert Emoji Copy extension
 gsettings reset-recursively org.gnome.shell.extensions.emoji-copy 2>/dev/null || true
 gsettings reset org.freedesktop.ibus.panel.emoji hotkey 2>/dev/null || true
 sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml 2>/dev/null || true

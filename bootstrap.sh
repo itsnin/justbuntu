@@ -7,7 +7,7 @@ ascii_art='
       | || |_| |\__ \ | |_ | |_) | |_| || |   | |_| |_| |
       |_| \__,_||___/  \__||____/ \__,_||_|    \__|\__,_|
 '
-# print in green
+# Print in green
 echo -ne '\033[38;5;46m'
 echo -e "$ascii_art"
 echo -ne '\033[0m'

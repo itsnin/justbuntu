@@ -1,5 +1,5 @@
 #!/bin/bash
-# install optional desktop apps selected during first run, or prompt if called directly
+# Install optional desktop apps selected during first run, or prompt if called directly
 if [[ -v JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS"
 else

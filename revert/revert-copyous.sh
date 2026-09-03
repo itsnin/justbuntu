@@ -1,5 +1,5 @@
 #!/bin/bash
-# revert copyous clipboard manager extension
+# Revert Copyous clipboard manager extension
 gsettings reset-recursively org.gnome.shell.extensions.copyous 2>/dev/null || true
 gsettings reset-recursively org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ 2>/dev/null || true
 gsettings reset-recursively org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ 2>/dev/null || true

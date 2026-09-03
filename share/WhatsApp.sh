@@ -1,5 +1,5 @@
 #!/bin/bash
-# detect available chromium-based browser
+# Detect available Chromium-based browser
 if command -v google-chrome-stable >/dev/null 2>&1; then
   BROWSER="google-chrome-stable"
 elif command -v brave >/dev/null 2>&1; then

@@ -1,5 +1,5 @@
 #!/bin/bash
-# reset all modified keybindings to defaults
+# Reset all modified keybindings to defaults
 gsettings reset org.gnome.desktop.wm.keybindings close
 gsettings reset org.gnome.desktop.wm.keybindings maximize
 gsettings reset org.gnome.desktop.wm.keybindings begin-resize

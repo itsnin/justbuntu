@@ -1,13 +1,13 @@
 #!/bin/bash
-# install logging — duplicates all terminal output to a log file.
-# uses process substitution so sourced scripts inherit the redirection.
+# Install logging — duplicates all terminal output to a log file.
+# Uses process substitution so sourced scripts inherit the redirection.
 JUSTBUNTU_INSTALL_LOG_FILE="/var/log/justbuntu-install.log"
 start_install_log() {
   sudo touch "$JUSTBUNTU_INSTALL_LOG_FILE"
   sudo chmod 666 "$JUSTBUNTU_INSTALL_LOG_FILE"
   export JUSTBUNTU_START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
   echo "=== JustBuntu Installation Started: $JUSTBUNTU_START_TIME ===" >>"$JUSTBUNTU_INSTALL_LOG_FILE"
-  # redirect all stdout and stderr to both terminal and log file
+  # Redirect all stdout and stderr to both terminal and log file
   exec > >(tee -a "$JUSTBUNTU_INSTALL_LOG_FILE") 2>&1
 }
 stop_install_log() {
@@ -28,8 +28,8 @@ stop_install_log() {
     } >>"$JUSTBUNTU_INSTALL_LOG_FILE"
   fi
 }
-# run a provisioning script with log markers and CURRENT_SCRIPT tracking.
-# sources the script so environment changes persist between scripts.
+# Run a provisioning script with log markers and CURRENT_SCRIPT tracking.
+# Sources the script so environment changes persist between scripts.
 run_script() {
   local script="$1"
   local script_name

@@ -1,5 +1,5 @@
 #!/bin/bash
-# install discord via official .deb
+# Install discord via official .deb
 (
   cd /tmp
   if wget -q -L -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"; then

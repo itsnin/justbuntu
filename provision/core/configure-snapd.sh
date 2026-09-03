@@ -1,5 +1,5 @@
 #!/bin/bash
-# remove or keep snapd based on first-run preference (or prompt if running directly)
+# Remove or keep snapd based on first-run preference. Prompts if running directly.
 if [[ -n "${JUSTBUNTU_SNAPD_CHOICE:-}" ]]; then
   SNAPD_CHOICE="$JUSTBUNTU_SNAPD_CHOICE"
 else
@@ -9,7 +9,7 @@ else
 fi
 
 if [[ "$SNAPD_CHOICE" == "Remove snapd"* ]]; then
-  # hold not just remove, so apt upgrade cant pull snapd back via ubuntu-server's recommends
+  # Hold, not just remove. Stops apt upgrade from pulling snapd back via ubuntu-server's recommends.
   echo "==> removing snapd"
   if command -v snap >/dev/null 2>&1 || dpkg -s snapd >/dev/null 2>&1; then
     sudo apt-get remove -y --purge snapd
@@ -18,7 +18,7 @@ if [[ "$SNAPD_CHOICE" == "Remove snapd"* ]]; then
   else
     echo "snapd is not installed"
   fi
-  # clean up orphans
+  # Clean up orphans
   echo "==> autoremoving orphans"
   sudo apt-get autoremove -y --purge || echo "autoremove failed (continuing)"
 fi

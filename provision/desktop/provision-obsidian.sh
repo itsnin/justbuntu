@@ -1,7 +1,7 @@
 #!/bin/bash
-# obsidian is a multi-platform note taking application. see https://obsidian.md
-# find the latest release that actually has a .deb asset
-# some releases are mobile-only and only ship an apk
+# Obsidian is a multi-platform note taking application. See https://obsidian.md
+# Find the latest release that actually has a .deb asset
+# Some releases are mobile-only and only ship an APK
 RELEASES=$(curl -s "https://api.github.com/repos/obsidianmd/obsidian-releases/releases?per_page=10")
 DEB_URL=$(echo "$RELEASES" | python3 -c "
 import json, sys
@@ -21,7 +21,7 @@ if [ -z "$DEB_URL" ]; then
   return 0
 fi
 
-# run download and install in a subshell to avoid changing parent working directory
+# Run download and install in a subshell. Avoids changing parent working directory.
 (
   cd /tmp
   if wget -q -O obsidian.deb "$DEB_URL"; then

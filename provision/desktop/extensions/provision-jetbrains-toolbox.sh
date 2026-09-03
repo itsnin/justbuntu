@@ -1,10 +1,10 @@
 #!/bin/bash
-# install JetBrains Toolbox App
-# download latest version in a subshell to avoid changing parent working directory
+# Install JetBrains Toolbox App
+# Download latest version in a subshell. Avoids changing parent working directory.
 (
   TMP_DIR=$(mktemp -d)
   cd "$TMP_DIR"
-  # query official jetbrains api for latest version download url
+  # Query official JetBrains API for latest version download URL
   TOOLBOX_URL=$(curl -fsSL --retry 2 "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
@@ -20,20 +20,20 @@ print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
   fi
 
   if curl -fsSL --retry 2 "$TOOLBOX_URL" -o jetbrains-toolbox.tar.gz; then
-    # extract and install
+    # Extract and install
     tar -xzf jetbrains-toolbox.tar.gz
     TOOLBOX_DIR=$(find . -maxdepth 1 -type d -name "jetbrains-toolbox-*" | head -1)
     if [ -n "$TOOLBOX_DIR" ]; then
       mkdir -p "$HOME/.local/share/JetBrains/Toolbox"
       mv "$TOOLBOX_DIR"/bin/* "$HOME/.local/share/JetBrains/Toolbox/"
-      # ensure toolbox binary is executable
+      # Ensure Toolbox binary is executable
       chmod +x "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox"
-      # create symlink for easy access
+      # Create symlink for easy access
       mkdir -p "$HOME/.local/bin"
       ln -sf "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox" "$HOME/.local/bin/jetbrains-toolbox"
-      # create desktop entry so it appears in the app grid
+      # Create desktop entry so it appears in the app grid
       mkdir -p "$HOME/.local/share/applications"
-      # icon is at known path after moving bin/ contents
+      # Icon is at known path after moving bin/ contents
       TOOLBOX_ICON="$HOME/.local/share/JetBrains/Toolbox/toolbox.svg"
       cat > "$HOME/.local/share/applications/jetbrains-toolbox.desktop" <<EOF
 [Desktop Entry]
@@ -48,7 +48,7 @@ Categories=Development;IDE;
 StartupNotify=true
 EOF
       chmod +x "$HOME/.local/share/applications/jetbrains-toolbox.desktop"
-      # refresh desktop database so it appears in the app grid
+      # Refresh desktop database so it appears in the app grid
       update-desktop-database "$HOME/.local/share/applications/" 2>/dev/null || true
     fi
   else

@@ -1,7 +1,7 @@
 #!/bin/bash
-# install vs code via direct .deb
-# the debconf line below is required or the .deb postinst prompts
-# whether to add microsoft's apt repo, which hangs an unattended script
+# Install vs code via direct .deb
+# The debconf line below is required or the .deb postinst prompts
+# whether to add Microsoft's apt repo, which hangs an unattended script
 echo "==> installing vs code (direct .deb)"
 echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
 if wget -q -O /tmp/vscode-stable.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"; then

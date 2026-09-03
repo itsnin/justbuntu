@@ -25,6 +25,12 @@
 - All variables inside functions must be `local`.
 - Return via exit codes (0 = success, non-zero = failure), not stdout for status.
 
+## Comments
+
+Write like a lazy senior engineer jotting quick notes. Sentence case for the first word. Proper nouns and acronyms capitalized (Ubuntu, GNOME, CLI, Super, Alt, Homebrew, JetBrains). Light punctuation — periods at the end of complete thoughts, commas where they help. Don't force perfect grammar. Don't overdo it.
+
+Explain why, not what the code already shows. No LLM phrases like "here we," "let's," "note that." Maximum three consecutive comment lines without intervening code.
+
 ## Script Header
 
 Every script must start with:

@@ -1,5 +1,5 @@
 #!/bin/bash
-# install browsers based on first-run preference (or prompt if running directly)
+# Install browsers based on first-run preference (or prompt if running directly)
 if [[ -n "${JUSTBUNTU_FIRST_RUN_BROWSERS:-}" ]]; then
   SELECTED_BROWSERS="$JUSTBUNTU_FIRST_RUN_BROWSERS"
 else
@@ -18,9 +18,9 @@ if [[ "$SELECTED_BROWSERS" != *"Chrome"* ]]; then
 fi
 
 if [[ "$SELECTED_BROWSERS" == *"Chrome"* ]]; then
-  # install google chrome via direct .deb
-  # apt-get install resolves chrome's deps, and the .deb postinst
-  # also adds google's apt repo so future apt upgrade pulls chrome updates
+  # Install google chrome via direct .deb
+  # apt-get install resolves Chrome's deps. The .deb postinst
+  # also adds Google's apt repo so future apt upgrade pulls Chrome updates.
   echo "==> installing google chrome (direct .deb)"
   if wget -q -O /tmp/google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
     sudo apt-get install -y /tmp/google-chrome-stable.deb || echo "chrome install failed (continuing)"
@@ -32,13 +32,13 @@ if [[ "$SELECTED_BROWSERS" == *"Chrome"* ]]; then
 fi
 
 if [[ "$SELECTED_BROWSERS" == *"Brave Origin"* ]]; then
-  # install brave origin using deb822 .sources format
+  # Install brave origin using deb822 .sources format
   echo "==> installing brave origin"
   if sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && \
      sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources; then
     sudo apt update
     sudo apt install -y brave-origin || echo "brave origin install failed (continuing)"
-    # set chrome as default if both selected, otherwise brave
+    # Set Chrome as default if both selected, otherwise Brave.
     if [[ "$SELECTED_BROWSERS" != *"Chrome"* ]]; then
       xdg-settings set default-web-browser brave-browser.desktop 2>/dev/null || true
     fi

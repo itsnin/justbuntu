@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# gives you previews in the file manager when pressing space
+# Gives you previews in the file manager when pressing space
 sudo apt install -y gnome-sushi || echo "gnome-sushi install failed (continuing)"

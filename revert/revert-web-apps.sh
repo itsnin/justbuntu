@@ -1,5 +1,5 @@
 #!/bin/bash
-# uninstall web apps by removing their .desktop files and icons
+# Uninstall web apps by removing their .desktop files and icons
 rm -f "$HOME/.local/share/applications/ChatGPT.desktop"
 rm -f "$HOME/.local/share/applications/Google Photos.desktop"
 rm -f "$HOME/.local/share/applications/Google Keep.desktop"

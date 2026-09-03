@@ -1,3 +1,3 @@
 #!/bin/bash
-# reset favorite apps to ubuntu defaults
+# Reset favorite apps to Ubuntu defaults
 gsettings reset org.gnome.shell favorite-apps

@@ -34,16 +34,13 @@ middle-ground target - not stiff and formal, not stripped down to lowercase-only
 out loud: it should sound like a real person writing carefully, not a legal notice and not
 someone refusing to use the shift key.
 
-**code comments**: lowercase by default, including at the start of the comment. minimal
-punctuation - most lines don't need a period at all. capitalize or punctuate only when
-leaving it lowercase/unpunctuated would change or obscure the actual meaning: a
-case-sensitive api or class name, a real command or flag, a word that needs emphasis
-because the lowercase version reads as a typo instead of a deliberate word (`REMOVED` vs
-`removed` when the point is contrast with "deprecated"). this is not "less strict than
-docs" - it's a different, terser register on purpose, because comments sit next to code
-and get read in short bursts, not start to finish. picture a sharp senior engineer
-leaving a quick note for the next person reading the same line - not a formal writeup, not
-a diary entry, just the minimum needed to know why this line exists.
+**code comments**: sentence case for the first word. proper nouns and acronyms get
+capital letters (Ubuntu, GNOME, CLI, API, Super, Alt, Homebrew, JetBrains). light
+punctuation — periods at the end of complete thoughts, commas where they actually help
+readability. don't force perfect grammar. don't overdo it. it should read like a sharp
+senior engineer leaving a quick note for the next person — natural, not stiff, not
+robotic. explain why, not what the code already shows. if the code is obvious, the
+comment probably isn't needed.
 
 ### the interleaving rule for code comments - ABSOLUTELY FORBIDDEN pattern
 
@@ -162,11 +159,10 @@ standing in for periods), and separately for capitalization or punctuation that'
 stripped below normal sentence writing (missing capitals at sentence starts or on proper
 nouns, punctuation dropped to the point sentences run together).
 
-for code comments: check for capitalization or punctuation that's crept in beyond what
-correctness requires - a capitalized sentence start, a period on a line that didn't need
-one, a proper-sounding tone that doesn't match the terse, lowercase-first target
-described above. verify strict interleaving: no block of four or more consecutive comment
-lines without intervening code.
+for code comments: check that it reads like a real engineer's quick notes —
+sentence case starts, proper nouns capitalized, light punctuation. not all-lowercase
+and not stiffly formal. verify strict interleaving: no block of four or more consecutive
+comment lines without intervening code.
 
 for both: check for any sentence that implicitly or explicitly puts down another project
 or approach, any named project that should have been described generically instead if

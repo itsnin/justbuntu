@@ -1,6 +1,6 @@
 #!/bin/bash
-# install GitHub Desktop (shiftkey/desktop fork)
-# query last 10 releases, iterate to find one with an amd64 .deb asset
+# Install GitHub Desktop (shiftkey/desktop fork)
+# Query last 10 releases, iterate to find one with an amd64 .deb asset
 DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/shiftkey/desktop/releases?per_page=10" | python3 -c "
 import json, sys
 releases = json.load(sys.stdin)
@@ -21,7 +21,7 @@ if [ -z "$DEB_URL" ]; then
   return 0
 fi
 
-# download and install in a subshell
+# Download and install in a subshell
 (
   cd /tmp
   if curl -fsSL --retry 2 -o github-desktop.deb "$DEB_URL"; then

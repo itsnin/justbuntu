@@ -1,6 +1,6 @@
 #!/bin/bash
-# install ai tools. separate category from optional apps. user chooses.
-# all cli tools require browser authentication after installation.
+# Install ai tools. separate category from optional apps. user chooses.
+# All CLI tools require browser authentication after installation.
 if [[ -v JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS"
 else

@@ -1,8 +1,8 @@
 #!/bin/bash
-# error handling — graceful recovery with retry menu and log inspection.
-# requires set -eE for the ERR trap to propagate into functions.
+# Error handling. Graceful recovery with retry menu and log inspection.
+# Requires set -eE for the ERR trap to propagate into functions.
 ERROR_HANDLING=false
-# drain pending terminal responses (OSC 11, CPR, etc.) left by gum
+# Drain pending terminal responses (OSC 11, CPR, etc.) left by gum
 drain_terminal() {
   if [[ -t 0 ]]; then
     stty -echo 2>/dev/null || true
@@ -11,7 +11,7 @@ drain_terminal() {
   fi
   stty sane 2>/dev/null || true
 }
-# clear the banner/logo from screen on error
+# Clear the banner/logo from screen on error
 clear_logo() {
   printf '\033[H\033[2J'
 }
@@ -33,7 +33,7 @@ catch_errors() {
     gum style "Failed command: $BASH_COMMAND (exit code $exit_code)"
   fi
   echo
-  # show last lines from the log for quick context
+  # Show last lines from the log for quick context
   if [[ -f ${JUSTBUNTU_INSTALL_LOG_FILE:-} ]]; then
     echo "Recent log output:"
     tail -10 "$JUSTBUNTU_INSTALL_LOG_FILE" | sed 's/\x1b\[[0-9;]*m//g' | while IFS= read -r line; do
@@ -41,7 +41,7 @@ catch_errors() {
     done
     echo
   fi
-  # options menu — loops until user retries or exits
+  # Options menu. Loops until user retries or exits
   while true; do
     local choice
     choice=$(gum choose \
@@ -63,14 +63,14 @@ catch_errors() {
     esac
   done
 }
-# exit handler — triggers error handling on non-zero exit
+# Exit handler. Triggers error handling on non-zero exit
 exit_handler() {
   local exit_code=$?
   if (( exit_code != 0 )) && [[ $ERROR_HANDLING != true ]]; then
     catch_errors
   fi
 }
-# set up traps
+# Set up traps
 trap catch_errors ERR
 trap 'exit 130' INT TERM
 trap exit_handler EXIT

@@ -1,6 +1,6 @@
 #!/bin/bash
-# install Claude Code CLI (Anthropic)
-# requires browser authentication after installation
+# Install Claude Code CLI (Anthropic)
+# Requires browser authentication after installation.
 if curl -fsSL --retry 3 --retry-delay 5 https://claude.ai/install.sh | bash; then
   echo "claude code cli installed. run 'claude' to authenticate and start."
 else

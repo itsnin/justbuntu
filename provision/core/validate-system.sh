@@ -5,7 +5,7 @@ if [ ! -f "/etc/os-release" ]; then
   exit 1
 fi
 . /etc/os-release
-# check if running on ubuntu 26.04 or higher using pure bash (no external deps)
+# Check if running on Ubuntu 26.04 or higher. Pure bash, no external deps.
 VERSION_MAJOR=$(echo "$VERSION_ID" | cut -d. -f1)
 VERSION_MINOR=$(echo "$VERSION_ID" | cut -d. -f2)
 if [ "$ID" != "ubuntu" ] || [ "$VERSION_MAJOR" -lt 26 ]; then
@@ -16,7 +16,7 @@ if [ "$ID" != "ubuntu" ] || [ "$VERSION_MAJOR" -lt 26 ]; then
   echo "Installation stopped."
   exit 1
 fi
-# check if running on x86_64 only
+# Check if running on x86_64 only.
 ARCH=$(uname -m)
 if [ "$ARCH" != "x86_64" ]; then
   echo "$(tput setaf 1)Error: Unsupported architecture detected"

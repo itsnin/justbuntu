@@ -1,6 +1,6 @@
 #!/bin/bash
-# find the latest release with a linux x86-64 .deb asset
-# asset naming has varied between releases so check multiple
+# Find the latest release with a Linux x86-64 .deb asset
+# Asset naming has varied between releases so check multiple
 DEB_URL=$(curl -s "https://api.github.com/repos/localsend/localsend/releases?per_page=10" | python3 -c "
 import json, sys, re
 releases = json.load(sys.stdin)
@@ -21,7 +21,7 @@ if [ -z "$DEB_URL" ]; then
   return 0
 fi
 
-# run download and install in a subshell to avoid changing parent working directory
+# Run download and install in a subshell. Avoids changing parent working directory.
 (
   cd /tmp
   if wget -q -O localsend.deb "$DEB_URL"; then

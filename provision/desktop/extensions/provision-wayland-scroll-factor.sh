@@ -1,7 +1,7 @@
 #!/bin/bash
-# install wayland-scroll-factor — adjusts two-finger scroll sensitivity
-# for users with hypersensitive touchpads on GNOME Wayland
-# query last 10 releases, skip prereleases, find first non-dbgsym amd64 .deb
+# Install wayland-scroll-factor — adjusts two-finger scroll sensitivity
+# For users with hypersensitive touchpads on GNOME Wayland
+# Query last 10 releases, skip prereleases, find first non-dbgsym amd64 .deb
 DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/daniel-g-carrasco/wayland-scroll-factor/releases?per_page=10" | python3 -c "
 import json, sys
 releases = json.load(sys.stdin)

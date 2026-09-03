@@ -1,5 +1,5 @@
 #!/bin/bash
-# gum is used for the JustBuntu commands for tailoring JustBuntu after the initial install
+# Gum is used for the JustBuntu commands for tailoring JustBuntu after the initial install.
 (
   cd /tmp
   GUM_VERSION="0.17.0"

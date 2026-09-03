@@ -19,7 +19,7 @@ CHOICES=(
 )
 CHOICE=$(gum choose "${CHOICES[@]}" --height 28 --header "Install additional components")
 if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
-  # don't install anything
+  # Don't install anything
   echo ""
 elif [[ "$CHOICE" == "> All"* ]]; then
   INSTALLER_FILE=$(gum file "$JUSTBUNTU_PATH/provision")

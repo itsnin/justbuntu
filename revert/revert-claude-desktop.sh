@@ -1,5 +1,5 @@
 #!/bin/bash
-# uninstall claude desktop
+# Uninstall Claude Desktop
 sudo apt-get remove -y claude-desktop 2>/dev/null || true
 sudo rm -f /etc/apt/sources.list.d/claude-desktop.list
 sudo rm -f /usr/share/keyrings/claude-desktop-archive-keyring.asc

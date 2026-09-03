@@ -1,6 +1,6 @@
 #!/bin/bash
-# install web apps as desktop entries. works with any chromium-based browser.
-# detect browser first
+# Install web apps as desktop entries. works with any chromium-based browser.
+# Detect browser first
 BROWSER=""
 if command -v google-chrome-stable >/dev/null 2>&1; then
   BROWSER="google-chrome-stable"
@@ -19,7 +19,7 @@ if [ -z "$BROWSER" ]; then
   return 0
 fi
 echo "using $BROWSER for web apps"
-# use first-run preference if available, otherwise prompt
+# Use first-run preference if available, otherwise prompt
 if [[ -n "${JUSTBUNTU_FIRST_RUN_WEB_APPS:-}" ]]; then
   SELECTED_WEB_APPS="$JUSTBUNTU_FIRST_RUN_WEB_APPS"
 else
@@ -32,10 +32,10 @@ fi
 ICON_DIR="$HOME/.local/share/applications/icons"
 mkdir -p "$ICON_DIR"
 
-# extract domain from url for google s2 favicon service
+# Extract domain from URL for Google S2 favicon service
 _get_domain() {
   local url="$1"
-  # strip protocol and path, keep just the domain
+  # Strip protocol and path, keep just the domain
   echo "$url" | sed -e 's|^[^/]*//||' -e 's|/.*$||' -e 's|^www\.||'
 }
 
@@ -46,8 +46,8 @@ install_webapp() {
   DOMAIN=$(_get_domain "$URL")
   local DESKTOP_FILE="$HOME/.local/share/applications/${NAME}.desktop"
   local ICON_PATH="${ICON_DIR}/${NAME}.png"
-  # use curated high-quality icons from dashboard-icons CDN for known apps
-  # fall back to direct favicon + Google S2 for unknown apps
+  # Use curated high-quality icons from dashboard-icons CDN for known apps
+  # Fall back to direct favicon + Google S2 for unknown apps
   declare -A ICON_MAP
   ICON_MAP["ChatGPT"]="chatgpt"
   ICON_MAP["Google Drive"]="google-drive"
@@ -63,7 +63,7 @@ install_webapp() {
   if [ -n "$ICON_SLUG" ]; then
     curl -sL --max-time 5 -o "$ICON_PATH" "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/${ICON_SLUG}.png" 2>/dev/null || true
   fi
-  # if CDN icon failed or unknown app, try direct favicon, then Google S2 fallback
+  # If CDN icon failed or unknown app, try direct favicon, then Google S2 fallback.
   if [ ! -s "$ICON_PATH" ]; then
     if ! curl -sL --max-time 5 -o "$ICON_PATH" "https://${DOMAIN}/favicon.ico" 2>/dev/null || [ ! -s "$ICON_PATH" ]; then
       curl -sL --max-time 5 -o "$ICON_PATH" "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}" 2>/dev/null || true
@@ -112,5 +112,5 @@ fi
 if [[ "$SELECTED_WEB_APPS" == *"Reddit"* ]]; then
   install_webapp "Reddit" "https://www.reddit.com"
 fi
-# refresh desktop database so new entries appear in app grid
+# Refresh desktop database so new entries appear in app grid
 update-desktop-database "$HOME/.local/share/applications/" 2>/dev/null || true

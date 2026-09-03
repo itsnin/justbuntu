@@ -1,3 +1,3 @@
 #!/bin/bash
-# simple virtual machine manager for gnome
+# Simple virtual machine manager for GNOME
 sudo apt install -y gnome-boxes || echo "gnome-boxes install failed (continuing)"

@@ -1,5 +1,5 @@
 #!/bin/bash
-# install slack desktop via official .deb
+# Install slack desktop via official .deb
 (
   cd /tmp
   if wget -q -L -O slack-desktop.deb "https://slack.com/downloads/instructions/linux?ddl=1&build=deb"; then
