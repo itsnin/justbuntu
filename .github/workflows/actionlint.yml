@@ -28,4 +28,4 @@ jobs:
           ./actionlint --version
 
       - name: Run actionlint
-        run: ./actionlint -color .github/workflows/
+        run: ./actionlint -color .github/workflows/*.yml .github/workflows/*.yaml
