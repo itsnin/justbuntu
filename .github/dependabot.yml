@@ -10,3 +10,9 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    # group ALL github actions updates into a single PR/branch
+    # prevents dependabot from creating one branch per action
+    groups:
+      all-github-actions:
+        patterns:
+          - "*"

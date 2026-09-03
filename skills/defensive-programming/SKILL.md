@@ -296,3 +296,25 @@ causes the base settings to silently win over the extension's intended behavior.
 When adding new cases to a glob-based installer, verify each `source` target.
 A common copy-paste error: the "Web Apps" check accidentally sources the GitHub
 Desktop installer. Pattern-match the check string against the sourced file.
+
+## Dependabot Configuration
+
+To prevent dependabot from creating one branch per dependency update, use the
+`groups` feature to batch all updates into a single PR/branch:
+```yaml
+groups:
+  all-github-actions:
+    patterns:
+      - "*"
+```
+This significantly reduces noise and maintenance overhead.
+
+## GitHub Issue Forms
+
+Prefer YAML issue forms (`.yml`) over markdown templates (`.md`). YAML forms provide:
+- Required field validations
+- Structured input types (dropdowns, checkboxes, textareas)
+- Consistent issue formatting
+- Better UX for reporters
+
+File goes in `.github/ISSUE_TEMPLATE/name.yml`.
