@@ -138,3 +138,38 @@ sys.exit(1)
 ")
 ```
 Skip prereleases. Gracefully handle "no asset found" by returning early.
+
+## Executable Bits and Git
+
+CLI entry points MUST have the executable bit set AND tracked in git:
+```bash
+chmod +x bin/script
+git add bin/script        # git tracks mode 100755 vs 100644
+git ls-files --stage bin/script   # verify: 100755 = executable
+```
+**Rule**: Never assume a clone preserves permissions without verifying git mode. Add defense-in-depth `chmod +x` in provisioning scripts.
+
+## Desktop Entries (.desktop files)
+
+After creating or modifying `.desktop` files in `~/.local/share/applications/`, ALWAYS refresh the desktop database:
+```bash
+update-desktop-database "$HOME/.local/share/applications/" 2>/dev/null || true
+```
+Without this, GNOME may silently ignore new entries until the next login.
+
+For icon paths, probe for multiple possible filenames since naming varies between versions:
+```bash
+for icon_name in "toolbox.svg" "jetbrains-toolbox.svg" "icon.svg"; do
+  [ -f "$path/$icon_name" ] && TOOLBOX_ICON="$path/$icon_name" && break
+done
+```
+
+## Web App Icons
+
+Google's S2 favicon service returns generic icons for Google's own products (Drive, Keep show generic G). Always try direct favicon first:
+```bash
+# primary: direct from the host (correct product icons)
+curl -sL -o icon.png "https://${DOMAIN}/favicon.ico"
+# fallback: Google S2 service
+curl -sL -o icon.png "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}"
+```

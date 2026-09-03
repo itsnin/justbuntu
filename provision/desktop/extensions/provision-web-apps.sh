@@ -44,10 +44,13 @@ install_webapp() {
   local URL="$2"
   local DOMAIN
   DOMAIN=$(_get_domain "$URL")
-  local ICON_URL="https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}"
   local DESKTOP_FILE="$HOME/.local/share/applications/${NAME}.desktop"
   local ICON_PATH="${ICON_DIR}/${NAME}.png"
-  curl -sL -o "$ICON_PATH" "$ICON_URL" 2>/dev/null || true
+  # try direct favicon first (better for Google products like Drive, Keep)
+  # fall back to Google S2 favicon service if direct fetch fails
+  if ! curl -sL --max-time 5 -o "$ICON_PATH" "https://${DOMAIN}/favicon.ico" 2>/dev/null || [ ! -s "$ICON_PATH" ]; then
+    curl -sL --max-time 5 -o "$ICON_PATH" "https://www.google.com/s2/favicons?sz=128&domain=${DOMAIN}" 2>/dev/null || true
+  fi
   cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Version=1.0
@@ -91,3 +94,5 @@ fi
 if [[ "$SELECTED_WEB_APPS" == *"Reddit"* ]]; then
   install_webapp "Reddit" "https://www.reddit.com"
 fi
+# refresh desktop database so new entries appear in app grid
+update-desktop-database "$HOME/.local/share/applications/" 2>/dev/null || true
