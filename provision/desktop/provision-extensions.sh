@@ -28,8 +28,5 @@ if [[ "$selected" == *"Wayland Scroll Factor"* ]]; then
   source "$JUSTBUNTU_PATH/provision/desktop/extensions/provision-wayland-scroll-factor.sh"
 fi
 if [[ "$selected" == *"Web Apps"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/extensions/provision-github-desktop.sh"
-fi
-if [[ "$selected" == *"Web Apps"* ]]; then
   source "$JUSTBUNTU_PATH/provision/desktop/extensions/provision-web-apps.sh"
 fi

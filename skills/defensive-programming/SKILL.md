@@ -272,3 +272,27 @@ gum choose "${OPTIONS[@]}" --no-limit --selected "$SELECTED" ...
 In multi-select with `--no-limit`, a "None" option is redundant — users can
 achieve the same by deselecting everything. Remove it. The empty-string case
 should still be handled explicitly.
+
+## CLI Entry Point Self-Sufficiency
+
+CLI entry points must NOT assume environment variables like `$PROJECT_PATH` are pre-set.
+Auto-detect from the script's own location:
+```bash
+if [[ -z "${PROJECT_PATH:-}" ]]; then
+  export PROJECT_PATH="$(dirname "$(dirname "$(readlink -f "$0")")")"
+fi
+```
+This handles desktop entries, cron jobs, and other non-interactive contexts.
+
+## Keybinding + Extension Ordering
+
+When shell extensions manage keyboard shortcuts (e.g., Space Bar overriding Super+1-9),
+the base keybinding configuration must run FIRST, then the extension installation.
+Extensions clear/override base shortcuts to avoid conflicts. Reversing this order
+causes the base settings to silently win over the extension's intended behavior.
+
+## Copy-Paste Bugs in Globs
+
+When adding new cases to a glob-based installer, verify each `source` target.
+A common copy-paste error: the "Web Apps" check accidentally sources the GitHub
+Desktop installer. Pattern-match the check string against the sourced file.

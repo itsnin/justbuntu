@@ -1,4 +1,11 @@
 #!/bin/bash
 
+# auto-detect justbuntu path if not already set in environment
+# this makes the cli robust when invoked from contexts that may not
+# have the shell profile (e.g., desktop entry via terminal emulator)
+if [[ -z "${JUSTBUNTU_PATH:-}" ]]; then
+  export JUSTBUNTU_PATH="$(dirname "$(dirname "$(readlink -f "$0")")")"
+fi
+
 source "$JUSTBUNTU_PATH/bin/commands/header.sh"
 source "$JUSTBUNTU_PATH/bin/commands/menu.sh"

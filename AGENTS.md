@@ -18,9 +18,9 @@ the project installs tools and configures only what is necessary for a solid bas
 
 every change the installer makes should be understandable by reading the corresponding script file. optional components are gated behind explicit user choice, not silently included. anything installed gets a corresponding uninstall path. this was chosen over opaque "magic" setup because users need to trust and understand what runs on their system.
 
-### one extension only
+### focused extension set
 
-on gnome, exactly one third-party shell extension is installed: spotlight. default ubuntu extensions may be disabled or configured, but no additional third-party extensions are added. this keeps the shell close to stock behavior and reduces maintenance surface.
+on gnome, a focused set of third-party shell extensions is installed: spotlight, space bar, just perfection, gsconnect, caffeine, copyous, and emoji copy. default ubuntu extensions may be disabled or configured. this set is chosen to add meaningful capability without heavy customization. each extension has a clear purpose and is actively maintained. the shell stays close to stock behavior while fixing real annoyances.
 
 ### inclusive defaults
 
