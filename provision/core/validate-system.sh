@@ -7,7 +7,6 @@ fi
 . /etc/os-release
 # Check if running on Ubuntu 26.04 or higher. Pure bash, no external deps.
 VERSION_MAJOR=$(echo "$VERSION_ID" | cut -d. -f1)
-VERSION_MINOR=$(echo "$VERSION_ID" | cut -d. -f2)
 if [ "$ID" != "ubuntu" ] || [ "$VERSION_MAJOR" -lt 26 ]; then
   echo "$(tput setaf 1)Error: OS requirement not met"
   echo "You are currently running: $ID $VERSION_ID"

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install discord via official .deb
 (
-  cd /tmp
+  cd /tmp || exit 1
   if wget -q -L -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"; then
     sudo apt install -y ./discord.deb || echo "discord install failed (continuing)"
     rm -f discord.deb

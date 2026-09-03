@@ -23,7 +23,7 @@ fi
 
 # Download and install in a subshell
 (
-  cd /tmp
+  cd /tmp || exit 1
   if curl -fsSL --retry 2 -o github-desktop.deb "$DEB_URL"; then
     sudo apt install -y ./github-desktop.deb || echo "github desktop install failed (continuing)"
     rm -f github-desktop.deb

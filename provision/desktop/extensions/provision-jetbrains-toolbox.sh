@@ -3,7 +3,7 @@
 # Download latest version in a subshell. Avoids changing parent working directory.
 (
   TMP_DIR=$(mktemp -d)
-  cd "$TMP_DIR"
+  cd "$TMP_DIR" || exit 1
   # Query official JetBrains API for latest version download URL
   TOOLBOX_URL=$(curl -fsSL --retry 2 "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
 import json, sys

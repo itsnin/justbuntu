@@ -23,7 +23,7 @@ fi
 
 # Run download and install in a subshell. Avoids changing parent working directory.
 (
-  cd /tmp
+  cd /tmp || exit 1
   if wget -q -O localsend.deb "$DEB_URL"; then
     sudo apt install -y ./localsend.deb || echo "localsend install failed (continuing)"
     rm -f localsend.deb

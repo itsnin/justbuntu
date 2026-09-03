@@ -153,7 +153,7 @@ https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/instagram.png
 https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/reddit.png
 ```
 
-Fallback chain: CDN → direct `/favicon.ico` → Google S2 service.
+Fallback chain: CDN, then direct `/favicon.ico`, then Google S2 service.
 
 ## JetBrains Product Downloads
 

@@ -24,7 +24,7 @@ if [ -z "$DEB_URL" ]; then
 fi
 
 (
-  cd /tmp
+  cd /tmp || exit 1
   if curl -fsSL --retry 2 -o wayland-scroll-factor.deb "$DEB_URL"; then
     sudo apt install -y ./wayland-scroll-factor.deb || echo "wayland-scroll-factor install failed (continuing)"
     rm -f wayland-scroll-factor.deb

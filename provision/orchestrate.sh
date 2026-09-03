@@ -36,7 +36,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   gnome-session-inhibit --inhibit idle --reason "JustBuntu installation in progress" \
     bash -c "
       set -eEuo pipefail
-      export PATH="\$HOME/.local/bin:\$PATH"
+      export PATH=\$HOME/.local/bin:\$PATH
       # Ensure Homebrew is available in this subshell
       if [ -x '/home/linuxbrew/.linuxbrew/bin/brew' ]; then
         eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)\"

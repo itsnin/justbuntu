@@ -40,6 +40,7 @@ if [[ "$SELECTED" == *"Go"* ]]; then
 fi
 if [[ "$SELECTED" == *"Node.js"* ]]; then
   echo "==> Installing nvm and Node.js..."
+  # shellcheck disable=SC2016  # $HOME expands later when bash -c runs this string
   NVM_INSTALL_CMD='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash && \. "$HOME/.nvm/nvm.sh" && nvm install 24'
   if [ -n "${SUDO_USER:-}" ] && [ "${SUDO_USER}" != "root" ]; then
     sudo -u "$SUDO_USER" bash -c "$NVM_INSTALL_CMD"

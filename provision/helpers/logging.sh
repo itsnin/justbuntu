@@ -5,7 +5,8 @@ JUSTBUNTU_INSTALL_LOG_FILE="/var/log/justbuntu-install.log"
 start_install_log() {
   sudo touch "$JUSTBUNTU_INSTALL_LOG_FILE"
   sudo chmod 666 "$JUSTBUNTU_INSTALL_LOG_FILE"
-  export JUSTBUNTU_START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+  JUSTBUNTU_START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+  export JUSTBUNTU_START_TIME
   echo "=== JustBuntu Installation Started: $JUSTBUNTU_START_TIME ===" >>"$JUSTBUNTU_INSTALL_LOG_FILE"
   # Redirect all stdout and stderr to both terminal and log file
   exec > >(tee -a "$JUSTBUNTU_INSTALL_LOG_FILE") 2>&1

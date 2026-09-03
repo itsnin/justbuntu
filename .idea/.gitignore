@@ -1,5 +1,10 @@
-# jetbrains ide files are user-specific and not portable.
-# ignore everything in this directory except this .gitignore file itself,
-# which exists so the .idea/ folder structure is preserved in the repository.
-*
-!.gitignore
+# User-specific workspace state
+workspace.xml
+usage.statistics.xml
+tasks.xml
+shelf/
+dictionaries/
+
+# Module files (not applicable for bash project)
+modules.xml
+*.iml

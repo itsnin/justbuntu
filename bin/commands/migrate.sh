@@ -1,4 +1,4 @@
 #!/bin/bash
-cd "$JUSTBUNTU_PATH"
+cd "$JUSTBUNTU_PATH" || exit 1
 git pull
-cd -
+cd - || exit 1

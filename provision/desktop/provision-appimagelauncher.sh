@@ -28,7 +28,7 @@ fi
 
 # Download and install
 (
-  cd /tmp
+  cd /tmp || exit 1
   if curl -fsSL --retry 2 -o appimagelauncher.deb "$DEB_URL"; then
     sudo apt install -y ./appimagelauncher.deb || echo "appimagelauncher install failed (continuing)"
     rm -f appimagelauncher.deb

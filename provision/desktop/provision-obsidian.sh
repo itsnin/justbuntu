@@ -23,7 +23,7 @@ fi
 
 # Run download and install in a subshell. Avoids changing parent working directory.
 (
-  cd /tmp
+  cd /tmp || exit 1
   if wget -q -O obsidian.deb "$DEB_URL"; then
     sudo apt install -y ./obsidian.deb || echo "obsidian install failed (continuing)"
     rm -f obsidian.deb
