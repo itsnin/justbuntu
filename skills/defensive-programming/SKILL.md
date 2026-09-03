@@ -198,6 +198,28 @@ sudo apt update && sudo apt install package
 
 Revert must remove both the `.list` file and the keyring file, then run `apt update`.
 
+
+## ShellCheck Configuration
+
+For repos with intentional dynamic sourcing, suppress unfixable info notes globally via `.shellcheckrc` at repo root:
+
+```
+# Dynamic sourcing from variables — architectural, not a bug
+disable=SC1090
+# External files installed at runtime — ShellCheck cannot follow them
+disable=SC1091
+```
+
+CI should use `severity: error` so only actual errors fail the build. Info and warning notes that are architectural false positives are handled by `.shellcheckrc`.
+
+For shell startup files (`.bashrc`, `.profile`) that have no shebang, add a directive as line 1:
+
+```bash
+# shellcheck shell=bash
+```
+
+This prevents SC2148 ("Tips depend on target shell and yours is unknown").
+
 ## Subshells vs Functions
 
 Inside a subshell `( ... )`, use `exit` to terminate early. `return` only works in functions or sourced scripts.
@@ -259,6 +281,25 @@ When adding new cases to a glob-based installer, verify each `source` target mat
 ## Dependabot Configuration
 
 Dependabot removed entirely. No automated dependency branches.
+
+
+## Actionlint Usage
+
+`actionlint` expects file paths or glob patterns, NOT a directory path with trailing slash:
+
+```bash
+# GOOD: no arguments — auto-discovers .github/workflows/
+./actionlint -color
+
+# GOOD: explicit glob
+./actionlint -color .github/workflows/*.yml
+
+# BAD: directory with trailing slash
+./actionlint -color .github/workflows/    # Error: "is a directory"
+
+# BAD: non-matching glob
+./actionlint -color .github/workflows/*.yaml    # Error if no .yaml files exist
+```
 
 ## GitHub Issue Forms
 
