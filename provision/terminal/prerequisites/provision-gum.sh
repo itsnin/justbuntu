@@ -1,13 +1,13 @@
 #!/bin/bash
-# Gum is used for the JustBuntu commands for tailoring JustBuntu after the initial install.
-(
-  cd /tmp || exit 1
-  GUM_VERSION="0.17.0"
-  if wget -qO gum.deb "https://github.com/charmbracelet/gum/releases/download/v${GUM_VERSION}/gum_${GUM_VERSION}_amd64.deb"; then
-    sudo apt-get install -y --allow-downgrades ./gum.deb || echo "gum install failed"
-    rm -f gum.deb
-  else
-    echo "gum download failed"
-    exit 1
-  fi
-)
+# Install gum via Charm's official apt repository.
+# This gives us the latest version automatically via apt.
+if ! command -v gum >/dev/null 2>&1; then
+  echo "==> installing gum..."
+  sudo mkdir -p /etc/apt/keyrings
+  curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+  sudo apt update
+  sudo apt install -y gum || echo "gum install failed"
+else
+  echo "gum already installed, skipping"
+fi

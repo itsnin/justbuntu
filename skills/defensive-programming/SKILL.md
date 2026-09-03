@@ -184,6 +184,20 @@ SLACK_DEB_URL=$(curl -fsSL --retry 2 "https://slack.com/downloads/linux" | grep 
 
 Fallback: if the parse fails, skip gracefully with a warning rather than hardcoding a version that will become stale.
 
+
+## Third-Party Apt Repositories
+
+When a project offers an official apt repository, prefer it over hardcoded .deb downloads. It gives automatic updates via `apt upgrade`. Standard pattern:
+
+```bash
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://repo.example.com/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/example.gpg
+echo "deb [signed-by=/etc/apt/keyrings/example.gpg] https://repo.example.com/apt/ * *" | sudo tee /etc/apt/sources.list.d/example.list
+sudo apt update && sudo apt install package
+```
+
+Revert must remove both the `.list` file and the keyring file, then run `apt update`.
+
 ## Subshells vs Functions
 
 Inside a subshell `( ... )`, use `exit` to terminate early. `return` only works in functions or sourced scripts.
