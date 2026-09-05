@@ -23,10 +23,10 @@ fi
 
 # Download and install in a subshell
 (
-  cd /tmp || exit 1
+  TMP_DIR=$(mktemp -d) && cd "$TMP_DIR" || exit 1
   if curl -fsSL --retry 2 -o github-desktop.deb "$DEB_URL"; then
     sudo apt install -y ./github-desktop.deb || echo "github desktop install failed (continuing)"
-    rm -f github-desktop.deb
+    rm -rf "$TMP_DIR"
   else
     echo "github desktop download failed (continuing)"
   fi

@@ -203,6 +203,44 @@ Homebrew on Linux installs to one of two locations depending on sudo access:
 - `$HOME/.linuxbrew/bin/brew` (user-local, no sudo needed)
 
 Always check **both** paths when initializing `brew shellenv`.
+## gum spin + Shell Builtins
+
+`gum spin` (written in Go) spawns subprocesses via `os/exec`, which requires an actual executable file on `$PATH`. Shell builtins like `source`, `function`, `alias`, and shell keywords cannot be executed directly:
+
+```bash
+# BROKEN: source is a bash builtin, not a file on disk
+gum spin --title "Working..." -- source ./script.sh
+
+# FIXED: wrap through bash executable
+gum spin --title "Working..." -- bash -c "source './script.sh'"
+```
+
+This also applies to shell functions — they only exist in the current shell's memory, not as files on disk. Always wrap in `bash -c`.
+
+## Cross-Process Error Handling
+
+Shell variables like `ERROR_HANDLING` do NOT cross process boundaries. When spawning a separate `bash -c "..."` process that re-sources error handling, the parent process's guard variable is untouched.
+
+If the child process's error handler fires and the user chooses "Exit", the child must signal to the parent that the error was already handled. Options:
+
+1. **Exit code 0**: Child exits 0 on user-initiated "Exit". Parent sees success, no ERR trap fires. Simplest, but masks the failure exit code.
+2. **Sentinel file**: Child creates `/tmp/justbuntu-error-handled` before exiting. Parent's error handler checks for this file and suppresses re-fire if found.
+3. **Specific exit code**: Child exits with code 42. Parent's `exit_handler` checks `(( exit_code != 42 ))` before firing.
+
+## Variable Quoting Inside Command Substitutions
+
+Inside `$(...)`, unquoted variables undergo word splitting and glob expansion. Always quote paths that could contain spaces or special characters:
+
+```bash
+# BAD: $HOME unquoted inside $(...)
+eval "$($HOME/.linuxbrew/bin/brew shellenv bash)"
+
+# GOOD: quoted
+eval "$("$HOME/.linuxbrew/bin/brew" shellenv bash)"
+```
+
+This applies to `$HOME`, `$INSTALLER_FILE`, or any variable used as a command path inside a command substitution.
+
 
 ## Third-Party Apt Repositories
 

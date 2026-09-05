@@ -10,19 +10,11 @@ if ! command -v brew >/dev/null 2>&1; then
     if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
     elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
-      eval "$($HOME/.linuxbrew/bin/brew shellenv bash)"
+      eval "$("$HOME/.linuxbrew/bin/brew" shellenv bash)"
     fi
   else
     echo "homebrew install failed (continuing)"
   fi
 else
   echo "homebrew already installed, skipping"
-  # Ensure brew is in PATH even if already installed from a previous run
-  if ! command -v brew >/dev/null 2>&1; then
-    if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
-      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
-    elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
-      eval "$($HOME/.linuxbrew/bin/brew shellenv bash)"
-    fi
-  fi
 fi

@@ -32,17 +32,20 @@ EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 SCHEMAS_DIR="/usr/share/glib-2.0/schemas"
 # Copy all Space Bar schemas. Ships 4 separate files: appearance, behavior, shortcuts, state.
 for schema in "$EXTENSIONS_DIR/space-bar@luchrioh"/schemas/*.gschema.xml; do
-  [ -f "$schema" ] && sudo cp "$schema" "$SCHEMAS_DIR/" 2>/dev/null || true
+  if [ -f "$schema" ]; then sudo cp "$schema" "$SCHEMAS_DIR/" 2>/dev/null || true; fi
 done
 # Copy Just Perfection schema
-[ -f "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" ] && \
+if [ -f "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" ]; then
   sudo cp "$EXTENSIONS_DIR/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
+fi
 # Copy Copyous schema
-[ -f "$EXTENSIONS_DIR/copyous@boerdereinar.dev/schemas/org.gnome.shell.extensions.copyous.gschema.xml" ] && \
+if [ -f "$EXTENSIONS_DIR/copyous@boerdereinar.dev/schemas/org.gnome.shell.extensions.copyous.gschema.xml" ]; then
   sudo cp "$EXTENSIONS_DIR/copyous@boerdereinar.dev/schemas/org.gnome.shell.extensions.copyous.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
+fi
 # Copy Emoji Copy schema
-[ -f "$EXTENSIONS_DIR/emoji-copy@felipeftn/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml" ] && \
+if [ -f "$EXTENSIONS_DIR/emoji-copy@felipeftn/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml" ]; then
   sudo cp "$EXTENSIONS_DIR/emoji-copy@felipeftn/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml" "$SCHEMAS_DIR/" 2>/dev/null || true
+fi
 # Compile all schemas
 sudo glib-compile-schemas "$SCHEMAS_DIR/" 2>/dev/null || true
 # Space Bar extension preferences

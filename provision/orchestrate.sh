@@ -41,7 +41,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
       if [ -x '/home/linuxbrew/.linuxbrew/bin/brew' ]; then
         eval \"\$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)\"
       elif [ -x \"\$HOME/.linuxbrew/bin/brew\" ]; then
-        eval \"\$(\$HOME/.linuxbrew/bin/brew shellenv bash)\"
+        eval \"\$( \"\$HOME/.linuxbrew/bin/brew\" shellenv bash)\"
       fi
       source '$HOME/.local/share/justbuntu/provision/helpers/logging.sh'
       source '$HOME/.local/share/justbuntu/provision/helpers/errors.sh'

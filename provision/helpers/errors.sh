@@ -58,7 +58,7 @@ catch_errors() {
       less "$JUSTBUNTU_INSTALL_LOG_FILE" 2>/dev/null || tail -50 "$JUSTBUNTU_INSTALL_LOG_FILE"
       ;;
     *)
-      exit 1
+      exit 0
       ;;
     esac
   done

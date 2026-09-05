@@ -30,6 +30,15 @@ set -euo pipefail
 - Command is in a negated `!` expression
 - Command output is captured via `$(...)` and used in a conditional
 
+
+## Cross-Process Error Handling
+
+Shell variables and traps do NOT cross `bash -c` boundaries. Each process gets its own copy. If error handling is sourced in both parent and child processes, a failure in the child can trigger the parent's error handler a second time.
+
+Guard against this by either:
+- Having the child's "Exit" path return a specific signal (exit code 0, sentinel file, or reserved code like 42)
+- Checking for that signal in the parent's error handler before re-firing
+
 ## Reserved Exit Codes
 
 | Code | Meaning |
