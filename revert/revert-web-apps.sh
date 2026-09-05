@@ -1,6 +1,7 @@
 #!/bin/bash
 # Uninstall web apps by removing their .desktop files and icons
 rm -f "$HOME/.local/share/applications/ChatGPT.desktop"
+rm -f "$HOME/.local/share/applications/Google Drive.desktop"
 rm -f "$HOME/.local/share/applications/Google Photos.desktop"
 rm -f "$HOME/.local/share/applications/Google Keep.desktop"
 rm -f "$HOME/.local/share/applications/YouTube.desktop"
@@ -9,6 +10,7 @@ rm -f "$HOME/.local/share/applications/Messenger.desktop"
 rm -f "$HOME/.local/share/applications/Instagram.desktop"
 rm -f "$HOME/.local/share/applications/Reddit.desktop"
 rm -f "$HOME/.local/share/applications/icons/ChatGPT.png"
+rm -f "$HOME/.local/share/applications/icons/Google Drive.png"
 rm -f "$HOME/.local/share/applications/icons/Google Photos.png"
 rm -f "$HOME/.local/share/applications/icons/Google Keep.png"
 rm -f "$HOME/.local/share/applications/icons/YouTube.png"

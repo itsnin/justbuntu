@@ -262,6 +262,61 @@ Verify in CI:
     done
 ```
 
+
+## Idempotent Dotfile Modification
+
+Never replace a user's `~/.bashrc` or `~/.profile`. Always append and use a guard to prevent duplication. Backup only once.
+
+```bash
+SOURCE_LINE="source "\$HOME/.local/share/justbuntu/shell/bash/rc""
+BASHRC_FILE="$HOME/.bashrc"
+BACKUP_FILE="$HOME/.bashrc.bak"
+
+# Backup only if backup doesn't exist yet — preserves genuine original
+if [ -f "$BASHRC_FILE" ] && [ ! -f "$BACKUP_FILE" ]; then
+  cp "$BASHRC_FILE" "$BACKUP_FILE"
+fi
+
+# Create file if missing entirely
+[ ! -f "$BASHRC_FILE" ] && touch "$BASHRC_FILE"
+
+# Append only if not already present (idempotent across re-runs)
+if ! grep -qxF "$SOURCE_LINE" "$BASHRC_FILE"; then
+  {
+    echo ""
+    echo "# JustBuntu — load shell environment"
+    echo "$SOURCE_LINE"
+  } >> "$BASHRC_FILE"
+fi
+```
+
+Key properties:
+- User's existing customizations are preserved, not destroyed
+- Second run does nothing (grep guard prevents duplication)
+- Original backup never overwritten
+- Works even if user has no bashrc at all
+
+## Hard Dependencies Must Fail Hard
+
+If a component is required for the script to continue (e.g., `gum` before interactive prompts), it must `exit 1` on failure, not just `echo` and continue.
+
+```bash
+# GOOD: hard fail with clear message
+if ! sudo apt install -y gum; then
+  echo "ERROR: gum installation failed. Gum is a required dependency." >&2
+  exit 1
+fi
+
+# BAD: silent failure, subsequent commands crash mysteriously
+sudo apt install -y gum || echo "gum install failed"
+```
+
+## Core Dependencies Have No Revert Scripts
+
+JustBuntu core and its hard dependencies (gum) are permanent infrastructure. They must NOT have revert scripts. The "Reset All Components" feature reverts provisioned applications and settings, not the foundation that makes JustBuntu work.
+
+If you add a new hard dependency: do NOT create a `revert-*.sh` for it.
+
 ## Cross-Process Error Handling via Sentinel File
 
 When error handling spans a `bash -c` boundary, shell variables like `ERROR_HANDLING` cannot cross. Use a sentinel file:

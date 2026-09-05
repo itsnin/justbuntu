@@ -129,9 +129,7 @@ The installer runs as a series of sourced bash scripts. Each script file is resp
 
 ### Comments
 
-All comments are lowercase with no exceptions unless a capital letter is required to preserve meaning. For example, `curl -fsSL` must keep the capital `S` and `L` because they are case-sensitive flags.
-
-No punctuation in comments. No periods, no commas, no exclamation marks, no question marks — unless punctuation changes meaning.
+Write like a lazy senior engineer jotting quick notes. Sentence case for the first word. Proper nouns and acronyms capitalized (Ubuntu, GNOME, CLI, Super, Alt, Homebrew, JetBrains). Light punctuation — periods at the end of complete thoughts, commas where they help. Don't force perfect grammar. Don't overdo it.
 
 Explain why, not what the code already shows.
 
