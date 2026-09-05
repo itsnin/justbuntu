@@ -4,12 +4,8 @@
 # No user interaction, runs instantly.
 run_script "$HOME/.local/share/justbuntu/provision/desktop/configure-keybindings.sh"
 
-# GNOME extensions next. They have interactive popups that need user attention
-# while they're still at the keyboard. Space Bar extension may clear Super+1-9
-# shortcuts (set above) to avoid conflicts. Must run after keybindings.
-if [[ "${JUSTBUNTU_INSTALL_EXTENSIONS:-}" == "true" ]]; then
-  run_script "$HOME/.local/share/justbuntu/provision/desktop/configure-shell-extensions.sh"
-fi
+# GNOME extensions already handled in the parent orchestrator before the
+# unattended phase began (they have interactive popups requiring user attention).
 
 # Run remaining desktop installers
 for installer in "$HOME/.local/share/justbuntu/provision/desktop/"*.sh; do

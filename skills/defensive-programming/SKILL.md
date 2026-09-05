@@ -377,6 +377,52 @@ sudo -v
 
 This ensures sudo never prompts mid-install when the prompt might be invisible due to output redirection or buffering.
 
+
+## curl|sh Installers With Interactive Prompts
+
+Third-party install scripts piped through `curl | sh` sometimes ask post-install questions (e.g., "Start now?"). Since stdin is the script itself, these scripts open `/dev/tty` directly and will hang indefinitely waiting for input in an unattended context.
+
+**Fix**: Download to temp file first, then pipe `yes n` to handle any prompts:
+
+```bash
+TMP_INSTALL=$(mktemp)
+if curl -fsSL "$URL" -o "$TMP_INSTALL"; then
+  yes n | bash "$TMP_INSTALL"
+fi
+rm -f "$TMP_INSTALL"
+```
+
+
+## Binary Installer Idempotency
+
+Scripts that download and extract tarballs or move binaries into place must check if the binary already exists at the target location before attempting installation. On a second run, destination files may be locked by running processes or otherwise fail to overwrite.
+
+```bash
+# GOOD: check and skip if already present
+if [ -x "$HOME/.local/share/AppTool/app-binary" ]; then
+  echo "app tool already installed, skipping"
+  return 0
+fi
+# ... download and extract ...
+mv -f "$SOURCE_DIR"/bin/* "$TARGET_DIR/"   # -f flag prevents "file exists" errors
+```
+
+`apt install` is inherently idempotent and does not need this check. Direct binary extraction and `mv` operations do.
+
+## Interactive Phases Must Stay Interactive
+
+GNOME extension installation triggers popup confirmations in the shell UI. These require the user to be at the keyboard. Run extension installation immediately after the user finishes answering questions, not later in an "unattended" phase.
+
+Correct order:
+1. All interactive questions (last one = extensions yes/no)
+2. Extension installation (popups appear, user clicks confirm)
+3. sudo credential refresh
+4. Unattended system changes (snapd removal, etc.)
+
+## Sudo Prompts Need Clean TTY
+
+`sudo -v` (credential caching) should run AFTER `restore_tty` so the password prompt renders directly to the terminal, not through a `tee` pipe buffer that could mangle it.
+
 ## Third-Party Apt Repositories
 
 When a project offers an official apt repository, prefer it over hardcoded .deb downloads. It gives automatic updates via `apt upgrade`. Standard pattern:

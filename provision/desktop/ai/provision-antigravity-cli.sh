@@ -1,8 +1,11 @@
 #!/bin/bash
 # Install Google Antigravity CLI (agy)
 # Requires Google account authentication after installation.
-if curl -fsSL --retry 3 --retry-delay 5 https://antigravity.google/cli/install.sh | bash; then
-  echo "antigravity cli installed. run 'agy' to authenticate and start."
-else
-  echo "antigravity cli install failed (continuing)"
+# Download to temp file first, then pipe "n" to any interactive prompts.
+TMP_INSTALL=$(mktemp)
+if curl -fsSL --retry 3 --retry-delay 5 https://antigravity.google/cli/install.sh -o "$TMP_INSTALL"; then
+  if yes n | bash "$TMP_INSTALL"; then
+    echo "antigravity cli installed. run 'agy' to authenticate and start."
+  fi
 fi
+rm -f "$TMP_INSTALL"

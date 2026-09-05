@@ -1,5 +1,10 @@
 #!/bin/bash
 # Install JetBrains Toolbox App
+# Idempotent: skip if already installed at the expected location.
+if [ -x "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox" ]; then
+  echo "jetbrains toolbox already installed, skipping"
+  return 0
+fi
 # Download latest version in a subshell. Avoids changing parent working directory.
 (
   TMP_DIR=$(mktemp -d)
@@ -25,7 +30,7 @@ print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
     TOOLBOX_DIR=$(find . -maxdepth 1 -type d -name "jetbrains-toolbox-*" | head -1)
     if [ -n "$TOOLBOX_DIR" ]; then
       mkdir -p "$HOME/.local/share/JetBrains/Toolbox"
-      mv "$TOOLBOX_DIR"/bin/* "$HOME/.local/share/JetBrains/Toolbox/"
+      mv -f "$TOOLBOX_DIR"/bin/* "$HOME/.local/share/JetBrains/Toolbox/"
       # Ensure Toolbox binary is executable
       chmod +x "$HOME/.local/share/JetBrains/Toolbox/jetbrains-toolbox"
       # Create symlink for easy access
