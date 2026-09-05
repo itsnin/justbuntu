@@ -1,4 +1,4 @@
-# JustBuntu
+#                                  JustBuntu
 
 <p align="center">
   <strong>Turn a fresh Ubuntu installation into what it should have been.</strong>
