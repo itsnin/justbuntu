@@ -185,6 +185,25 @@ SLACK_DEB_URL=$(curl -fsSL --retry 2 "https://slack.com/downloads/linux" | grep 
 Fallback: if the parse fails, skip gracefully with a warning rather than hardcoding a version that will become stale.
 
 
+
+## Homebrew Non-Interactive Install
+
+The official Homebrew installer is interactive by default. For automation:
+
+```bash
+# GOOD: official non-interactive mode
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# BAD: unreliable echo pipe
+echo | /bin/bash -c "..."   # May hang on multiple prompts or sudo password
+```
+
+Homebrew on Linux installs to one of two locations depending on sudo access:
+- `/home/linuxbrew/.linuxbrew/bin/brew` (system-wide, requires sudo)
+- `$HOME/.linuxbrew/bin/brew` (user-local, no sudo needed)
+
+Always check **both** paths when initializing `brew shellenv`.
+
 ## Third-Party Apt Repositories
 
 When a project offers an official apt repository, prefer it over hardcoded .deb downloads. It gives automatic updates via `apt upgrade`. Standard pattern:

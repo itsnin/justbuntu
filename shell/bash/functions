@@ -77,7 +77,11 @@ app2folder() {
   local CURRENT_APPS=$(gsettings get "$SCHEMA" apps)
   if [[ "$CURRENT_APPS" != *"$DESKTOP_FILE"* ]]; then
     local TRIMMED=$(echo "$CURRENT_APPS" | sed "s/^\[//;s/\]$//")
-    gsettings set "$SCHEMA" apps "[$TRIMMED, '$DESKTOP_FILE']"
+    if [[ -z "${TRIMMED// }" ]]; then
+      gsettings set "$SCHEMA" apps "['$DESKTOP_FILE']"
+    else
+      gsettings set "$SCHEMA" apps "[$TRIMMED, '$DESKTOP_FILE']"
+    fi
   fi
 }
 

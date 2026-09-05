@@ -8,6 +8,8 @@ source "/usr/share/bash-completion/bash_completion"
 # Homebrew — if installed, add to PATH and environment
 if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
+  eval "$($HOME/.linuxbrew/bin/brew shellenv bash)"
 fi
 # Set complete path
 export PATH="$HOME/.local/bin:$HOME/.local/share/justbuntu/bin:$PATH"
