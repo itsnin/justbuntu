@@ -242,6 +242,48 @@ eval "$("$HOME/.linuxbrew/bin/brew" shellenv bash)"
 This applies to `$HOME`, `$INSTALLER_FILE`, or any variable used as a command path inside a command substitution.
 
 
+## Executable Bits in Git
+
+Git tracks the executable permission bit (mode 100755 vs 100644). Zip files and some editors destroy this information.
+
+**Critical files that MUST be executable**:
+- CLI entry points invoked directly by name (e.g., `bin/justbuntu` on `$PATH`)
+- Entry point scripts users might run as `./script.sh`
+
+**Files that do NOT need to be executable**:
+- Any script always invoked via `source` or `bash script.sh` (the vast majority in this codebase)
+
+Verify in CI:
+```yaml
+- name: Verify critical files retain executable permission
+  run: |
+    for f in bin/justbuntu bootstrap.sh; do
+      [ ! -x "$f" ] && echo "ERROR: $f must be executable" && exit 1
+    done
+```
+
+## Cross-Process Error Handling via Sentinel File
+
+When error handling spans a `bash -c` boundary, shell variables like `ERROR_HANDLING` cannot cross. Use a sentinel file:
+
+```bash
+# In child process error handler, "Exit" case:
+touch /tmp/justbuntu-error-handled
+exit 1  # Still report genuine failure
+
+# In parent process error handler, at the very top:
+if [[ -f /tmp/justbuntu-error-handled ]]; then
+  rm -f /tmp/justbuntu-error-handled
+  ERROR_HANDLING=true  # Also suppress EXIT trap re-fire
+  return
+fi
+```
+
+Clean up stale sentinels at startup: `rm -f /tmp/justbuntu-error-handled`
+
+This preserves genuine failure exit codes while preventing double error menus.
+
+
 ## Third-Party Apt Repositories
 
 When a project offers an official apt repository, prefer it over hardcoded .deb downloads. It gives automatic updates via `apt upgrade`. Standard pattern:

@@ -2,6 +2,8 @@
 # Exit immediately if a command exits with a non-zero status.
 # -E preserves ERR traps inside functions. Required for error handling.
 set -eEuo pipefail
+# Clean up any stale error-handling sentinel from previous runs
+rm -f /tmp/justbuntu-error-handled
 # Load helpers. Logging duplicates output to /var/log/justbuntu-install.log,
 # errors provides graceful recovery with retry menu and log inspection.
 source "$HOME/.local/share/justbuntu/provision/helpers/logging.sh"

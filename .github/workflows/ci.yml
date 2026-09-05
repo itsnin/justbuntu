@@ -16,6 +16,19 @@ jobs:
         run: |
           find . -name "*.sh" -exec bash -n {} \;
           echo "All shell scripts pass syntax validation"
+      - name: Verify critical files retain executable permission
+        run: |
+          MISSING=""
+          for f in bin/justbuntu bootstrap.sh; do
+            if [ ! -x "$f" ]; then
+              MISSING="$MISSING $f"
+            fi
+          done
+          if [ -n "$MISSING" ]; then
+            echo "ERROR: These files must be executable but are not:$MISSING"
+            exit 1
+          fi
+          echo "All critical files have executable permission"
 
       - name: Check no forbidden project references
         run: |

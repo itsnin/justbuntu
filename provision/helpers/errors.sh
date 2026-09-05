@@ -17,6 +17,13 @@ clear_logo() {
 }
 catch_errors() {
   local exit_code=$?
+  # If error was already handled in a child process, suppress double fire
+  # but preserve the genuine failure exit code
+  if [[ -f /tmp/justbuntu-error-handled ]]; then
+    rm -f /tmp/justbuntu-error-handled
+    ERROR_HANDLING=true
+    return
+  fi
   if [[ $ERROR_HANDLING == true ]]; then
     return
   fi
@@ -58,7 +65,9 @@ catch_errors() {
       less "$JUSTBUNTU_INSTALL_LOG_FILE" 2>/dev/null || tail -50 "$JUSTBUNTU_INSTALL_LOG_FILE"
       ;;
     *)
-      exit 0
+      # Create sentinel so parent process knows error was already handled
+      touch /tmp/justbuntu-error-handled
+      exit 1
       ;;
     esac
   done
