@@ -339,6 +339,44 @@ Clean up stale sentinels at startup: `rm -f /tmp/justbuntu-error-handled`
 This preserves genuine failure exit codes while preventing double error menus.
 
 
+
+## TTY Buffering with Tee and TUI Tools
+
+When using `exec > >(tee -a logfile) 2>&1` to duplicate output to a log file, TUI tools like `gum choose` can appear "stuck." Their terminal escape sequences contain no newlines, so they sit in the pipe buffer between the script and `tee`.
+
+**Fix**: Save the original TTY file descriptors before redirecting, and restore them for interactive phases:
+
+```bash
+# Before redirect: save original stdout (fd 3) and stderr (fd 4)
+exec 3>&1
+exec 4>&2
+exec > >(tee -a "$LOGFILE") 2>&1
+
+# For interactive TUI phases:
+restore_tty() { exec >&3 2>&4; }
+enable_logging() { exec > >(tee -a "$LOGFILE") 2>&1; }
+
+restore_tty
+gum choose ...  # Renders directly to TTY, no buffering
+enable_logging
+```
+
+## Sudo Credential Caching Strategy
+
+Default sudo timeout is 15 minutes. Interactive phases can easily exceed this.
+
+```bash
+# Cache credentials UPFRONT — before any provisioning that needs sudo
+sudo -v
+
+# ... long interactive phase ...
+
+# Refresh credentials after user finishes making choices
+sudo -v
+```
+
+This ensures sudo never prompts mid-install when the prompt might be invisible due to output redirection or buffering.
+
 ## Third-Party Apt Repositories
 
 When a project offers an official apt repository, prefer it over hardcoded .deb downloads. It gives automatic updates via `apt upgrade`. Standard pattern:

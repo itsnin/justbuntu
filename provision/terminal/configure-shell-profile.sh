@@ -5,7 +5,7 @@
 # Idempotent: does nothing if the source line already exists.
 # Backup only created once, never overwritten on subsequent runs.
 
-JUSTBUNTU_BASHRC_SOURCE="source "\$HOME/.local/share/justbuntu/shell/bash/rc""
+JUSTBUNTU_BASHRC_SOURCE='source "\$HOME/.local/share/justbuntu/shell/bash/rc"'
 BASHRC_FILE="$HOME/.bashrc"
 BACKUP_FILE="$HOME/.bashrc.bak"
 

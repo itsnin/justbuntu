@@ -8,7 +8,23 @@ start_install_log() {
   JUSTBUNTU_START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
   export JUSTBUNTU_START_TIME
   echo "=== JustBuntu Installation Started: $JUSTBUNTU_START_TIME ===" >>"$JUSTBUNTU_INSTALL_LOG_FILE"
+  # Save original TTY file descriptors before redirecting.
+  # fd 3 = original stdout, fd 4 = original stderr. Needed so interactive
+  # TUI tools (gum) can bypass the tee pipe buffer and render directly.
+  exec 3>&1
+  exec 4>&2
   # Redirect all stdout and stderr to both terminal and log file
+  exec > >(tee -a "$JUSTBUNTU_INSTALL_LOG_FILE") 2>&1
+}
+
+# Restore original TTY for interactive phases. Tee pipe can buffer
+# TUI escape sequences (no newlines), making gum prompts appear "stuck."
+restore_tty() {
+  exec >&3 2>&4
+}
+
+# Re-enable logging redirect after interactive phase
+enable_logging() {
   exec > >(tee -a "$JUSTBUNTU_INSTALL_LOG_FILE") 2>&1
 }
 stop_install_log() {
