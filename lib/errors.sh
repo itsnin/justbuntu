@@ -59,7 +59,7 @@ catch_errors() {
     case "$choice" in
     "Retry installation")
       printf '\033[H\033[2J'
-      exec bash -c "source $HOME/.local/share/justbuntu/provision/orchestrate.sh"
+      exec bash -c "source $HOME/.local/share/justbuntu/install.sh"
       ;;
     "View full log")
       less "$JUSTBUNTU_INSTALL_LOG_FILE" 2>/dev/null || tail -50 "$JUSTBUNTU_INSTALL_LOG_FILE"

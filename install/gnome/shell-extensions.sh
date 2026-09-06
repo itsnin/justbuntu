@@ -1,5 +1,8 @@
 #!/bin/bash
 sudo apt install -y gnome-shell-extension-manager gir1.2-gtop-2.0 gir1.2-clutter-1.0 pipx || echo "shell extension deps install failed (continuing)"
+# pipx installs binaries to ~/.local/bin which may not be on PATH yet
+# in this shell session (shell profile setup runs later in terminal phase)
+export PATH="$HOME/.local/bin:$PATH"
 pipx install gnome-extensions-cli --system-site-packages
 # Turn off default Ubuntu extensions
 gnome-extensions disable tiling-assistant@ubuntu.com 2>/dev/null || true

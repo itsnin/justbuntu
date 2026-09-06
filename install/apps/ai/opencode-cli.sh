@@ -5,7 +5,7 @@
 # then pipe "n" to any interactive prompts.
 TMP_INSTALL=$(mktemp)
 if curl -fsSL --retry 3 --retry-delay 5 https://opencode.ai/install -o "$TMP_INSTALL"; then
-  if yes n | bash "$TMP_INSTALL"; then
+  if echo n | script -q -c "bash $TMP_INSTALL" /dev/null; then
     echo "opencode cli installed via official script. run 'opencode' to configure API keys."
     rm -f "$TMP_INSTALL"
   else

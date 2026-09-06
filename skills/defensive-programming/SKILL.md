@@ -393,6 +393,64 @@ rm -f "$TMP_INSTALL"
 ```
 
 
+
+## PTY Wrapper for /dev/tty Prompts
+
+Some third-party install scripts open `/dev/tty` directly for post-install prompts, completely bypassing stdin. Piping `yes n |` to the script's stdin has no effect because the script reads from the terminal device, not file descriptor 0.
+
+**Fix**: Use the `script` command to create a pseudo-terminal, then pipe input to that:
+
+```bash
+echo n | script -q -c "sh $TMP_INSTALL" /dev/null
+```
+
+- `script` creates a PTY and runs the command inside it
+- `-q` = quiet mode, no "Script started/stopped" messages
+- `-c "command"` = command to run
+- `/dev/null` = discard the typescript output file
+- `echo n |` = provides input that reaches the PTY's /dev/tty
+
+This is the only reliable way to answer prompts in scripts that explicitly open `/dev/tty`, short of using `expect`.
+
+
+## Script Naming and Directory Conventions
+
+Scripts are organized by action, not by "provisioning" (too vague/academic). Each filename clearly states what it does:
+
+```
+install/      # Scripts that install software packages
+configure/    # Scripts that configure system settings (no package install)
+core/         # Orchestrators, validation, interactive preference gathering
+lib/      # Shared infrastructure (logging, error handling)
+revert/       # Uninstall + deconfigure scripts (categorized into uninstall/ and deconfigure/ subdirs)
+```
+
+File prefix convention:
+- Files in `install/` — download and/or install software
+- Files in `configure/` — change settings via gsettings, dconf, config files, etc.
+- `register-*.sh` — registers desktop entries, MIME types, etc.
+
+Never use vague prefixes like `provision-` which could mean either install or configure.
+
+
+## Revert Script Categorization
+
+Revert scripts are organized by action, mirroring the install/configure split:
+
+```
+revert/
+  uninstall/     # Removes installed packages (apt purge, brew uninstall, rm -rf binaries)
+  deconfigure/   # Resets settings (gsettings reset, removes config files, .desktop entries)
+  revert/all.sh   # Orchestrator — globs both subdirectories
+```
+
+Corollary: the orchestrator glob pattern must cover BOTH subdirectories:
+```bash
+for script in "$REVERT_DIR"/uninstall/revert-*.sh "$REVERT_DIR"/deconfigure/revert-*.sh; do
+```
+
+Never mix uninstall and deconfigure logic in the same revert script. Each script does one thing.
+
 ## Binary Installer Idempotency
 
 Scripts that download and extract tarballs or move binaries into place must check if the binary already exists at the target location before attempting installation. On a second run, destination files may be locked by running processes or otherwise fail to overwrite.
@@ -542,3 +600,33 @@ Dependabot removed entirely. No automated dependency branches.
 ## GitHub Issue Forms
 
 Prefer YAML issue forms (`.yml`) over markdown templates (`.md`). YAML forms provide required field validations, structured input types, and consistent issue formatting.
+
+
+## Separate Cross-Desktop from DE-Specific Provisioning
+
+Not all GUI apps require a specific desktop environment. Browsers (Chrome, Brave), terminal emulators (Ghostty), media players (VLC), IDEs (VS Code), chat apps (Slack, Discord, Element), AI CLIs, web app .desktop entries, and tools like AppImageLauncher all work on any DE that supports X11/Wayland and XDG standards. Only DE-specific tweaks (GNOME extensions, keybindings, dock config, gsettings/dconf calls, GNOME Boxes/Sushi/Tweaks) should be gated behind a `$XDG_CURRENT_DESKTOP` check.
+
+Directory structure:
+```
+install/
+  apps/                    # Always runs: cross-desktop apps, browsers, AI tools
+    ai/                    # AI CLIs and GUI tools (no DE requirement)
+    optional/              # Third-party .deb downloaders (Slack, Discord, JetBrains, etc.)
+    apps.sh                  # Optional app orchestrator
+    ai-tools.sh              # AI tool orchestrator
+    browsers.sh              # Chrome + Brave install + xdg-settings default
+    ghostty.sh               # Terminal emulator (apt install)
+    vlc.sh                   # Media player
+    vscode.sh                # IDE
+    obsidian.sh              # Notes
+    localsend.sh             # File transfer
+    element.sh               # Matrix chat
+    appimagelauncher.sh      # AppImage integration
+    web-apps.sh              # .desktop entries for web apps
+  desktop/                 # GNOME-only: extensions, keybindings, dock, gsettings
+    extensions/            # Wayland scroll factor (mutter dconf)
+    gnome/*.sh              # Keybindings, dock, app grid, default terminal
+    gnome-*.sh   # GNOME Boxes, Sushi, Tweaks
+```
+
+Corollary: interactive preference questions about cross-desktop apps, browsers, and web apps must be asked of ALL users, not gated behind the GNOME check. Only GNOME extensions and Wayland-specific tweaks stay behind the gate.

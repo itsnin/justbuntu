@@ -24,4 +24,4 @@ if [[ -n "${JUSTBUNTU_REF:-}" ]] && [[ $JUSTBUNTU_REF != "main" ]]; then
 	cd -
 fi
 echo "Installation starting..."
-source "$HOME/.local/share/justbuntu/provision/orchestrate.sh"
+source "$HOME/.local/share/justbuntu/install.sh"

@@ -1,6 +1,6 @@
 #!/bin/bash
-# Install ai tools. separate category from optional apps. user chooses.
-# All CLI tools require browser authentication after installation.
+# Install AI tools. Cross-desktop — CLIs work on any DE, Claude Desktop
+# needs a graphical environment but not specifically GNOME.
 if [[ -v JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS"
 else
@@ -8,17 +8,17 @@ else
   selected=$(gum choose "${AI_OPTIONS[@]}" --no-limit --height 8 --header "Select AI tools (optional, all require account login after install)")
 fi
 if [[ "$selected" == *"Claude Desktop"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-desktop.sh"
+  source "$JUSTBUNTU_PATH/install/apps/ai/claude-desktop.sh"
 fi
 if [[ "$selected" == *"Claude Code CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/ai/provision-claude-code-cli.sh"
+  source "$JUSTBUNTU_PATH/install/apps/ai/claude-code-cli.sh"
 fi
 if [[ "$selected" == *"OpenCode CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/ai/provision-opencode-cli.sh"
+  source "$JUSTBUNTU_PATH/install/apps/ai/opencode-cli.sh"
 fi
 if [[ "$selected" == *"Antigravity CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/ai/provision-antigravity-cli.sh"
+  source "$JUSTBUNTU_PATH/install/apps/ai/antigravity-cli.sh"
 fi
 if [[ "$selected" == *"Codex CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/desktop/ai/provision-codex-cli.sh"
+  source "$JUSTBUNTU_PATH/install/apps/ai/codex-cli.sh"
 fi

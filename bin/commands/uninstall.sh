@@ -12,12 +12,12 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
 fi
 if [[ "$CHOICE" == "Reset All Components"* ]]; then
   if gum confirm "This will revert all provisioned apps and settings. justbuntu core will remain. Continue?"; then
-    gum spin --spinner globe --title "Resetting all components..." -- bash -c "source '$JUSTBUNTU_PATH/revert/revert-all-components.sh'"
+    gum spin --spinner globe --title "Resetting all components..." -- bash -c "source '$JUSTBUNTU_PATH/revert/all.sh'"
     if gum confirm "Reset complete. Reboot for all changes to take effect?"; then sudo reboot || true; fi
   fi
 else
   UNINSTALLER=$(gum file "$JUSTBUNTU_PATH/revert" --height 26)
-  if [[ -n "$UNINSTALLER" ]] && [[ "$(basename "$UNINSTALLER")" != "revert-all-components.sh" ]]; then
+  if [[ -n "$UNINSTALLER" ]] && [[ "$(basename "$UNINSTALLER")" != "all.sh" ]]; then
     gum confirm "Run $(basename "$UNINSTALLER")?" &&
       source "$UNINSTALLER" &&
       gum spin --spinner globe --title "Revert completed!" -- sleep 2

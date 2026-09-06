@@ -35,7 +35,7 @@ The project is organized into distinct functional domains, each with a clear res
 ```
 justbuntu/
     bootstrap.sh                 Entry point. Clones repository and initiates provisioning
-    provision/orchestrate.sh     Primary orchestrator. Wires together core validation,
+    install.sh     Primary orchestrator. Wires together core validation,
                                  preference gathering, logging, error recovery, and domain-specific provisioners
     banner.sh                    ASCII art banner displayed at startup
     version                      Plain text version number, calendar-based
@@ -47,61 +47,86 @@ justbuntu/
         icons/                  PNG icons referenced by desktop entries
     shell/                      Shell environment: PATH, aliases, functions, prompt
         bash/
-    provision/
-        orchestrate-terminal.sh  Runs all terminal provisioning modules
-        orchestrate-desktop.sh   Runs all desktop provisioning modules (GNOME only)
-        helpers/                   Install logging to /var/log/justbuntu-install.log and
-                                   sophisticated error handling with retry menu
-            logging.sh                  Tee-based log redirection, run_script helper with CURRENT_SCRIPT tracking, start/stop timing
-            errors.sh                   ERR trap, retry menu, log viewer, graceful recovery
-        core/                    Foundational setup: system validation, snapd, kdump, preferences
-            validate-system.sh        OS and architecture validation
-            configure-snapd.sh         Snapd retention or removal choice
-            purge-kdump.sh             Kdump-tools removal to free reserved memory
-            gather-preferences.sh      ALL interactive choices upfront: snapd, dev languages, browsers, optional apps, web apps, AI assistants, GNOME extensions
-        terminal/                Terminal environment provisioning
-            prerequisites/            Dependencies required before interactive prompts
-                provision-gum.sh      Gum TUI library installation
-                provision-homebrew.sh   Homebrew package manager for Linux (mandatory)
-            configure-git.sh          Git identity and behavior
-            configure-shell-profile.sh Shell profile deployment
-            provision-cli-utilities.sh Fastfetch, btop, wget, curl, micro
-            provision-dev-tooling.sh   Selectable language and tool installation
-            provision-github-cli.sh    GitHub CLI via apt repo
-            provision-system-libraries.sh Common development libraries
-        desktop/                 Desktop environment provisioning
-            configure-app-grid.sh          Application folder organization
-            configure-browsers.sh          Browser selection and installation
-            configure-default-terminal.sh  Ghostty as default terminal emulator
-            configure-desktop-preferences.sh Window behavior, calendar, ambient sensors
-            configure-dock.sh              Dash favorite-apps configuration
-            configure-keybindings.sh       Keyboard shortcuts: Super+w close, Super+Up maximize, Super+e files, 9 fixed workspaces, Alt+1-9 apps, Super+1-9 workspaces
-            configure-shell-extensions.sh  Install 7 extensions, disable 6 Ubuntu extensions, copy schemas + compile, set prefs, resolve Super+V and Super+. keybinding conflicts
-            extensions/                     User-choice desktop applications
-                provision-jetbrains-toolbox.sh
-                provision-obs-studio.sh
-                provision-spotify.sh
-                provision-slack.sh
-                provision-discord.sh
-                provision-web-apps.sh
-            provision-extensions.sh        Extension selection orchestrator
-            provision-ai-assistants.sh     AI tools orchestrator (Claude Desktop + 4 CLI tools)
+    install.sh              Main entry point. Orchestrates full installation flow.
+    core/                   Orchestrators and foundation
+        terminal.sh             Runs all terminal provisioning modules
+        desktop.sh              Runs all desktop provisioning modules (GNOME only)
+        validate-system.sh      OS and architecture validation
+        gather-preferences.sh   ALL interactive choices upfront
+    lib/                    Infrastructure: logging and error handling
+        logging.sh              Tee-based log redirection, run_script helper
+        errors.sh               ERR trap, retry menu, log viewer, graceful recovery
+    configure/              System configuration (no package install)
+        snapd.sh                Snapd retention or removal choice
+        kdump.sh                Kdump-tools removal to free reserved memory
+        git.sh                  Git identity and behavior
+        shell-profile.sh        Shell profile deployment
+        gnome/                  GNOME-specific configuration
+            keybindings.sh          Keyboard shortcuts
+            dock.sh                 Dash favorite-apps configuration
+            app-grid.sh             Application folder organization
+            desktop-preferences.sh  Window behavior, calendar, ambient sensors
+            default-terminal.sh     Ghostty as default terminal emulator
+            register-desktop-entries.sh
+    install/                Software installation
+        prerequisites/          Dependencies required before interactive prompts
+            gum.sh                  Gum TUI library installation
+            homebrew.sh             Homebrew package manager (mandatory)
+        terminal/               Terminal tools
+            cli-utilities.sh        Fastfetch, btop, wget, curl, micro
+            dev-tooling.sh          Selectable language and tool installation
+            github-cli.sh           GitHub CLI via apt repo
+            system-libraries.sh     Common development libraries
+        apps/                   Cross-desktop applications
+            browsers.sh             Chrome + Brave installation
+            ghostty.sh              Terminal emulator
+            vlc.sh                  Media player
+            vscode.sh               Code editor
+            obsidian.sh             Notes
+            localsend.sh            File transfer
+            element.sh              Matrix chat
+            appimagelauncher.sh     AppImage integration
+            web-apps.sh             .desktop entries for web apps
+            apps.sh                 Optional apps orchestrator
+            ai-tools.sh             AI tools orchestrator
+            ai/                     AI tools (Claude, Codex, etc.)
+            optional/               Third-party .deb downloaders
+        gnome/                  GNOME-only software installation
+            shell-extensions.sh     Install 7 GNOME extensions
+            gnome-boxes.sh          GNOME Boxes
+            gnome-sushi.sh          GNOME Sushi
+            gnome-tweaks.sh         GNOME Tweaks
+            extensions.sh           Wayland scroll factor orchestrator
+            extensions/
+                wayland-scroll-factor.sh
+    revert/                 Uninstall and deconfigure scripts
+        uninstall/              Package removal scripts
+        deconfigure/            Settings reset scripts
+        all.sh                  Revert everything orchestrator
+                jetbrains-toolbox.sh
+                obs-studio.sh
+                spotify.sh
+                slack.sh
+                discord.sh
+                web-apps.sh
+            extensions.sh        Extension selection orchestrator
+            ai-assistants.sh     AI tools orchestrator (Claude Desktop + 4 CLI tools)
             ai/                           AI assistant installers
-                provision-claude-desktop.sh
-            provision-ghostty.sh            GPU-accelerated terminal emulator
-            provision-gnome-boxes.sh        Virtual machine manager
-            provision-gnome-sushi.sh        File preview capability
-            provision-gnome-tweaks.sh       Desktop customization interface
-            provision-localsend.sh          Cross-platform file transfer
-            provision-obsidian.sh           Knowledge base application
-            provision-vlc.sh                Media player
-            provision-vscode.sh             Code editor
+                claude-desktop.sh
+            ghostty.sh            GPU-accelerated terminal emulator
+            gnome-boxes.sh        Virtual machine manager
+            gnome-sushi.sh        File preview capability
+            gnome-tweaks.sh       Desktop customization interface
+            localsend.sh          Cross-platform file transfer
+            obsidian.sh           Knowledge base application
+            vlc.sh                Media player
+            vscode.sh             Code editor
             register-desktop-entries.sh     Desktop entry registration
     revert/                      Revert scripts for every provisioned component.
                                  Important: revert scripts never touch JustBuntu core files.
                                  The CLI, desktop icon, shell config, and ~/.local/share/justbuntu/
                                  are permanent once installed. Users can re-provision at any time.
-                                 revert-all-components.sh runs all revert scripts (full reset option).
+                                 revert/all.sh runs all revert scripts (full reset option).
                                  Uninstall menu offers: reset all components, or select individual items.
     skills/                      Skill definitions for AI agents and code standards
         scripting-style-guide/        Naming, formatting, aesthetics, structure
@@ -123,7 +148,7 @@ justbuntu/
 
 ### Execution and Module Boundaries
 
-The installer runs as a series of sourced bash scripts. Each script file is responsible for one component and one component only. The primary `provision/orchestrate.sh` wires things together and should never contain direct installation logic itself. `orchestrate-terminal.sh` and `orchestrate-desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. No script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
+The installer runs as a series of sourced bash scripts. Each script file is responsible for one component and one component only. The primary `install.sh` wires things together and should never contain direct installation logic itself. `core/terminal.sh` and `core/desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. No script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
 
 ## Code Style
 

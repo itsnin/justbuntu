@@ -52,21 +52,29 @@ The menu provides options for installing additional components, updating JustBun
 
 ## Project Structure
 
-| Directory | Purpose |
-|-----------|---------|
-| `bin/` | CLI entry points and subcommands |
-| `config/` | Static configuration files |
-| `provision/` | System provisioning logic |
-| `provision/core/` | Foundation: validation, snapd choice, preferences gathering |
-| `provision/terminal/` | Terminal tools, languages, shell configuration |
-| `provision/desktop/` | Desktop applications, browsers, extensions, keybindings |
-| `provision/desktop/extensions/` | Optional user-choice applications |
-| `provision/desktop/ai/` | AI assistant installers |
-| `provision/helpers/` | Logging and error handling infrastructure |
-| `revert/` | Revert scripts — one per provisioned component. JustBuntu core is never touched. |
-| `share/` | Shared assets: desktop entry generators and icons |
-| `shell/` | Shell environment: PATH, aliases, functions |
-| `skills/` | Agent skill definitions and coding standards |
+| Path | Purpose |
+|------|---------|
+| `install.sh` | Main entry point — full installation orchestrator |
+| `lib/` | Core infrastructure — logging, error handling |
+| `core/` | Sub-orchestrators, validation, preference gathering |
+| `configure/` | System configuration (no package install) |
+| `configure/gnome/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
+| `install/` | Software installation scripts |
+| `install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
+| `install/terminal/` | Terminal tools, languages, dev libraries |
+| `install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
+| `install/apps/ai/` | AI assistant installers |
+| `install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
+| `install/gnome/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
+| `revert/` | Uninstall + deconfigure scripts |
+| `revert/uninstall/` | Package removal (37 scripts) |
+| `revert/deconfigure/` | Settings reset (13 scripts) |
+| `bin/` | CLI entry points (`justbuntu` command) |
+| `shell/` | Bash environment configuration |
+| `share/` | Desktop entries, icons |
+| `config/` | Bashrc snippet |
+| `skills/` | Agent skill definitions |
+
 
 ## Contributing
 

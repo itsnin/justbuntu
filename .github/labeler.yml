@@ -1,26 +1,35 @@
 provisioning:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/orchestrate.sh
-          - provision/orchestrate-terminal.sh
-          - provision/orchestrate-desktop.sh
+          - install.sh
+          - core/terminal.sh
+          - core/desktop.sh
+          - lib/**
           - bootstrap.sh
 core:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/core/**
+          - core/**
 terminal tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/terminal/**
+          - install/terminal/**
+          - install/prerequisites/**
+          - configure/git.sh
+          - configure/shell-profile.sh
 desktop tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/desktop/**
+          - configure/gnome/**
+          - install/gnome/**
 extensions:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/desktop/extensions/**
+          - install/gnome/extensions/**
+apps:
+  - changed-files:
+      - any-glob-to-any-file:
+          - install/apps/**
 shared assets:
   - changed-files:
       - any-glob-to-any-file:

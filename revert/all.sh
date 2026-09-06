@@ -9,14 +9,12 @@ REVERT_DIR="$JUSTBUNTU_PATH/revert"
 position=0
 success_count=0
 total=0
-# Count total scripts first, excluding this one.
-for script in "$REVERT_DIR/revert-"*.sh; do
-  [[ "$(basename "$script")" == "revert-all-components.sh" ]] && continue
+# Count total scripts first from both subdirectories
+for script in "$REVERT_DIR"/uninstall/*.sh "$REVERT_DIR"/deconfigure/*.sh; do
   total=$((total + 1))
 done
 # Run each revert script with graceful failure
-for script in "$REVERT_DIR/revert-"*.sh; do
-  [[ "$(basename "$script")" == "revert-all-components.sh" ]] && continue
+for script in "$REVERT_DIR"/uninstall/*.sh "$REVERT_DIR"/deconfigure/*.sh; do
   position=$((position + 1))
   name=$(basename "$script" .sh | sed 's/^revert-//')
   echo "  [$position/$total] $name"
