@@ -31,7 +31,7 @@ Every bash script change must pass this review.
 - [ ] **`local` variables** in all functions
 - [ ] **`then` on same line** as `if`, `do` on same line as `while`
 - [ ] **2-space indentation** — no tabs
-- [ ] **Comments are lowercase** with no trailing punctuation unless meaning requires it
+- [ ] **Comments are sentence case** with proper punctuation, lazy senior engineer style
 - [ ] **Directory = context, filenames are descriptive** — files in `install/`, `configure/`, `revert/` directories; filenames describe the subject only (no redundant action prefix)
 - [ ] **kebab-case.sh** for script file names
 

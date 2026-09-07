@@ -433,6 +433,18 @@ File prefix convention:
 Never use vague prefixes like `provision-` which could mean either install or configure.
 
 
+
+## Homebrew Revert Coverage
+
+Tools installed via `brew install` (lazygit, opencode, etc.) are NOT managed by apt.
+Their revert scripts MUST include:
+```bash
+if command -v brew >/dev/null 2>&1; then
+  brew uninstall formula-name 2>/dev/null || true
+fi
+```
+alongside any apt purge or rm -rf cleanup.
+
 ## Revert Script Categorization
 
 Revert scripts are organized by action, mirroring the install/configure split:
@@ -630,3 +642,19 @@ install/
 ```
 
 Corollary: interactive preference questions about cross-desktop apps, browsers, and web apps must be asked of ALL users, not gated behind the GNOME check. Only GNOME extensions and Wayland-specific tweaks stay behind the gate.
+## Logging and Error Handling
+
+Always use leveled logging functions. Raw `echo` is acceptable for trivial output but
+structured logging makes troubleshooting much easier:
+
+```bash
+log_info()  { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') INFO] $*"; }
+log_warn()  { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') WARN] $*" >&2; }
+log_error() { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') ERROR] $*" >&2; }
+```
+
+- ISO-8601 UTC timestamps are unambiguous across timezones
+- WARN and ERROR go to stderr so they surface even when stdout is piped
+- ERR trap should show: failed script, line number, failed command, exit code, and stack trace via `caller` builtin
+
+

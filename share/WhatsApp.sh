@@ -15,6 +15,14 @@ else
   return 0
 fi
 
+# Download icon using same method as other web apps
+mkdir -p "$HOME/.local/share/applications/icons"
+curl -sL --max-time 5 -o "$HOME/.local/share/applications/icons/WhatsApp.png" "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/whatsapp.png" 2>/dev/null || true
+# Fallback to direct favicon if CDN failed
+if [ ! -s "$HOME/.local/share/applications/icons/WhatsApp.png" ]; then
+  curl -sL --max-time 5 -o "$HOME/.local/share/applications/icons/WhatsApp.png" "https://www.google.com/s2/favicons?sz=128&domain=web.whatsapp.com" 2>/dev/null || true
+fi
+
 cat <<EOF >"$HOME/.local/share/applications/WhatsApp.desktop"
 [Desktop Entry]
 Version=1.0
@@ -23,7 +31,7 @@ Comment=WhatsApp Messenger
 Exec=$BROWSER --app="https://web.whatsapp.com" --name=WhatsApp --class=Whatsapp
 Terminal=false
 Type=Application
-Icon=$HOME/.local/share/justbuntu/share/icons/WhatsApp.png
+Icon=$HOME/.local/share/applications/icons/WhatsApp.png
 Categories=GTK;
 MimeType=text/html;text/xml;application/xhtml_xml;
 StartupNotify=true

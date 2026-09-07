@@ -18,8 +18,6 @@ start_install_log
 run_script "$HOME/.local/share/justbuntu/core/validate-system.sh"
 # Install gum first, needed for interactive prompts
 run_script "$HOME/.local/share/justbuntu/provision/install/prerequisites/gum.sh"
-# Install homebrew early — mandatory package manager
-run_script "$HOME/.local/share/justbuntu/provision/install/prerequisites/homebrew.sh"
 # ALL INTERACTIVE CHOICES HAPPEN HERE
 # Gather all preferences upfront before any system modifications begin.
 # Restore direct TTY access so gum TUI renders properly (bypasses tee buffer).
@@ -39,11 +37,14 @@ enable_logging
 # needs to approve while they are still at the keyboard. Must happen
 # BEFORE snapd removal and other unattended system changes.
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  run_script "$HOME/.local/share/justbuntu/provision/install/gnome/shell-extensions.sh"
+  run_script "$HOME/.local/share/justbuntu/provision/install/gnome-shell-extensions.sh"
 fi
 # Refresh sudo credentials cache. Extension installation popups may have
 # taken some time, and the long unattended phase follows.
 sudo -v
+# Install Homebrew. Mandatory package manager for terminal tools (lazygit, etc.)
+# and AI tool fallbacks. Installed after extensions so interactive popups happen first.
+run_script "$HOME/.local/share/justbuntu/provision/install/prerequisites/homebrew.sh"
 
 # Cross-desktop applications and AI tools. Run regardless of DE.
 # Slack, Discord, Spotify, JetBrains, etc. do not need GNOME.

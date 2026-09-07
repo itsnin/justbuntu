@@ -16,13 +16,15 @@ Reviewer must verify against `skills/code-review-checklist/SKILL.md`. Minimum re
 
 - [ ] All shell scripts pass `bash -n` syntax check
 - [ ] ShellCheck passes (or warnings are justified)
-- [ ] Comments are lowercase with no punctuation (unless meaning requires it)
+- [ ] Comments are sentence case with proper punctuation, lazy senior engineer style
 - [ ] No references to forbidden project names anywhere
 - [ ] No `sudo` added to commands that do not require it
 - [ ] No `sudo` removed from commands that genuinely need it
 - [ ] Newly provisioned components have corresponding revert scripts
-- [ ] Downloads and `cd` operations are failure-protected
+- [ ] Homebrew-installed tools have `brew uninstall` in their revert scripts
+- [ ] Downloads and `cd` operations are failure-protected (mktemp -d, retries)
 - [ ] `gum confirm` is never standalone (always in `if` or `&&` chain)
+- [ ] Directory = context, filenames do not repeat action prefixes
 - [ ] Tested on Ubuntu 26.04 LTS (or equivalent)
 
 ## Testing

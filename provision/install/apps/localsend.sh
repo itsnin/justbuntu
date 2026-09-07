@@ -6,6 +6,8 @@ import json, sys, re
 releases = json.load(sys.stdin)
 patterns = [r'linux-x86-64\.deb$', r'linux_x86-64\.deb$', r'amd64\.deb$']
 for release in releases:
+    if release.get('prerelease', False):
+        continue
     for asset in release.get('assets', []):
         name = asset.get('name', '')
         for p in patterns:

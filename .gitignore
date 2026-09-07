@@ -20,7 +20,7 @@ Desktop.ini
 *.swp
 *.swo
 *.swn
-# vs code — ignore everything except shared settings and extensions
+# vs code - ignore everything except shared settings and extensions
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json

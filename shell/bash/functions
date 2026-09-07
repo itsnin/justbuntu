@@ -74,15 +74,24 @@ app2folder() {
   local DESKTOP_FILE="$1"
   local FOLDER="$2"
   local SCHEMA="org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/$FOLDER/"
-  local CURRENT_APPS=$(gsettings get "$SCHEMA" apps)
-  if [[ "$CURRENT_APPS" != *"$DESKTOP_FILE"* ]]; then
-    local TRIMMED=$(echo "$CURRENT_APPS" | sed "s/^\[//;s/\]$//")
-    if [[ -z "${TRIMMED// }" ]]; then
-      gsettings set "$SCHEMA" apps "['$DESKTOP_FILE']"
-    else
-      gsettings set "$SCHEMA" apps "[$TRIMMED, '$DESKTOP_FILE']"
-    fi
-  fi
+  # Use Python to safely parse and modify the gsettings array. Avoids fragile
+  # string parsing that can break if the array format changes.
+  python3 - "$SCHEMA" "$DESKTOP_FILE" << 'PYINNER'
+import sys, subprocess
+schema, desktop_file = sys.argv[1], sys.argv[2]
+result = subprocess.run(["gsettings", "get", schema, "apps"], capture_output=True, text=True)
+current = result.stdout.strip()
+# Use ast.literal_eval to safely parse the gsettings array format
+import ast
+try:
+    apps = ast.literal_eval(current)
+except (ValueError, SyntaxError):
+    apps = []
+if desktop_file not in apps:
+    apps.append(desktop_file)
+    new_value = str(apps).replace('", "', "', '").replace('["', "['").replace('"]', "']")
+    subprocess.run(["gsettings", "set", schema, "apps", new_value])
+PYINNER
 }
 
 app2folder-remove() {
@@ -93,18 +102,19 @@ app2folder-remove() {
   local DESKTOP_FILE="$1"
   local FOLDER="$2"
   local SCHEMA="org.gnome.desktop.app-folders.folder:/org/gnome/desktop/app-folders/folders/$FOLDER/"
-  local CURRENT_APPS=$(gsettings get "$SCHEMA" apps)
-  if [[ "$CURRENT_APPS" == *"$DESKTOP_FILE"* ]]; then
-    local RAW_LIST=$(echo "$CURRENT_APPS" | tr -d "[]'")
-    IFS=',' read -ra APPS_ARRAY <<< "$RAW_LIST"
-    local NEW_APPS=()
-    for app in "${APPS_ARRAY[@]}"; do
-      app=$(echo "$app" | xargs)
-      if [[ "$app" != "$DESKTOP_FILE" && -n "$app" ]]; then
-        NEW_APPS+=("'$app'")
-      fi
-    done
-    local NEW_LIST=$(IFS=, ; echo "${NEW_APPS[*]}")
-    gsettings set "$SCHEMA" apps "[$NEW_LIST]"
-  fi
+  python3 - "$SCHEMA" "$DESKTOP_FILE" << 'PYINNER'
+import sys, subprocess
+schema, desktop_file = sys.argv[1], sys.argv[2]
+result = subprocess.run(["gsettings", "get", schema, "apps"], capture_output=True, text=True)
+current = result.stdout.strip()
+import ast
+try:
+    apps = ast.literal_eval(current)
+except (ValueError, SyntaxError):
+    apps = []
+if desktop_file in apps:
+    apps = [a for a in apps if a != desktop_file]
+    new_value = str(apps).replace('", "', "', '").replace('["', "['").replace('"]', "']")
+    subprocess.run(["gsettings", "set", schema, "apps", new_value])
+PYINNER
 }

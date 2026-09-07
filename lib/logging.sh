@@ -2,6 +2,19 @@
 # Install logging — duplicates all terminal output to a log file.
 # Uses process substitution so sourced scripts inherit the redirection.
 JUSTBUNTU_INSTALL_LOG_FILE="/var/log/justbuntu-install.log"
+
+# Logging helpers. Timestamped, leveled output. Goes through the tee
+# redirect so messages appear in both terminal and log file.
+log_info() {
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') INFO] $*"
+}
+log_warn() {
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') WARN] $*" >&2
+}
+log_error() {
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ') ERROR] $*" >&2
+}
+
 start_install_log() {
   sudo touch "$JUSTBUNTU_INSTALL_LOG_FILE"
   sudo chmod 666 "$JUSTBUNTU_INSTALL_LOG_FILE"
@@ -52,7 +65,7 @@ run_script() {
   local script_name
   script_name=$(basename "$script")
   export CURRENT_SCRIPT="$script_name"
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting: $script_name"
+  log_info "Starting: $script_name"
   source "$script"
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Completed: $script_name"
+  log_info "Completed: $script_name"
 }

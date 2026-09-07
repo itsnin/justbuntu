@@ -7,6 +7,8 @@ DEB_URL=$(echo "$RELEASES" | python3 -c "
 import json, sys
 releases = json.load(sys.stdin)
 for release in releases:
+    if release.get('prerelease', False):
+        continue
     for asset in release.get('assets', []):
         name = asset.get('name', '')
         if name.endswith('_amd64.deb'):

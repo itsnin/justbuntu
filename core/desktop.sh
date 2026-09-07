@@ -13,6 +13,8 @@ for installer in "$HOME/.local/share/justbuntu/provision/configure/gnome/"*.sh; 
   run_script "$installer"
 done
 # Run GNOME-only software installs (Boxes, Sushi, Tweaks, Wayland scroll factor)
+# shell-extensions.sh lives at parent level (gnome-shell-extensions.sh) and runs
+# in the parent orchestrator before this subshell — interactive popups need user.
 for installer in "$HOME/.local/share/justbuntu/provision/install/gnome/"*.sh; do
   run_script "$installer"
 done

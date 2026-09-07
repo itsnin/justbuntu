@@ -15,8 +15,29 @@ drain_terminal() {
 clear_logo() {
   printf '\033[H\033[2J'
 }
+# Build a stack trace using bash's caller builtin. Shows the call chain
+# with line numbers and function names so users can pinpoint failures.
+_build_stack_trace() {
+  local frame=0
+  local trace=""
+  while caller_output=$(caller $frame 2>/dev/null); do
+    local line func file
+    line=$(echo "$caller_output" | awk '{print $1}')
+    func=$(echo "$caller_output" | awk '{print $2}')
+    file=$(echo "$caller_output" | awk '{print $3}')
+    if [[ "$func" == "main" ]]; then
+      trace="${trace}  at ${file}:${line}\n"
+    else
+      trace="${trace}  in ${func}() at ${file}:${line}\n"
+    fi
+    ((frame++))
+  done
+  echo -e "$trace"
+}
+
 catch_errors() {
   local exit_code=$?
+  local error_lineno="${BASH_LINENO[0]:-unknown}"
   # If error was already handled in a child process, suppress double fire
   # but preserve the genuine failure exit code
   if [[ -f /tmp/justbuntu-error-handled ]]; then
@@ -34,11 +55,16 @@ catch_errors() {
   clear_logo
   gum style --foreground 1 "JustBuntu installation stopped!"
   if [[ -n ${CURRENT_SCRIPT:-} ]]; then
-    gum style "Failed script: $CURRENT_SCRIPT"
+    gum style "Script: $CURRENT_SCRIPT  |  Line: $error_lineno  |  Exit code: $exit_code"
   fi
   if [[ -n ${BASH_COMMAND:-} ]]; then
-    gum style "Failed command: $BASH_COMMAND (exit code $exit_code)"
+    echo ""
+    echo "Command that failed:"
+    echo "  $BASH_COMMAND"
   fi
+  echo ""
+  echo "Stack trace:"
+  _build_stack_trace
   echo
   # Show last lines from the log for quick context
   if [[ -f ${JUSTBUNTU_INSTALL_LOG_FILE:-} ]]; then

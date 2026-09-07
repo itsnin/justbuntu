@@ -22,9 +22,10 @@ if [[ "$SELECTED_BROWSERS" == *"Chrome"* ]]; then
   # apt-get install resolves Chrome's deps. The .deb postinst
   # also adds Google's apt repo so future apt upgrade pulls Chrome updates.
   echo "==> installing google chrome (direct .deb)"
-  if wget -q -O /tmp/google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
-    sudo apt-get install -y /tmp/google-chrome-stable.deb || echo "chrome install failed (continuing)"
-    rm -f /tmp/google-chrome-stable.deb
+  TMP_DEB=$(mktemp)
+  if wget -q -O "$TMP_DEB" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
+    sudo apt-get install -y "$TMP_DEB" || echo "chrome install failed (continuing)"
+    rm -f "$TMP_DEB"
     xdg-settings set default-web-browser google-chrome.desktop 2>/dev/null || true
   else
     echo "chrome download failed (continuing)"
