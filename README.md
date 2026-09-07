@@ -38,18 +38,6 @@ justbuntu
 
 The menu provides options for installing additional components, updating JustBuntu itself, reverting individual components, and accessing the documentation.
 
-## What Gets Configured
-
-| Category | Details |
-|----------|---------|
-| **Terminal** | Ghostty as default terminal, Homebrew package manager, shell aliases and functions, fastfetch, btop, micro, lazygit |
-| **Development** | Selectable installation of Python, Rust, Go, Node.js, Java, C/C++, PostgreSQL, and web tools |
-| **Desktop** | GNOME keybindings, 9 fixed workspaces, dash cleared, window centering, week numbers in calendar |
-| **Extensions** | Spotlight, Space Bar, Just Perfection, GSConnect, Caffeine, Copyous, Emoji Copy |
-| **Browsers** | Chrome and/or Brave Origin (user choice) |
-| **Optional Apps** | JetBrains Toolbox, OBS Studio, Spotify, Slack, Discord, GitHub Desktop, VS Code, Obsidian, VLC, and more |
-| **AI Assistants** | Claude Desktop, Claude Code CLI, OpenCode CLI, Antigravity CLI, Codex CLI (user choice) |
-
 ## Project Structure
 
 | Path | Purpose |
@@ -57,16 +45,17 @@ The menu provides options for installing additional components, updating JustBun
 | `install.sh` | Main entry point — full installation orchestrator |
 | `lib/` | Core infrastructure — logging, error handling |
 | `core/` | Sub-orchestrators, validation, preference gathering |
-| `configure/` | System configuration (no package install) |
-| `configure/gnome/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
-| `install/` | Software installation scripts |
-| `install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
-| `install/terminal/` | Terminal tools, languages, dev libraries |
-| `install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
-| `install/apps/ai/` | AI assistant installers |
-| `install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
-| `install/gnome/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
-| `revert/` | Uninstall + deconfigure scripts |
+| `provision/` | Forward action — install and configure (mirrors `revert/`) |
+| `provision/install/` | Software installation scripts |
+| `provision/install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
+| `provision/install/terminal/` | Terminal tools, languages, dev libraries |
+| `provision/install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
+| `provision/install/apps/ai/` | AI assistant installers |
+| `provision/install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
+| `provision/install/gnome/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
+| `provision/configure/` | System configuration (no package install) |
+| `provision/configure/gnome/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
+| `revert/` | Undo action — uninstall and deconfigure (mirrors `provision/`) |
 | `revert/uninstall/` | Package removal (37 scripts) |
 | `revert/deconfigure/` | Settings reset (13 scripts) |
 | `bin/` | CLI entry points (`justbuntu` command) |

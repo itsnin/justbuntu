@@ -418,16 +418,16 @@ This is the only reliable way to answer prompts in scripts that explicitly open 
 Scripts are organized by action, not by "provisioning" (too vague/academic). Each filename clearly states what it does:
 
 ```
-install/      # Scripts that install software packages
-configure/    # Scripts that configure system settings (no package install)
+provision/install/      # Scripts that install software packages
+provision/configure/    # Scripts that configure system settings (no package install)
 core/         # Orchestrators, validation, interactive preference gathering
 lib/      # Shared infrastructure (logging, error handling)
 revert/       # Uninstall + deconfigure scripts (categorized into uninstall/ and deconfigure/ subdirs)
 ```
 
 File prefix convention:
-- Files in `install/` — download and/or install software
-- Files in `configure/` — change settings via gsettings, dconf, config files, etc.
+- Files in `provision/install/` — download and/or install software
+- Files in `provision/configure/` — change settings via gsettings, dconf, config files, etc.
 - `register-*.sh` — registers desktop entries, MIME types, etc.
 
 Never use vague prefixes like `provision-` which could mean either install or configure.
@@ -625,7 +625,7 @@ install/
     web-apps.sh              # .desktop entries for web apps
   desktop/                 # GNOME-only: extensions, keybindings, dock, gsettings
     extensions/            # Wayland scroll factor (mutter dconf)
-    gnome/*.sh              # Keybindings, dock, app grid, default terminal
+    provision/configure/gnome/*.sh  # Keybindings, dock, app grid, default terminal
     gnome-*.sh   # GNOME Boxes, Sushi, Tweaks
 ```
 

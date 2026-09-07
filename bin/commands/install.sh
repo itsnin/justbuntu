@@ -30,7 +30,7 @@ if [[ "$CHOICE" == "<< Back"* ]] || [[ -z "$CHOICE" ]]; then
   # Don't install anything
   echo ""
 elif [[ "$CHOICE" == "> All"* ]]; then
-  INSTALLER_FILE=$(gum file "$JUSTBUNTU_PATH/scripts")
+  INSTALLER_FILE=$(gum file "$JUSTBUNTU_PATH/provision")
   [[ -n "$INSTALLER_FILE" ]] &&
     gum confirm "Run installer?" &&
     source "$INSTALLER_FILE" &&
@@ -38,28 +38,28 @@ elif [[ "$CHOICE" == "> All"* ]]; then
 else
   INSTALLER=$(echo "$CHOICE" | awk -F ' {2,}' '{print $1}' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
   case "$INSTALLER" in
-  "browsers") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/browsers.sh" ;;
-  "ghostty") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ghostty.sh" ;;
-  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/vlc.sh" ;;
-  "vs-code") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/vscode.sh" ;;
-  "obsidian") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/obsidian.sh" ;;
-  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/localsend.sh" ;;
-  "element") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/element.sh" ;;
-  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/appimagelauncher.sh" ;;
-  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/install/terminal/dev-tooling.sh" ;;
-  "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/jetbrains-toolbox.sh" ;;
-  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/obs-studio.sh" ;;
-  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/spotify.sh" ;;
-  "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/slack.sh" ;;
-  "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/discord.sh" ;;
-  "github-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/optional/github-desktop.sh" ;;
-  "wayland-scroll-factor") INSTALLER_FILE="$JUSTBUNTU_PATH/install/gnome/extensions/wayland-scroll-factor.sh" ;;
-  "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ai/claude-desktop.sh" ;;
-  "claude-code-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ai/claude-code-cli.sh" ;;
-  "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ai/opencode-cli.sh" ;;
-  "antigravity-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ai/antigravity-cli.sh" ;;
-  "codex-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/ai/codex-cli.sh" ;;
-  "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/install/apps/web-apps.sh" ;;
+  "browsers") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/browsers.sh" ;;
+  "ghostty") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ghostty.sh" ;;
+  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/vlc.sh" ;;
+  "vs-code") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/vscode.sh" ;;
+  "obsidian") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/obsidian.sh" ;;
+  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/localsend.sh" ;;
+  "element") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/element.sh" ;;
+  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/appimagelauncher.sh" ;;
+  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/terminal/dev-tooling.sh" ;;
+  "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/jetbrains-toolbox.sh" ;;
+  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/obs-studio.sh" ;;
+  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/spotify.sh" ;;
+  "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/slack.sh" ;;
+  "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/discord.sh" ;;
+  "github-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/github-desktop.sh" ;;
+  "wayland-scroll-factor") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/gnome/extensions/wayland-scroll-factor.sh" ;;
+  "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ai/claude-desktop.sh" ;;
+  "claude-code-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ai/claude-code-cli.sh" ;;
+  "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ai/opencode-cli.sh" ;;
+  "antigravity-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ai/antigravity-cli.sh" ;;
+  "codex-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ai/codex-cli.sh" ;;
+  "web-apps") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/web-apps.sh" ;;
   esac
   if [[ -n "$INSTALLER_FILE" ]]; then
     source "$INSTALLER_FILE" && gum spin --spinner globe --title "Install completed!" -- sleep 3
