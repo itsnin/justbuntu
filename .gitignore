@@ -1,6 +1,4 @@
-# ============================================
 # operating system generated files
-# ============================================
 # macOS
 .DS_Store
 .AppleDouble
@@ -13,9 +11,7 @@ Desktop.ini
 # linux
 *~
 
-# ============================================
 # editor and ide files
-# ============================================
 # vim / neovim
 *.swp
 *.swo
@@ -30,9 +26,7 @@ Desktop.ini
 .sublime-project
 .sublime-workspace
 
-# ============================================
 # backup and temporary files
-# ============================================
 *.bak
 *.backup
 *.tmp
@@ -41,15 +35,11 @@ Desktop.ini
 *.orig
 *.rej
 
-# ============================================
 # log files
-# ============================================
 *.log
 logs/
 
-# ============================================
 # archives and large binaries
-# ============================================
 *.tar.gz
 *.tgz
 *.zip
@@ -58,9 +48,7 @@ logs/
 *.dmg
 *.iso
 
-# ============================================
 # environment and secrets
-# ============================================
 .env
 .env.*
 !.env.example
@@ -69,18 +57,14 @@ secrets/
 *.pem
 *.p12
 
-# ============================================
 # shell script specific
-# ============================================
 # script test artifacts
 test-*/
 temp/
 tmp/
 .cache/
 
-# ============================================
 # misc
-# ============================================
 # node_modules (if any javascript tooling is used locally)
 node_modules/
 # python (if any local tooling)

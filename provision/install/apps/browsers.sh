@@ -23,9 +23,9 @@ if [[ "$SELECTED_BROWSERS" == *"Chrome"* ]]; then
   # also adds Google's apt repo so future apt upgrade pulls Chrome updates.
   echo "==> installing google chrome (direct .deb)"
   TMP_DEB=$(mktemp)
+  trap 'rm -f "$TMP_DEB"' RETURN
   if wget -q -O "$TMP_DEB" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; then
     sudo apt-get install -y "$TMP_DEB" || echo "chrome install failed (continuing)"
-    rm -f "$TMP_DEB"
     xdg-settings set default-web-browser google-chrome.desktop 2>/dev/null || true
   else
     echo "chrome download failed (continuing)"
