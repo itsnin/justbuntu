@@ -74,9 +74,8 @@ justbuntu/
             homebrew.sh             Homebrew package manager (mandatory)
         terminal/               Terminal tools
             cli-utilities.sh        Fastfetch, btop, wget, curl, micro
-            dev-tooling.sh          Selectable language and tool installation
+            languages.sh            Selectable language and tool installation (orchestrator)
             github-cli.sh           GitHub CLI via apt repo
-            system-libraries.sh     Common development libraries
         apps/                   Cross-desktop applications
             browsers.sh             Chrome + Brave installation
             ghostty.sh              Terminal emulator

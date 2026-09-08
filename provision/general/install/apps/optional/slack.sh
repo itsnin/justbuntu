@@ -1,19 +1,10 @@
 #!/bin/bash
-# Install Slack desktop via official .deb
-# Parse the latest .deb URL from Slack's download page to avoid hardcoding versions.
+# Install Slack desktop via direct .deb download
 (
-  TMP_DIR=$(mktemp -d) && cd "$TMP_DIR" || exit 1
-  SLACK_DEB_URL=$(curl -fsSL --retry 2 "https://slack.com/downloads/linux" | grep -oP 'https://downloads\.slack-edge\.com[^"]+amd64\.deb' | head -1)
-
-  if [ -z "$SLACK_DEB_URL" ]; then
-    echo "warning: could not determine latest Slack download URL"
-    echo "skipping Slack installation"
-    exit 0
-  fi
-
-  if wget -q -L -O slack-desktop.deb "$SLACK_DEB_URL"; then
-    sudo apt install -y ./slack-desktop.deb || echo "Slack install failed (continuing)"
-    rm -rf "$TMP_DIR"
+  TMP_DEB=$(mktemp)
+  trap 'rm -f "$TMP_DEB"' RETURN
+  if wget -q -O "$TMP_DEB" "https://downloads.slack-edge.com/desktop-releases/linux/x64/4.52.155/slack-desktop-4.52.155-amd64.deb"; then
+    sudo apt install -y "$TMP_DEB" || echo "Slack install failed (continuing)"
   else
     echo "Slack download failed (continuing)"
   fi

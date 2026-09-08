@@ -40,16 +40,16 @@ else
   case "$INSTALLER" in
   "browsers") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/browsers.sh" ;;
   "ghostty") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/ghostty.sh" ;;
-  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/vlc.sh" ;;
+  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/vlc.sh" ;;
   "vs-code") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/vscode.sh" ;;
   "obsidian") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/obsidian.sh" ;;
-  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/localsend.sh" ;;
+  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/localsend.sh" ;;
   "element") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/element.sh" ;;
-  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/appimagelauncher.sh" ;;
-  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/terminal/dev-tooling.sh" ;;
+  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/appimagelauncher.sh" ;;
+  "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/terminal/languages.sh" ;;
   "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/jetbrains-toolbox.sh" ;;
-  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/obs-studio.sh" ;;
-  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/spotify.sh" ;;
+  "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/obs-studio.sh" ;;
+  "spotify") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/spotify.sh" ;;
   "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/slack.sh" ;;
   "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/discord.sh" ;;
   "github-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/github-desktop.sh" ;;

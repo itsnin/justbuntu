@@ -4,17 +4,18 @@
 if [[ -v JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS"
 else
-  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Slack" "Discord" "GitHub Desktop" "VLC" "VS Code" "Obsidian" "LocalSend" "Element" "AppImageLauncher")
+  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "Slack" "Discord" "GitHub Desktop" "VS Code" "Obsidian" "Element")
   selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 12 --header "Select optional applications")
 fi
+# Always-installed cross-desktop utilities
+source "$JUSTBUNTU_PATH/provision/general/install/apps/vlc.sh"
+source "$JUSTBUNTU_PATH/provision/general/install/apps/obs-studio.sh"
+source "$JUSTBUNTU_PATH/provision/general/install/apps/spotify.sh"
+source "$JUSTBUNTU_PATH/provision/general/install/apps/localsend.sh"
+source "$JUSTBUNTU_PATH/provision/general/install/apps/appimagelauncher.sh"
+
 if [[ "$selected" == *"JetBrains Toolbox"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/jetbrains-toolbox.sh"
-fi
-if [[ "$selected" == *"OBS Studio"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/obs-studio.sh"
-fi
-if [[ "$selected" == *"Spotify"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/spotify.sh"
 fi
 if [[ "$selected" == *"Slack"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/slack.sh"
@@ -25,21 +26,12 @@ fi
 if [[ "$selected" == *"GitHub Desktop"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/github-desktop.sh"
 fi
-if [[ "$selected" == *"VLC"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/vlc.sh"
-fi
 if [[ "$selected" == *"VS Code"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/vscode.sh"
 fi
 if [[ "$selected" == *"Obsidian"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/obsidian.sh"
 fi
-if [[ "$selected" == *"LocalSend"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/localsend.sh"
-fi
 if [[ "$selected" == *"Element"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/element.sh"
-fi
-if [[ "$selected" == *"AppImageLauncher"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/general/install/apps/optional/appimagelauncher.sh"
 fi

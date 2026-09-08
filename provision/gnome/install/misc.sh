@@ -8,5 +8,5 @@ else
   selected=$(gum choose "${GNOME_OPTIONAL[@]}" --no-limit --height 4 --header "Select GNOME-specific add-ons")
 fi
 if [[ "$selected" == *"Wayland Scroll Factor"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/gnome/install/extensions/wayland-scroll-factor.sh"
+  source "$JUSTBUNTU_PATH/provision/gnome/install/misc/wayland-scroll-factor.sh"
 fi

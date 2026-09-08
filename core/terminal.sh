@@ -11,6 +11,6 @@ run_script "$HOME/.local/share/justbuntu/provision/general/configure/shell-profi
 # Configure git identity and aliases
 run_script "$HOME/.local/share/justbuntu/provision/general/configure/git.sh"
 # Run terminal installers
-for installer in "$HOME/.local/share/justbuntu/provision/general/install/terminal/"*.sh; do
-  run_script "$installer"
-done
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/cli-utilities.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/languages.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/github-cli.sh"

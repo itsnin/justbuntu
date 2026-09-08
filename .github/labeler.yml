@@ -25,7 +25,7 @@ desktop tools:
 extensions:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/gnome/install/extensions/**
+          - provision/gnome/install/misc/**
 apps:
   - changed-files:
       - any-glob-to-any-file:
