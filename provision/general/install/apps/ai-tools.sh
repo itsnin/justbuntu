@@ -8,17 +8,17 @@ else
   selected=$(gum choose "${AI_OPTIONS[@]}" --no-limit --height 8 --header "Select AI tools (optional, all require account login after install)")
 fi
 if [[ "$selected" == *"Claude Desktop"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ai/claude-desktop.sh"
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-desktop.sh"
 fi
 if [[ "$selected" == *"Claude Code CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ai/claude-code-cli.sh"
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-code-cli.sh"
 fi
 if [[ "$selected" == *"OpenCode CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ai/opencode-cli.sh"
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/opencode-cli.sh"
 fi
 if [[ "$selected" == *"Antigravity CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ai/antigravity-cli.sh"
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/antigravity-cli.sh"
 fi
 if [[ "$selected" == *"Codex CLI"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ai/codex-cli.sh"
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/codex-cli.sh"
 fi

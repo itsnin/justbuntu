@@ -87,15 +87,15 @@ flowchart TD
     D --> E[install/prerequisites/homebrew.sh]:::core
     E --> F[gather-preferences.sh<br/>All interactive choices]:::interactive
     F --> G[sudo -v<br/>Refresh credentials]:::core
-    G --> H[provision/configure/snapd.sh]:::core
+    G --> H[provision/general/configure/snapd.sh]:::core
     H --> I[purge-kdump.sh]:::core
     I --> J[core/terminal.sh<br/>apt update + all terminal tools]:::terminal
     J --> K{GNOME detected?}:::decision
     K -->|No| L[Done]:::done
     K -->|Yes| M[gnome-session-inhibit<br/>subshell]:::desktop
     M --> N[core/desktop.sh]:::desktop
-    N --> O[provision/configure/gnome/keybindings.sh]:::desktop
-    O --> P[provision/install/gnome/shell-extensions.sh<br/>Interactive popups]:::interactive
+    N --> O[provision/gnome/configure/keybindings.sh]:::desktop
+    O --> P[provision/gnome/install/shell-extensions.sh<br/>Interactive popups]:::interactive
     P --> Q[All other desktop scripts<br/>via glob loop]:::desktop
     Q --> R[Reboot prompt]:::interactive
     R --> L
@@ -114,7 +114,7 @@ flowchart LR
     classDef step2 fill:#5c3d2e,stroke:#d4a373,stroke-width:2px,color:#ffffff
     classDef step3 fill:#2d5016,stroke:#6aa84f,stroke-width:2px,color:#ffffff
 
-    A[provision/configure/gnome/keybindings.sh<br/>Sets Super+1-9 = workspaces<br/>No user interaction]:::step1 --> B[provision/install/gnome/shell-extensions.sh<br/>Space Bar clears Super+1-9<br/>Interactive popups]:::step2
+    A[provision/gnome/configure/keybindings.sh<br/>Sets Super+1-9 = workspaces<br/>No user interaction]:::step1 --> B[provision/gnome/install/shell-extensions.sh<br/>Space Bar clears Super+1-9<br/>Interactive popups]:::step2
     B --> C[All other desktop scripts<br/>Glob loop, alphabetical]:::step3
 ```
 

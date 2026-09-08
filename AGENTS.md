@@ -56,7 +56,7 @@ justbuntu/
     lib/                    Infrastructure: logging and error handling
         logging.sh              Tee-based log redirection, run_script helper
         errors.sh               ERR trap, retry menu, log viewer, graceful recovery
-    provision/configure/              System configuration (no package install)
+    provision/general/configure/              System configuration (no package install)
         snapd.sh                Snapd retention or removal choice
         kdump.sh                Kdump-tools removal to free reserved memory
         git.sh                  Git identity and behavior
@@ -68,7 +68,7 @@ justbuntu/
             desktop-preferences.sh  Window behavior, calendar, ambient sensors
             default-terminal.sh     Ghostty as default terminal emulator
             register-desktop-entries.sh
-    provision/install/                Software installation
+    provision/general/install/                Software installation
         prerequisites/          Dependencies required before interactive prompts
             gum.sh                  Gum TUI library installation
             homebrew.sh             Homebrew package manager (mandatory)

@@ -17,7 +17,7 @@ start_install_log
 # Check the distribution name and version. Abort if incompatible.
 run_script "$HOME/.local/share/justbuntu/core/validate-system.sh"
 # Install gum first, needed for interactive prompts
-run_script "$HOME/.local/share/justbuntu/provision/install/prerequisites/gum.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites/gum.sh"
 # ALL INTERACTIVE CHOICES HAPPEN HERE
 # Gather all preferences upfront before any system modifications begin.
 # Restore direct TTY access so gum TUI renders properly (bypasses tee buffer).
@@ -37,14 +37,14 @@ enable_logging
 # needs to approve while they are still at the keyboard. Must happen
 # BEFORE snapd removal and other unattended system changes.
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
-  run_script "$HOME/.local/share/justbuntu/provision/install/gnome-shell-extensions.sh"
+  run_script "$HOME/.local/share/justbuntu/provision/gnome/install/gnome-shell-extensions.sh"
 fi
 # Refresh sudo credentials cache. Extension installation popups may have
 # taken some time, and the long unattended phase follows.
 sudo -v
 # Install Homebrew. Mandatory package manager for terminal tools (lazygit, etc.)
 # and AI tool fallbacks. Installed after extensions so interactive popups happen first.
-run_script "$HOME/.local/share/justbuntu/provision/install/prerequisites/homebrew.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites/homebrew.sh"
 
 # Cross-desktop applications and AI tools. Run regardless of DE.
 # Slack, Discord, Spotify, JetBrains, etc. do not need GNOME.
@@ -53,21 +53,21 @@ export JUSTBUNTU_PATH="$HOME/.local/share/justbuntu"
 
 # Browsers first. Web apps depend on having a Chromium-based browser.
 echo "Installing browsers..."
-source "$HOME/.local/share/justbuntu/provision/install/apps/browsers.sh"
+source "$HOME/.local/share/justbuntu/provision/general/install/apps/browsers.sh"
 # Ghostty is the default terminal emulator — always installed
-source "$HOME/.local/share/justbuntu/provision/install/apps/ghostty.sh"
+source "$HOME/.local/share/justbuntu/provision/general/install/apps/ghostty.sh"
 echo "Installing cross-desktop applications..."
-source "$HOME/.local/share/justbuntu/provision/install/apps/apps.sh"
+source "$HOME/.local/share/justbuntu/provision/general/install/apps/apps.sh"
 echo "Installing AI tools..."
-source "$HOME/.local/share/justbuntu/provision/install/apps/ai-tools.sh"
+source "$HOME/.local/share/justbuntu/provision/general/install/apps/ai-tools.sh"
 # Web apps. Need browser installed first; creates .desktop entries.
 if [[ "$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS" == *"Web Apps"* ]]; then
   echo "Installing web apps..."
-  source "$HOME/.local/share/justbuntu/provision/install/apps/web-apps.sh"
+  source "$HOME/.local/share/justbuntu/provision/general/install/apps/web-apps.sh"
 fi
 # Now apply unattended system changes based on gathered preferences
-run_script "$HOME/.local/share/justbuntu/provision/configure/snapd.sh"
-run_script "$HOME/.local/share/justbuntu/provision/configure/kdump.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/configure/snapd.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/configure/kdump.sh"
 # Install terminal tools (always)
 echo "Installing terminal tools..."
 source "$HOME/.local/share/justbuntu/core/terminal.sh"

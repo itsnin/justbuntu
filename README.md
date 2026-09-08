@@ -46,18 +46,18 @@ The menu provides options for installing additional components, updating JustBun
 | `lib/` | Core infrastructure — logging, error handling |
 | `core/` | Sub-orchestrators, validation, preference gathering |
 | `provision/` | Forward action — install and configure (mirrors `revert/`) |
-| `provision/install/` | Software installation scripts |
-| `provision/install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
-| `provision/install/terminal/` | Terminal tools, languages, dev libraries |
-| `provision/install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
-| `provision/install/apps/ai/` | AI assistant installers |
-| `provision/install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
-| `provision/install/gnome/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
-| `provision/configure/` | System configuration (no package install) |
-| `provision/configure/gnome/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
+| `provision/general/install/` | Software installation scripts |
+| `provision/general/install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
+| `provision/general/install/terminal/` | Terminal tools, languages, dev libraries |
+| `provision/general/install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
+| `provision/general/install/apps/ai/` | AI assistant installers |
+| `provision/general/install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
+| `provision/gnome/install/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
+| `provision/general/configure/` | System configuration (no package install) |
+| `provision/gnome/configure/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
 | `revert/` | Undo action — uninstall and deconfigure (mirrors `provision/`) |
-| `revert/uninstall/` | Package removal (37 scripts) |
-| `revert/deconfigure/` | Settings reset (13 scripts) |
+| `revert/general/uninstall/` | Package removal (37 scripts) |
+| `revert/general/deconfigure/` | Settings reset (13 scripts) |
 | `bin/` | CLI entry points (`justbuntu` command) |
 | `shell/` | Bash environment configuration |
 | `share/` | Desktop entries, icons |

@@ -10,11 +10,11 @@ position=0
 success_count=0
 total=0
 # Count total scripts first from both subdirectories
-for script in "$REVERT_DIR"/uninstall/*.sh "$REVERT_DIR"/deconfigure/*.sh; do
+for script in "$REVERT_DIR"/general/uninstall/*.sh "$REVERT_DIR"/general/deconfigure/*.sh "$REVERT_DIR"/gnome/uninstall/*.sh "$REVERT_DIR"/gnome/deconfigure/*.sh; do
   total=$((total + 1))
 done
 # Run each revert script with graceful failure
-for script in "$REVERT_DIR"/uninstall/*.sh "$REVERT_DIR"/deconfigure/*.sh; do
+for script in "$REVERT_DIR"/general/uninstall/*.sh "$REVERT_DIR"/general/deconfigure/*.sh "$REVERT_DIR"/gnome/uninstall/*.sh "$REVERT_DIR"/gnome/deconfigure/*.sh; do
   position=$((position + 1))
   name=$(basename "$script" .sh | sed 's/^revert-//')
   echo "  [$position/$total] $name"

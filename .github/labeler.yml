@@ -13,23 +13,23 @@ core:
 terminal tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/install/terminal/**
-          - provision/install/prerequisites/**
-          - provision/configure/git.sh
-          - provision/configure/shell-profile.sh
+          - provision/general/install/terminal/**
+          - provision/general/install/prerequisites/**
+          - provision/general/configure/git.sh
+          - provision/general/configure/shell-profile.sh
 desktop tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/configure/gnome/**
-          - provision/install/gnome/**
+          - provision/gnome/configure/**
+          - provision/gnome/install/**
 extensions:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/install/gnome/extensions/**
+          - provision/gnome/install/extensions/**
 apps:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/install/apps/**
+          - provision/general/install/apps/**
 shared assets:
   - changed-files:
       - any-glob-to-any-file:
