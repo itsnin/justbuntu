@@ -661,6 +661,36 @@ Anything set as the system default (terminal emulator, browser, etc.) must be
 **always installed**, not optional. If the default points to a missing binary,
 core system functionality breaks. Optional apps are extras the user can skip.
 
+
+## Cross-Desktop Environment Gating
+
+GNOME-specific code MUST be gated behind a DE check. General provisioning
+(browsers, terminal tools, AI CLIs, cross-desktop apps) MUST run regardless.
+
+```bash
+if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
+  # GNOME-only: shell extensions, gsettings, gnome-tweaks, etc.
+else
+  echo "GNOME not detected. Skipping desktop-specific tools."
+fi
+```
+
+Known `XDG_CURRENT_DESKTOP` values: `GNOME`, `ubuntu:GNOME`, `KDE`, `Cinnamon`,
+`XFCE`, `MATE`, `Budgie`, `Hyprland`, `Niri`, `sway`, `COSMIC`. On headless
+servers the variable is unset/empty. The `*"GNOME"*` glob correctly matches
+both `GNOME` and `ubuntu:GNOME` variants.
+
+## Migration Framework
+
+When config structure or data layout changes between versions, use the migration
+system in `migrate/`:
+
+- File naming: `0001-description.sh` (4-digit sequential prefix, kebab-case)
+- **Idempotent**: Each migration MUST check if already applied
+- **Immutable**: Never edit a shipped migration — create a new one
+- Version tracked at `$HOME/.local/share/justbuntu/state/migrate-version`
+- Orchestrator: `justbuntu migrate`
+
 ## Logging and Error Handling
 
 Always use leveled logging functions. Raw `echo` is acceptable for trivial output but

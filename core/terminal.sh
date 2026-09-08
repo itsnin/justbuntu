@@ -11,6 +11,11 @@ run_script "$HOME/.local/share/justbuntu/provision/general/configure/shell-profi
 # Configure git identity and aliases
 run_script "$HOME/.local/share/justbuntu/provision/general/configure/git.sh"
 # Run terminal installers
-run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/cli-utilities.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/fastfetch.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/btop.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/wget.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/curl.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/micro.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/lazygit.sh"
+run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/github-cli.sh"
 run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/languages.sh"
-run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/github-cli.sh"

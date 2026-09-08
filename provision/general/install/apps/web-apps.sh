@@ -23,7 +23,7 @@ echo "using $BROWSER for web apps"
 if [[ -n "${JUSTBUNTU_FIRST_RUN_WEB_APPS:-}" ]]; then
   SELECTED_WEB_APPS="$JUSTBUNTU_FIRST_RUN_WEB_APPS"
 else
-  WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+  WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit" "WhatsApp")
   SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select web apps to install (uses $BROWSER)")
 fi
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
@@ -58,6 +58,7 @@ install_webapp() {
   ICON_MAP["Messenger"]="facebook-messenger"
   ICON_MAP["Instagram"]="instagram"
   ICON_MAP["Reddit"]="reddit"
+  ICON_MAP["WhatsApp"]="whatsapp"
 
   ICON_SLUG="${ICON_MAP[$NAME]:-}"
   if [ -n "$ICON_SLUG" ]; then
@@ -111,6 +112,9 @@ if [[ "$SELECTED_WEB_APPS" == *"Instagram"* ]]; then
 fi
 if [[ "$SELECTED_WEB_APPS" == *"Reddit"* ]]; then
   install_webapp "Reddit" "https://www.reddit.com"
+fi
+if [[ "$SELECTED_WEB_APPS" == *"WhatsApp"* ]]; then
+  install_webapp "WhatsApp" "https://web.whatsapp.com"
 fi
 # Refresh desktop database so new entries appear in app grid
 update-desktop-database "$HOME/.local/share/applications/" 2>/dev/null || true

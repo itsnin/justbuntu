@@ -73,7 +73,7 @@ justbuntu/
             gum.sh                  Gum TUI library installation
             homebrew.sh             Homebrew package manager (mandatory)
         terminal/               Terminal tools
-            cli-utilities.sh        Fastfetch, btop, wget, curl, micro
+            general/                Individual CLI tools (fastfetch, btop, wget, curl, micro, lazygit, github-cli)
             languages.sh            Selectable language and tool installation (orchestrator)
             github-cli.sh           GitHub CLI via apt repo
         apps/                   Cross-desktop applications

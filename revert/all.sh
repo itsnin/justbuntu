@@ -9,12 +9,12 @@ REVERT_DIR="$JUSTBUNTU_PATH/revert"
 position=0
 success_count=0
 total=0
-# Count total scripts first from both subdirectories
-for script in "$REVERT_DIR"/general/uninstall/*.sh "$REVERT_DIR"/general/deconfigure/*.sh "$REVERT_DIR"/gnome/uninstall/*.sh "$REVERT_DIR"/gnome/deconfigure/*.sh; do
+# Count total scripts recursively from all subdirectories
+while IFS= read -r script; do
   total=$((total + 1))
-done
+done < <(find "$REVERT_DIR"/general/uninstall "$REVERT_DIR"/general/deconfigure "$REVERT_DIR"/gnome/uninstall "$REVERT_DIR"/gnome/deconfigure -name "*.sh" -type f | sort)
 # Run each revert script with graceful failure
-for script in "$REVERT_DIR"/general/uninstall/*.sh "$REVERT_DIR"/general/deconfigure/*.sh "$REVERT_DIR"/gnome/uninstall/*.sh "$REVERT_DIR"/gnome/deconfigure/*.sh; do
+while IFS= read -r script; do
   position=$((position + 1))
   name=$(basename "$script" .sh | sed 's/^revert-//')
   echo "  [$position/$total] $name"
@@ -23,7 +23,7 @@ for script in "$REVERT_DIR"/general/uninstall/*.sh "$REVERT_DIR"/general/deconfi
   else
     echo "       (failed — continuing)"
   fi
-done
+done < <(find "$REVERT_DIR"/general/uninstall "$REVERT_DIR"/general/deconfigure "$REVERT_DIR"/gnome/uninstall "$REVERT_DIR"/gnome/deconfigure -name "*.sh" -type f | sort)
 echo ""
 echo "==> reset complete: $success_count/$total components processed"
 echo "    justbuntu core remains available. run 'justbuntu install' to re-provision."

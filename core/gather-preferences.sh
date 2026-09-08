@@ -4,8 +4,8 @@ SNAPD_OPTIONS=("Remove snapd" "Keep snapd")
 DEFAULT_CHOICE="Remove snapd"
 JUSTBUNTU_SNAPD_CHOICE=$(gum choose "${SNAPD_OPTIONS[@]}" --selected "$DEFAULT_CHOICE" --height 3 --header "Ubuntu ships with snapd by default. Remove it?")
 export JUSTBUNTU_SNAPD_CHOICE
-AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL" "Web Tools")
-SELECTED_LANGUAGES="Python,Rust,Go,Node.js,Java,C/C++ Build Tools,PostgreSQL,Web Tools"
+AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL")
+SELECTED_LANGUAGES="Python,Rust,Go,Node.js,Java,C/C++ Build Tools,PostgreSQL"
 JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
 export JUSTBUNTU_FIRST_RUN_LANGUAGES
 # Browsers. Cross-desktop — Chrome and Brave work on any DE.
@@ -20,7 +20,7 @@ JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-l
 export JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS
 # If web apps selected, ask which specific ones.
 if [[ "$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS" == *"Web Apps"* ]]; then
-  WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit")
+  WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit" "WhatsApp")
   JUSTBUNTU_FIRST_RUN_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --header "Select specific web apps to install")
   export JUSTBUNTU_FIRST_RUN_WEB_APPS
 fi
