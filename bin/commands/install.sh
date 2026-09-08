@@ -40,12 +40,12 @@ else
   case "$INSTALLER" in
   "browsers") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/browsers.sh" ;;
   "ghostty") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/ghostty.sh" ;;
-  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/vlc.sh" ;;
-  "vs-code") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/vscode.sh" ;;
-  "obsidian") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/obsidian.sh" ;;
-  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/localsend.sh" ;;
-  "element") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/element.sh" ;;
-  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/appimagelauncher.sh" ;;
+  "vlc") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/vlc.sh" ;;
+  "vs-code") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/vscode.sh" ;;
+  "obsidian") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/obsidian.sh" ;;
+  "localsend") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/localsend.sh" ;;
+  "element") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/element.sh" ;;
+  "appimagelauncher") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/appimagelauncher.sh" ;;
   "dev-language") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/terminal/dev-tooling.sh" ;;
   "jetbrains-toolbox") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/jetbrains-toolbox.sh" ;;
   "obs-studio") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/install/apps/optional/obs-studio.sh" ;;

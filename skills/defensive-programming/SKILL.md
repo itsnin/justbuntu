@@ -642,6 +642,25 @@ install/
 ```
 
 Corollary: interactive preference questions about cross-desktop apps, browsers, and web apps must be asked of ALL users, not gated behind the GNOME check. Only GNOME extensions and Wayland-specific tweaks stay behind the gate.
+
+## Extension and Configuration Timing
+
+When extensions modify system behavior (keybindings, shortcuts, UI elements):
+
+1. **Disable conflicting system extensions FIRST** — before installing replacements
+2. **Install and configure new extensions** — copy schemas, compile, set preferences
+3. **Resolve conflicts LAST** — clear or modify system settings that would conflict
+   with the newly installed extensions. Not before.
+
+If you clear system keybindings before they're even set, the base config script
+will just re-set them and the conflict remains.
+
+## Default Dependencies
+
+Anything set as the system default (terminal emulator, browser, etc.) must be
+**always installed**, not optional. If the default points to a missing binary,
+core system functionality breaks. Optional apps are extras the user can skip.
+
 ## Logging and Error Handling
 
 Always use leveled logging functions. Raw `echo` is acceptable for trivial output but

@@ -24,16 +24,9 @@ gsettings set org.gnome.shell.keybindings switch-to-application-6 "['<Alt>6']"
 gsettings set org.gnome.shell.keybindings switch-to-application-7 "['<Alt>7']"
 gsettings set org.gnome.shell.keybindings switch-to-application-8 "['<Alt>8']"
 gsettings set org.gnome.shell.keybindings switch-to-application-9 "['<Alt>9']"
-# Use Super for workspaces
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>7']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 "['<Super>8']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 "['<Super>9']"
+# Super+1..Super+0 workspace switching is handled by the Space Bar extension
+# when installed. 9 fixed workspaces remain reachable via Ctrl+Alt+Arrow or
+# the Activities overview when extensions are not used.
 # Reserve slots for custom keybindings
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
 # Free up Super+space for the Spotlight launcher

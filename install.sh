@@ -54,6 +54,8 @@ export JUSTBUNTU_PATH="$HOME/.local/share/justbuntu"
 # Browsers first. Web apps depend on having a Chromium-based browser.
 echo "Installing browsers..."
 source "$HOME/.local/share/justbuntu/provision/install/apps/browsers.sh"
+# Ghostty is the default terminal emulator — always installed
+source "$HOME/.local/share/justbuntu/provision/install/apps/ghostty.sh"
 echo "Installing cross-desktop applications..."
 source "$HOME/.local/share/justbuntu/provision/install/apps/apps.sh"
 echo "Installing AI tools..."

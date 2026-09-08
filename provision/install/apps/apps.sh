@@ -4,7 +4,7 @@
 if [[ -v JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS"
 else
-  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Slack" "Discord" "GitHub Desktop" "VLC" "VS Code" "Obsidian" "LocalSend" "Element" "AppImageLauncher" "Ghostty")
+  AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Slack" "Discord" "GitHub Desktop" "VLC" "VS Code" "Obsidian" "LocalSend" "Element" "AppImageLauncher")
   selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 12 --header "Select optional applications")
 fi
 if [[ "$selected" == *"JetBrains Toolbox"* ]]; then
@@ -26,23 +26,20 @@ if [[ "$selected" == *"GitHub Desktop"* ]]; then
   source "$JUSTBUNTU_PATH/provision/install/apps/optional/github-desktop.sh"
 fi
 if [[ "$selected" == *"VLC"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/vlc.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/vlc.sh"
 fi
 if [[ "$selected" == *"VS Code"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/vscode.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/vscode.sh"
 fi
 if [[ "$selected" == *"Obsidian"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/obsidian.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/obsidian.sh"
 fi
 if [[ "$selected" == *"LocalSend"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/localsend.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/localsend.sh"
 fi
 if [[ "$selected" == *"Element"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/element.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/element.sh"
 fi
 if [[ "$selected" == *"AppImageLauncher"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/appimagelauncher.sh"
-fi
-if [[ "$selected" == *"Ghostty"* ]]; then
-  source "$JUSTBUNTU_PATH/provision/install/apps/ghostty.sh"
+  source "$JUSTBUNTU_PATH/provision/install/apps/optional/appimagelauncher.sh"
 fi
