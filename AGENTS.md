@@ -6,7 +6,7 @@ If you are an AI agent, read the whole file. Do not skim.
 
 ## What This Project Is
 
-JustBuntu is a one-command setup script that turns a fresh Ubuntu 26.04 LTS or newer installation into what Ubuntu should have been all along. It is opinionated where opinions reduce friction, and restrained where opinions would impose themselves. The result is a system that arrives configured but not constrained. While crafted with developers as the primary audience, it avoids narrow specialization and remains approachable for anyone who wants a clean, capable desktop. "Done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no themes, no distractions, no aesthetic layer demanding attention. It targets Ubuntu desktop with GNOME when available, but degrades gracefully to terminal-only tools on systems without GNOME.
+JustBuntu is a one-command setup script for Ubuntu desktop. It is opinionated where opinions reduce friction, and restrained where opinions would impose themselves. The result is a system that arrives configured but not constrained. While crafted with developers as the primary audience, it avoids narrow specialization and remains approachable for anyone who wants a clean, capable desktop. "Done right" means the script runs unattended after the initial choices, produces a system that behaves predictably, and stays out of the user's way — no themes, no distractions, no aesthetic layer demanding attention. It targets Ubuntu desktop with GNOME when available, but degrades gracefully to terminal-only tools on systems without GNOME.
 
 ## Design Philosophy
 
@@ -20,7 +20,7 @@ Every change the installer makes should be understandable by reading the corresp
 
 ### Focused Extension Set
 
-On GNOME, a focused set of third-party shell extensions is installed: Spotlight, Space Bar, Just Perfection, GSConnect, Caffeine, Copyous, and Emoji Copy. Default Ubuntu extensions may be disabled or configured. This set is chosen to add meaningful capability without heavy customization. Each extension has a clear purpose and is actively maintained. The shell stays close to stock behavior while fixing real annoyances.
+On GNOME, a focused set of third-party shell extensions is installed. Default Ubuntu extensions may be disabled or configured. The shell stays close to stock behavior while fixing real annoyances.
 
 ### Inclusive Defaults
 
@@ -28,126 +28,26 @@ The baseline configuration serves developers first, but the system remains appro
 
 ## Architecture
 
-### File Layout
+The repository is divided into stable functional domains: `core/` contains
+orchestration, `lib/` contains shared infrastructure, `provision/` contains
+installation and configuration modules, and `revert/` contains cleanup paths.
+`install.sh` wires these modules together and should not contain component
+installation logic. The repository itself is the source of truth for the
+current file inventory; this guide intentionally does not duplicate it.
 
-The project is organized into distinct functional domains, each with a clear responsibility. Directory and file names communicate intent precisely.
-
-```
-justbuntu/
-    bootstrap.sh                 Entry point. Clones repository and initiates provisioning
-    install.sh     Primary orchestrator. Wires together core validation,
-                                 preference gathering, logging, error recovery, and domain-specific provisioners
-    banner.sh                    ASCII art banner displayed at startup
-    version                      Plain text version number, calendar-based
-    bin/
-        justbuntu                CLI entry point for post-install management
-        commands/                Individual menu actions: install, update, revert, etc.
-    config/                     Static configuration files (bashrc)
-    share/                      Shared assets: .desktop entry generators and icons
-        icons/                  PNG icons referenced by desktop entries
-    shell/                      Shell environment: PATH, aliases, functions, prompt
-        bash/
-    install.sh              Main entry point. Orchestrates full installation flow.
-    core/                   Orchestrators and foundation
-        terminal.sh             Runs all terminal provisioning modules
-        desktop.sh              Runs all desktop provisioning modules (GNOME only)
-        validate-system.sh      OS and architecture validation
-        gather-preferences.sh   ALL interactive choices upfront
-    lib/                    Infrastructure: logging and error handling
-        logging.sh              Tee-based log redirection, run_script helper
-        errors.sh               ERR trap, retry menu, log viewer, graceful recovery
-    provision/general/configure/              System configuration (no package install)
-        snapd.sh                Snapd retention or removal choice
-        kdump.sh                Kdump-tools removal to free reserved memory
-        git.sh                  Git identity and behavior
-        shell-profile.sh        Shell profile deployment
-        gnome/                  GNOME-specific configuration
-            keybindings.sh          Keyboard shortcuts
-            dock.sh                 Dash favorite-apps configuration
-            app-grid.sh             Application folder organization
-            desktop-preferences.sh  Window behavior, calendar, ambient sensors
-            default-terminal.sh     Ghostty as default terminal emulator
-            register-desktop-entries.sh
-    provision/general/install/                Software installation
-        prerequisites/          Dependencies required before interactive prompts
-            gum.sh                  Gum TUI library installation
-            homebrew.sh             Homebrew package manager (mandatory)
-        terminal/               Terminal tools
-            general/                Individual CLI tools (fastfetch, btop, wget, curl, micro, lazygit, github-cli)
-            languages.sh            Selectable language and tool installation (orchestrator)
-            github-cli.sh           GitHub CLI via apt repo
-        apps/                   Cross-desktop applications
-            browsers.sh             Chrome + Brave installation
-            ghostty.sh              Terminal emulator
-            vlc.sh                  Media player
-            vscode.sh               Code editor
-            obsidian.sh             Notes
-            localsend.sh            File transfer
-            element.sh              Matrix chat
-            appimagelauncher.sh     AppImage integration
-            web-apps.sh             .desktop entries for web apps
-            apps.sh                 Optional apps orchestrator
-            ai-tools.sh             AI tools orchestrator
-            ai/                     AI tools (Claude, Codex, etc.)
-            optional/               Third-party .deb downloaders
-        gnome/                  GNOME-only software installation
-            shell-extensions.sh     Install 7 GNOME extensions
-            gnome-boxes.sh          GNOME Boxes
-            gnome-sushi.sh          GNOME Sushi
-            gnome-tweaks.sh         GNOME Tweaks
-            extensions.sh           Wayland scroll factor orchestrator
-            extensions/
-                wayland-scroll-factor.sh
-    revert/                 Uninstall and deconfigure scripts
-        uninstall/              Package removal scripts
-        deconfigure/            Settings reset scripts
-        all.sh                  Revert everything orchestrator
-                jetbrains-toolbox.sh
-                obs-studio.sh
-                spotify.sh
-                slack.sh
-                discord.sh
-                web-apps.sh
-            extensions.sh        Extension selection orchestrator
-            ai-assistants.sh     AI tools orchestrator (Claude Desktop + 4 CLI tools)
-            ai/                           AI assistant installers
-                claude-desktop.sh
-            ghostty.sh            GPU-accelerated terminal emulator
-            gnome-boxes.sh        Virtual machine manager
-            gnome-sushi.sh        File preview capability
-            gnome-tweaks.sh       Desktop customization interface
-            localsend.sh          Cross-platform file transfer
-            obsidian.sh           Knowledge base application
-            vlc.sh                Media player
-            vscode.sh             Code editor
-            register-desktop-entries.sh     Desktop entry registration
-    revert/                      Revert scripts for every provisioned component.
-                                 Important: revert scripts never touch JustBuntu core files.
-                                 The CLI, desktop icon, shell config, and ~/.local/share/justbuntu/
-                                 are permanent once installed. Users can re-provision at any time.
-                                 revert/all.sh runs all revert scripts (full reset option).
-                                 Uninstall menu offers: reset all components, or select individual items.
-    skills/                      Skill definitions for AI agents and code standards
-        scripting-style-guide/        Naming, formatting, aesthetics, structure
-        strict-mode-error-handling/   set -euo pipefail, trap, error patterns
-        defensive-programming/        Input validation, dry-run, idempotency, mktemp
-        security-anti-patterns/       Eval avoidance, command injection, quoting
-        variables-and-quoting/        Variable scope, expansion, quoting rules
-        functions-and-modularity/     Function design, return codes, sourcing
-        conditionals-control-flow/    [[ vs [, case, loops, subshell pitfalls
-        arrays-argument-parsing/      Array usage, getopts, safe argument passing
-        portability-compatibility/    Shebang choices, POSIX vs bash, macOS vs Linux
-        logging-observability/        Log levels, structured logging, verbosity
-        testing-and-linting/          ShellCheck, bats, syntax check, CI
-        filesystem-operations/        Mktemp, atomic writes, locking, glob safety
-        process-management/           Background jobs, signals, trap, wait
-        command-execution-patterns/   Command substitution, pipes, xargs, cd safety
-        code-review-checklist/        Mandatory review checklist for all changes
-```
+Guidance files describe durable contracts, not current inventories, versions,
+provider URLs, or one-off fixes. Update them when a durable rule changes, not
+after every implementation edit. Revert scripts may remove provisioned
+components and reset their settings, but must not remove the core needed to
+run JustBuntu again.
 
 ### Execution and Module Boundaries
 
-The installer runs as a series of sourced bash scripts. Each script file is responsible for one component and one component only. The primary `install.sh` wires things together and should never contain direct installation logic itself. `core/terminal.sh` and `core/desktop.sh` use glob loops over their respective directories, so adding a new component is as simple as dropping a new `.sh` file in the right place. No script may assume it is being run from a specific working directory — always use absolute paths rooted at `$JUSTBUNTU_PATH` or `$HOME`.
+The installer runs as a series of sourced Bash modules. Each module is
+responsible for one component, while `install.sh` wires modules together and
+does not contain component installation logic. No script may assume a specific
+working directory; resolve paths from `$JUSTBUNTU_PATH`, `$HOME`, or the
+sourced file's own location.
 
 ## Code Style
 
@@ -255,4 +155,7 @@ This command must exit cleanly with no output before any change is considered do
 
 ### Manual Testing
 
-Target environment: Ubuntu 26.04 LTS desktop, x86_64, with GNOME. The project should also be tested on a system without GNOME to verify the graceful degradation path. At minimum, run the bootstrap script in a clean VM or container and confirm: the version check passes, interactive prompts appear, terminal tools install without error, and the `justbuntu` command is available in PATH after installation.
+Test changes with the smallest relevant checks first. For desktop-path
+changes, cover both GNOME and non-GNOME behavior when practical. A full clean
+VM or container run is a release-level check for installer-flow changes, not a
+requirement for every local edit.

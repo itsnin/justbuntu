@@ -43,6 +43,9 @@ count_items() {
 
 ## Sourcing Modular Files
 
+Resolve files next to a sourced script from `${BASH_SOURCE[0]}`, not `$0`.
+`$0` belongs to the outer shell and changes when a file is sourced.
+
 Library scripts should be sourced, not executed directly. They should define only functions and variables, not execute logic at top level.
 
 ## Error Handling in Functions

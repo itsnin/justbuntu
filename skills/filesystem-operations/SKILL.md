@@ -11,6 +11,10 @@ cleanup() { rm -rf "$TMP_DIR" "$TMP_FILE"; }
 trap cleanup EXIT ERR INT TERM
 ```
 
+When a consumer identifies a file by its suffix, create the suffix with
+`mktemp --suffix=.deb` or create a temporary directory and use a descriptive
+filename inside it. Keep the generated path quoted.
+
 ## Atomic File Writes
 
 Never write directly to a file that another process might read. Write to a temp file, then rename atomically:

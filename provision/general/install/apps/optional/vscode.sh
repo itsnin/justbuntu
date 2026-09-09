@@ -8,7 +8,8 @@ if command -v code >/dev/null 2>&1; then
 fi
 echo "==> installing vs code (direct .deb)"
 echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
-TMP_DEB=$(mktemp)
+# Keep the package suffix so apt recognizes the downloaded local package.
+TMP_DEB=$(mktemp --suffix=.deb)
 trap 'rm -f "$TMP_DEB"' RETURN
 if wget -q -O "$TMP_DEB" "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"; then
   sudo apt-get install -y "$TMP_DEB" || echo "vs code install failed (continuing)"

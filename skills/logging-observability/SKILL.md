@@ -35,7 +35,7 @@ log() {
 ## Log to File and Terminal
 
 ```bash
-LOG_FILE="/var/log/justbuntu-install.log"
+LOG_FILE="/var/log/installer.log"
 exec > >(tee -a "$LOG_FILE") 2>&1
 ```
 

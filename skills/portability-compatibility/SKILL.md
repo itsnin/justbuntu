@@ -55,9 +55,6 @@ sed -i '' 's/old/new/' file
 sed -i.bak 's/old/new/' file && rm -f file.bak
 ```
 
-## Ubuntu-Specific Considerations
-
-- Ubuntu 26.04 LTS ships bash 5.x — bash 4+ features are safe
-- `wget` is preinstalled on Ubuntu desktop; `curl` is NOT preinstalled on Ubuntu desktop
-- `curl` is preinstalled on Ubuntu server; `wget` is NOT preinstalled on Ubuntu server
-- Ghostty is available in Ubuntu 26.04 LTS repos
+Platform-specific assumptions belong in the relevant installer and its tests,
+not in this general compatibility guide. Verify package availability and
+shell versions in the target environment before relying on them.

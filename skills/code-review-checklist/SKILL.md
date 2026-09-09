@@ -45,8 +45,7 @@ Every bash script change must pass this review.
 
 - [ ] **Script header** present — shebang, description
 - [ ] **Non-obvious decisions** explained in comments
-- [ ] **README updated** if user-facing behavior changed
-- [ ] **AGENTS.md updated** if architecture or standards changed
+- [ ] **Documentation changes** are limited to requested updates or durable contract changes
 
 ## Testing
 

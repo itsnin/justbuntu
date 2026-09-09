@@ -12,7 +12,7 @@ fi
 
 export JUSTBUNTU_FIRST_RUN_LANGUAGES="$SELECTED"
 
-TERM_DIR="$(dirname "$0")"
+TERM_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$TERM_DIR/programming-language/python.sh"
 source "$TERM_DIR/programming-language/rust.sh"
 source "$TERM_DIR/programming-language/go.sh"
