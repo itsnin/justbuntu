@@ -1,4 +1,14 @@
 #!/bin/bash
+DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+reset_extension_schema() {
+  local extension="$1"
+  local schema="$2"
+  local schema_dir="$DATA_HOME/gnome-shell/extensions/$extension/schemas"
+
+  gsettings --schemadir "$schema_dir" reset-recursively "$schema" 2>/dev/null || true
+}
+
 # Re-enable default Ubuntu extensions
 gnome-extensions enable tiling-assistant@ubuntu.com 2>/dev/null || true
 gnome-extensions enable ubuntu-appindicators@ubuntu.com 2>/dev/null || true
@@ -6,25 +16,19 @@ gnome-extensions enable ubuntu-dock@ubuntu.com 2>/dev/null || true
 gnome-extensions enable ding@rastersoft.com 2>/dev/null || true
 gnome-extensions enable snapd-prompting@canonical.com 2>/dev/null || true
 gnome-extensions enable snapd-search-provider@canonical.com 2>/dev/null || true
-# Reset extension gsettings and remove system-installed schemas
-gsettings reset-recursively org.gnome.shell.extensions.space-bar.behavior 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.space-bar.shortcuts 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.space-bar.appearance 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.space-bar.state 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.just-perfection 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.copyous 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.copyous.file-item:/org/gnome/shell/extensions/copyous/file-item/ 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.copyous.link-item:/org/gnome/shell/extensions/copyous/link-item/ 2>/dev/null || true
-gsettings reset-recursively org.gnome.shell.extensions.emoji-copy 2>/dev/null || true
+# Reset extension settings using each installed extension's schemas.
+reset_extension_schema space-bar@luchrioh org.gnome.shell.extensions.space-bar.behavior
+reset_extension_schema space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts
+reset_extension_schema space-bar@luchrioh org.gnome.shell.extensions.space-bar.appearance
+reset_extension_schema space-bar@luchrioh org.gnome.shell.extensions.space-bar.state
+reset_extension_schema just-perfection-desktop@just-perfection org.gnome.shell.extensions.just-perfection
+reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyous
+reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyous.file-item
+reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyous.link-item
+reset_extension_schema emoji-copy@felipeftn org.gnome.shell.extensions.emoji-copy
 # Restore GNOME keybindings we modified
 gsettings reset org.gnome.shell.keybindings toggle-message-tray 2>/dev/null || true
 gsettings reset org.freedesktop.ibus.panel.emoji hotkey 2>/dev/null || true
-# Clean up system-installed schemas
-sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.space-bar.*.gschema.xml 2>/dev/null || true
-sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml 2>/dev/null || true
-sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.copyous.gschema.xml 2>/dev/null || true
-sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml 2>/dev/null || true
-sudo glib-compile-schemas /usr/share/glib-2.0/schemas/ 2>/dev/null || true
 # Restore workspace keybindings that we cleared for Space Bar
 for i in 1 2 3 4 5 6 7 8 9; do
   gsettings reset org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" 2>/dev/null || true

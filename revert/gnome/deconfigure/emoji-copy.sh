@@ -1,8 +1,8 @@
 #!/bin/bash
 # Revert Emoji Copy extension
-gsettings reset-recursively org.gnome.shell.extensions.emoji-copy 2>/dev/null || true
+DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+SCHEMA_DIR="$DATA_HOME/gnome-shell/extensions/emoji-copy@felipeftn/schemas"
+gsettings --schemadir "$SCHEMA_DIR" reset-recursively org.gnome.shell.extensions.emoji-copy 2>/dev/null || true
 gsettings reset org.freedesktop.ibus.panel.emoji hotkey 2>/dev/null || true
-sudo rm -f /usr/share/glib-2.0/schemas/org.gnome.shell.extensions.emoji-copy.gschema.xml 2>/dev/null || true
-sudo glib-compile-schemas /usr/share/glib-2.0/schemas/ 2>/dev/null || true
 gext uninstall emoji-copy@felipeftn 2>/dev/null || true
 gnome-extensions uninstall emoji-copy@felipeftn 2>/dev/null || true

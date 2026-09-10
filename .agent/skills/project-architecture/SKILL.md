@@ -33,6 +33,8 @@ behavior, or revert coverage.
 - Compile and use each extension's schemas from its own extension
   directory; do not copy user-installed extension schemas into the system
   schema directory.
+- Keep native GNOME shortcuts as a fallback until extension settings are
+  verified and the replacement extension is enabled.
 - Do not let a later directory loop re-run an installer that already ran in an
   earlier phase.
 

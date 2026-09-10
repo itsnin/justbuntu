@@ -34,3 +34,5 @@ Run the smallest relevant checks first. For modified Bash, run `bash -n`; for
 installer-flow changes, test the affected order and failure path. Use a clean
 VM or container for release-level installer changes, not as a mandatory step
 for every local edit.
+- For non-default GSettings schemas, verify both schema resolution and the
+  read-back value before removing a working native fallback.
