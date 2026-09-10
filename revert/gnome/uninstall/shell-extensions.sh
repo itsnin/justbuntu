@@ -1,5 +1,7 @@
 #!/bin/bash
 DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+SYSTEM_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
+removed=false
 
 reset_extension_schema() {
   local extension="$1"
@@ -7,6 +9,18 @@ reset_extension_schema() {
   local schema_dir="$DATA_HOME/gnome-shell/extensions/$extension/schemas"
 
   gsettings --schemadir "$schema_dir" reset-recursively "$schema" 2>/dev/null || true
+}
+
+remove_system_schema() {
+  local schema_file="$1"
+
+  [[ -e "$schema_file" ]] || return 0
+  if [[ -L "$schema_file" ]] || ! command -v dpkg-query >/dev/null 2>&1 || dpkg-query -S "$schema_file" >/dev/null 2>&1; then
+    printf 'warning: refusing to remove non-JustBuntu schema: %s\n' "$schema_file" >&2
+    return 0
+  fi
+  sudo rm -f -- "$schema_file" 2>/dev/null || true
+  removed=true
 }
 
 # Re-enable default Ubuntu extensions
@@ -26,6 +40,16 @@ reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyo
 reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyous.file-item
 reset_extension_schema copyous@boerdereinar.dev org.gnome.shell.extensions.copyous.link-item
 reset_extension_schema emoji-copy@felipeftn org.gnome.shell.extensions.emoji-copy
+for schema_file in \
+  "$SYSTEM_SCHEMA_DIR"/org.gnome.shell.extensions.space-bar.*.gschema.xml \
+  "$SYSTEM_SCHEMA_DIR/org.gnome.shell.extensions.just-perfection.gschema.xml" \
+  "$SYSTEM_SCHEMA_DIR/org.gnome.shell.extensions.copyous.gschema.xml" \
+  "$SYSTEM_SCHEMA_DIR/org.gnome.shell.extensions.emoji-copy.gschema.xml"; do
+  remove_system_schema "$schema_file"
+done
+if [[ "$removed" == true ]]; then
+  sudo glib-compile-schemas "$SYSTEM_SCHEMA_DIR" 2>/dev/null || true
+fi
 # Restore GNOME keybindings we modified
 gsettings reset org.gnome.shell.keybindings toggle-message-tray 2>/dev/null || true
 gsettings reset org.freedesktop.ibus.panel.emoji hotkey 2>/dev/null || true

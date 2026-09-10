@@ -21,7 +21,7 @@ Reviewer must verify against `.agent/skills/code-review-checklist/SKILL.md`. Min
 - [ ] No `sudo` added to commands that do not require it
 - [ ] No `sudo` removed from commands that genuinely need it
 - [ ] Newly provisioned components have corresponding revert scripts
-- [ ] GNOME extension settings use the installed schema directory and preserve a native fallback until verified
+- [ ] GNOME extension schemas are validated, compiled system-wide, and preserve a native fallback until verified
 - [ ] Homebrew-installed tools have `brew uninstall` in their revert scripts
 - [ ] Downloads and `cd` operations are failure-protected (mktemp -d, retries)
 - [ ] `gum confirm` is never standalone (always in `if` or `&&` chain)

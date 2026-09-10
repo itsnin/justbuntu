@@ -7,22 +7,72 @@ fi
 
 DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 EXTENSIONS_DIR="$DATA_HOME/gnome-shell/extensions"
+SYSTEM_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
 
-compile_extension_schemas() {
-  local schema_file schema_dir error
+CONFIGURED_EXTENSIONS=(
+  "space-bar@luchrioh"
+  "just-perfection-desktop@just-perfection"
+  "copyous@boerdereinar.dev"
+  "emoji-copy@felipeftn"
+)
+
+schema_is_package_owned() {
+  local schema_file="$1"
+
+  if ! command -v dpkg-query >/dev/null 2>&1; then
+    return 1
+  fi
+  dpkg-query -S "$schema_file" >/dev/null 2>&1
+}
+
+install_extension_schemas() {
+  local extension schema_dir schema_file target error copied
+  copied=false
 
   if [[ ! -d "$EXTENSIONS_DIR" ]]; then
     printf 'warning: GNOME extension directory is missing: %s\n' "$EXTENSIONS_DIR" >&2
     return 1
   fi
+  if [[ ! -d "$SYSTEM_SCHEMA_DIR" ]]; then
+    printf 'warning: system schema directory is missing: %s\n' "$SYSTEM_SCHEMA_DIR" >&2
+    return 1
+  fi
 
-  for schema_file in "$EXTENSIONS_DIR"/*/schemas/*.gschema.xml; do
-    [[ -f "$schema_file" ]] || continue
-    schema_dir="${schema_file%/*}"
-    if ! error=$(glib-compile-schemas "$schema_dir" 2>&1); then
-      printf 'warning: could not compile schemas in %s: %s\n' "$schema_dir" "$error" >&2
+  for extension in "${CONFIGURED_EXTENSIONS[@]}"; do
+    schema_dir="$EXTENSIONS_DIR/$extension/schemas"
+    if [[ ! -d "$schema_dir" ]]; then
+      printf 'warning: schema directory missing for %s\n' "$extension" >&2
+      continue
     fi
+    if ! error=$(glib-compile-schemas --strict --dry-run "$schema_dir" 2>&1); then
+      printf 'warning: invalid schemas for %s: %s\n' "$extension" "$error" >&2
+      continue
+    fi
+    for schema_file in "$schema_dir"/*.gschema.xml; do
+      [[ -f "$schema_file" ]] || continue
+      target="$SYSTEM_SCHEMA_DIR/$(basename "$schema_file")"
+      if [[ -L "$target" ]]; then
+        printf 'warning: refusing to replace schema symlink: %s\n' "$target" >&2
+        continue
+      fi
+      if [[ -e "$target" ]] && ! cmp -s "$schema_file" "$target"; then
+        if ! command -v dpkg-query >/dev/null 2>&1 || schema_is_package_owned "$target"; then
+          printf 'warning: refusing to replace existing package schema: %s\n' "$target" >&2
+          continue
+        fi
+      fi
+      if ! error=$(sudo install -m 0644 -- "$schema_file" "$target" 2>&1); then
+        printf 'warning: could not install schema %s: %s\n' "$target" "$error" >&2
+        continue
+      fi
+      copied=true
+    done
   done
+
+  if [[ "$copied" == true ]] && ! error=$(sudo glib-compile-schemas "$SYSTEM_SCHEMA_DIR" 2>&1); then
+    printf 'warning: could not compile system schemas: %s\n' "$error" >&2
+    return 1
+  fi
 }
 
 set_global_setting() {
@@ -38,24 +88,19 @@ set_extension_setting() {
   local schema="$2"
   local key="$3"
   local value="$4"
-  local schema_dir="$EXTENSIONS_DIR/$extension/schemas"
   local error actual
 
-  if [[ ! -d "$schema_dir" ]]; then
-    printf 'warning: schema directory missing for %s; skipped %s\n' "$extension" "$key" >&2
+  if ! error=$(gsettings set "$schema" "$key" "$value" 2>&1); then
+    printf 'warning: could not set %s %s %s: %s\n' "$extension" "$schema" "$key" "$error" >&2
     return 1
   fi
-  if ! error=$(gsettings --schemadir "$schema_dir" set "$schema" "$key" "$value" 2>&1); then
-    printf 'warning: could not set %s %s: %s\n' "$schema" "$key" "$error" >&2
-    return 1
-  fi
-  if ! actual=$(gsettings --schemadir "$schema_dir" get "$schema" "$key" 2>&1); then
-    printf 'warning: could not verify %s %s: %s\n' "$schema" "$key" "$actual" >&2
+  if ! actual=$(gsettings get "$schema" "$key" 2>&1); then
+    printf 'warning: could not verify %s %s %s: %s\n' "$extension" "$schema" "$key" "$actual" >&2
     return 1
   fi
   if [[ "$actual" != "$value" && "$actual" != "'$value'" ]]; then
-    printf 'warning: %s %s was not applied; expected %s, got %s\n' \
-      "$schema" "$key" "$value" "$actual" >&2
+    printf 'warning: %s %s %s was not applied; expected %s, got %s\n' \
+      "$extension" "$schema" "$key" "$value" "$actual" >&2
     return 1
   fi
 }
@@ -74,9 +119,9 @@ extension_is_enabled() {
   [[ "$enabled" == *"$quoted"* && "$disabled" != *"$quoted"* ]]
 }
 
-compile_extension_schemas || true
+install_extension_schemas || true
 
-# Space Bar settings use its installed schema directory.
+# Space Bar settings use the compiled system schema directory.
 set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.behavior toggle-overview false || true
 space_bar_workspace_settings_ready=true
 if ! set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts true; then
@@ -100,10 +145,10 @@ else
   printf 'warning: Space Bar workspace settings are not active; keeping native workspace bindings\n' >&2
 fi
 
-# Just Perfection settings use its installed schema directory.
+# Just Perfection settings use the compiled system schema directory.
 set_extension_setting just-perfection-desktop@just-perfection org.gnome.shell.extensions.just-perfection dash false || true
 
-# Copyous settings use its installed schema directory.
+# Copyous settings use the compiled system schema directory.
 set_extension_setting copyous@boerdereinar.dev org.gnome.shell.extensions.copyous show-indicator false || true
 set_extension_setting copyous@boerdereinar.dev org.gnome.shell.extensions.copyous wiggle-indicator false || true
 set_extension_setting copyous@boerdereinar.dev org.gnome.shell.extensions.copyous open-clipboard-dialog-shortcut "['<Super>v']" || true
