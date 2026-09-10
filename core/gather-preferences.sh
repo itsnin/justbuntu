@@ -6,34 +6,34 @@ JUSTBUNTU_SNAPD_CHOICE=$(gum choose "${SNAPD_OPTIONS[@]}" --selected "$DEFAULT_C
 export JUSTBUNTU_SNAPD_CHOICE
 AVAILABLE_LANGUAGES=("Python" "Rust" "Go" "Node.js" "Java" "C/C++ Build Tools" "PostgreSQL")
 SELECTED_LANGUAGES="Python,Rust,Go,Node.js,Java,C/C++ Build Tools,PostgreSQL"
-JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --show-help=false --header "Select development tools (Space: toggle, Enter: confirm)")
+JUSTBUNTU_FIRST_RUN_LANGUAGES=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --show-help=false --header "Space: select/deselect | Enter: confirm | Select development tools")
 export JUSTBUNTU_FIRST_RUN_LANGUAGES
 # Browsers. Cross-desktop — Chrome and Brave work on any DE.
 # Web apps depend on having a Chromium-based browser installed.
 BROWSER_OPTIONS=("Chrome" "Brave Origin")
 DEFAULT_BROWSER="Chrome"
-JUSTBUNTU_FIRST_RUN_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --show-help=false --header "Select browsers to install (Space: toggle, Enter: confirm)")
+JUSTBUNTU_FIRST_RUN_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --show-help=false --header "Space: select/deselect | Enter: confirm | Select browsers")
 export JUSTBUNTU_FIRST_RUN_BROWSERS
 # Optional applications are the installers kept under apps/optional/.
 # Web Apps is a separate optional feature with its own installer.
 AVAILABLE_OPTIONAL=("JetBrains Toolbox" "Slack" "Discord" "GitHub Desktop" "VS Code" "Obsidian" "Element" "Web Apps")
-JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 15 --show-help=false --header "Select optional applications (Space: toggle, Enter: confirm)")
+JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 15 --show-help=false --header "Space: select/deselect | Enter: confirm | Optional applications")
 export JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS
 # If web apps selected, ask which specific ones.
 if [[ "$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS" == *"Web Apps"* ]]; then
   WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit" "WhatsApp")
-  JUSTBUNTU_FIRST_RUN_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --show-help=false --header "Select specific web apps to install (Space: toggle, Enter: confirm)")
+  JUSTBUNTU_FIRST_RUN_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --show-help=false --header "Space: select/deselect | Enter: confirm | Select web apps")
   export JUSTBUNTU_FIRST_RUN_WEB_APPS
 fi
 # AI tools. Cross-desktop — CLIs work anywhere, Claude Desktop just needs X11/Wayland.
 AVAILABLE_AI=("Claude Desktop" "Claude Code CLI" "OpenCode CLI" "Antigravity CLI (Google)" "Codex CLI (OpenAI)")
-JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS=$(gum choose "${AVAILABLE_AI[@]}" --no-limit --height 8 --show-help=false --header "Select AI tools (Space: toggle, Enter: confirm)")
+JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS=$(gum choose "${AVAILABLE_AI[@]}" --no-limit --height 8 --show-help=false --header "Space: select/deselect | Enter: confirm | Select AI tools")
 export JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS
 # GNOME-specific questions only offered when running GNOME
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   # GNOME-specific optional add-ons
   GNOME_OPTIONAL=("Wayland Scroll Factor")
-  JUSTBUNTU_FIRST_RUN_GNOME_EXTRAS=$(gum choose "${GNOME_OPTIONAL[@]}" --no-limit --height 4 --show-help=false --header "Select GNOME-specific add-ons (Space: toggle, Enter: confirm)")
+  JUSTBUNTU_FIRST_RUN_GNOME_EXTRAS=$(gum choose "${GNOME_OPTIONAL[@]}" --no-limit --height 4 --show-help=false --header "Space: select/deselect | Enter: confirm | GNOME add-ons")
   export JUSTBUNTU_FIRST_RUN_GNOME_EXTRAS
   # GNOME extensions. Requires accepting some confirmations during install.
   if gum confirm "Install GNOME extensions? (requires accepting some confirmations during setup)"; then

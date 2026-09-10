@@ -1,33 +1,23 @@
 #!/bin/bash
-# Install wayland-scroll-factor. GNOME/Wayland touchpad scroll speed tuner.
-# Query last 10 releases, skip prereleases, find first amd64 .deb.
-# Uses mktemp -d to avoid /tmp races.
+# Install the Ubuntu/Debian amd64 package for wayland-scroll-factor.
+WSF_VERSION="1.0.0"
+WSF_ASSET="wayland-scroll-factor_1.0.0-1_amd64.deb"
+WSF_SHA256="208994120f93f1ff96536e15cee4f5630d7d2c86e94d4bf4a90e1575b929b8d4"
+WSF_URL="https://github.com/daniel-g-carrasco/wayland-scroll-factor/releases/download/v$WSF_VERSION/$WSF_ASSET"
+
+# Uses mktemp -d to avoid /tmp races and verifies the release before apt sees it.
 (
+  set -euo pipefail
   TMP_DIR=$(mktemp -d)
+  trap 'rm -rf -- "$TMP_DIR"' EXIT
   cd "$TMP_DIR" || exit 1
-  DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/daniel-g-carrasco/wayland-scroll-factor/releases?per_page=10" | python3 -c "
-import json, sys
-releases = json.load(sys.stdin)
-for release in releases:
-    if release.get('prerelease', False):
-        continue
-    for asset in release.get('assets', []):
-        name = asset.get('name', '')
-        if name.endswith('_amd64.deb') or (name.endswith('.deb') and 'amd64' in name.lower()):
-            print(asset.get('browser_download_url', ''))
-            sys.exit(0)
-sys.exit(1)
-" 2>/dev/null)
-  if [ -z "$DEB_URL" ]; then
-    echo "warning: could not find a wayland-scroll-factor .deb release"
-    echo "skipping wayland-scroll-factor installation"
-    rm -rf "$TMP_DIR"
+  if ! curl -fsSL --retry 2 "$WSF_URL" -o "$WSF_ASSET"; then
+    echo "wayland-scroll-factor download failed (continuing)"
     exit 0
   fi
-  if curl -fsSL --retry 2 "$DEB_URL" -o wayland-scroll-factor.deb; then
-    sudo apt-get install -y ./wayland-scroll-factor.deb || echo "wayland-scroll-factor install failed (continuing)"
-  else
-    echo "wayland-scroll-factor download failed (continuing)"
+  if ! printf '%s  %s\n' "$WSF_SHA256" "$WSF_ASSET" | sha256sum --check --status -; then
+    echo "error: wayland-scroll-factor checksum verification failed" >&2
+    exit 1
   fi
-  rm -rf "$TMP_DIR"
+  sudo apt-get install -y "./$WSF_ASSET" || echo "wayland-scroll-factor install failed (continuing)"
 )

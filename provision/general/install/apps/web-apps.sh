@@ -24,7 +24,7 @@ if [[ -n "${JUSTBUNTU_FIRST_RUN_WEB_APPS:-}" ]]; then
   SELECTED_WEB_APPS="$JUSTBUNTU_FIRST_RUN_WEB_APPS"
 else
   WEB_APP_OPTIONS=("ChatGPT" "Google Drive" "Google Photos" "Google Keep" "YouTube" "Facebook" "Messenger" "Instagram" "Reddit" "WhatsApp")
-  SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --show-help=false --header "Select web apps to install (Space: toggle, Enter: confirm; uses $BROWSER)")
+  SELECTED_WEB_APPS=$(gum choose "${WEB_APP_OPTIONS[@]}" --no-limit --height 10 --show-help=false --header "Space: select/deselect | Enter: confirm | Web apps ($BROWSER)")
 fi
 if [[ -z "$SELECTED_WEB_APPS" ]]; then
   return 0

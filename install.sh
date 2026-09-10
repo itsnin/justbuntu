@@ -24,7 +24,7 @@ run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites
 restore_tty
 echo ""
 gum style --bold "==> A few quick choices before we begin"
-echo "    Use arrow keys to navigate, Enter to confirm, Space to toggle."
+echo "    Use arrow keys to navigate, Space to select/deselect, Enter to confirm."
 echo "    The last question will ask about GNOME extensions — you will see"
 echo "    some popup confirmations immediately after if you accept."
 echo ""
