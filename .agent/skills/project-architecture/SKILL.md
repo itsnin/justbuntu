@@ -30,6 +30,9 @@ behavior, or revert coverage.
 - Run the replacement-extension installer once, during the interactive phase.
 - Apply extension schemas, preferences, and conflict resolution only after the
   corresponding extension has been installed.
+- Compile and use each extension's schemas from its own extension
+  directory; do not copy user-installed extension schemas into the system
+  schema directory.
 - Do not let a later directory loop re-run an installer that already ran in an
   earlier phase.
 

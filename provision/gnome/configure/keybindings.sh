@@ -12,6 +12,10 @@ gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']
 # Use 9 fixed workspaces instead of dynamic mode
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.desktop.wm.preferences num-workspaces 9
+# Set native bindings first. Space Bar takes ownership after its schema loads.
+for i in 1 2 3 4 5 6 7 8 9; do
+  gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" "['<Super>$i']"
+done
 # Disable the hotkeys in the Dash to Dock extension. Most likely culprit for conflicts.
 gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
 # Use Alt for pinned apps
@@ -24,9 +28,6 @@ gsettings set org.gnome.shell.keybindings switch-to-application-6 "['<Alt>6']"
 gsettings set org.gnome.shell.keybindings switch-to-application-7 "['<Alt>7']"
 gsettings set org.gnome.shell.keybindings switch-to-application-8 "['<Alt>8']"
 gsettings set org.gnome.shell.keybindings switch-to-application-9 "['<Alt>9']"
-# Super+1..Super+0 workspace switching is handled by the Space Bar extension
-# when installed. 9 fixed workspaces remain reachable via Ctrl+Alt+Arrow or
-# the Activities overview when extensions are not used.
 # Reserve slots for custom keybindings
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']"
 # Free up Super+space for the Spotlight launcher

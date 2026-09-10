@@ -14,8 +14,9 @@ BROWSER_OPTIONS=("Chrome" "Brave Origin")
 DEFAULT_BROWSER="Chrome"
 JUSTBUNTU_FIRST_RUN_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 6 --header "Select browsers to install (multi-select)")
 export JUSTBUNTU_FIRST_RUN_BROWSERS
-# Optional cross-desktop applications. Run regardless of desktop environment.
-AVAILABLE_OPTIONAL=("JetBrains Toolbox" "OBS Studio" "Spotify" "Slack" "Discord" "GitHub Desktop" "VLC" "VS Code" "Obsidian" "LocalSend" "Element" "AppImageLauncher" "Ghostty" "Web Apps")
+# Optional applications are the installers kept under apps/optional/.
+# Web Apps is a separate optional feature with its own installer.
+AVAILABLE_OPTIONAL=("JetBrains Toolbox" "Slack" "Discord" "GitHub Desktop" "VS Code" "Obsidian" "Element" "Web Apps")
 JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 15 --header "Select optional applications")
 export JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS
 # If web apps selected, ask which specific ones.

@@ -53,7 +53,7 @@ else
   "slack") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/slack.sh" ;;
   "discord") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/discord.sh" ;;
   "github-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/optional/github-desktop.sh" ;;
-  "wayland-scroll-factor") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/gnome/install/extensions/wayland-scroll-factor.sh" ;;
+  "wayland-scroll-factor") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/gnome/install/misc/wayland-scroll-factor.sh" ;;
   "claude-desktop") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-desktop.sh" ;;
   "claude-code-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-code-cli.sh" ;;
   "opencode-cli") INSTALLER_FILE="$JUSTBUNTU_PATH/provision/general/install/apps/ai/opencode-cli.sh" ;;
