@@ -1,21 +1,18 @@
 #!/bin/bash
 
-# Keybindings first. Sets base shortcuts (Super+1-9 = workspaces).
-# No user interaction, runs instantly.
+# Run GNOME configuration after the early extension installation phase.
 run_script "$HOME/.local/share/justbuntu/provision/gnome/configure/keybindings.sh"
 
-# GNOME extensions already handled in the parent orchestrator before the
-# unattended phase began (they have interactive popups requiring user attention).
-
-# Run GNOME configuration scripts (keybindings already ran above)
+# Extension-specific settings run here, after their extensions and schemas exist.
 for installer in "$HOME/.local/share/justbuntu/provision/gnome/configure/"*.sh; do
+  [[ "$installer" == *"disable-ubuntu-extensions.sh" ]] && continue
   [[ "$installer" == *"keybindings.sh" ]] && continue
   run_script "$installer"
 done
-# Run GNOME-only software installs (Boxes, Sushi, Tweaks, Wayland scroll factor)
-# shell-extensions.sh lives at parent level (gnome-shell-extensions.sh) and runs
-# in the parent orchestrator before this subshell — interactive popups need user.
+# Extension installation already ran in the parent orchestrator while popups
+# were visible. Skip it here so each extension is installed exactly once.
 for installer in "$HOME/.local/share/justbuntu/provision/gnome/install/"*.sh; do
+  [[ "$installer" == *"gnome-shell-extensions.sh" ]] && continue
   run_script "$installer"
 done
 

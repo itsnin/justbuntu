@@ -35,7 +35,7 @@ Issue templates are provided to guide you through the necessary information.
 ### Before You Start
 
 1. **File or find an issue** — This gives us a chance to provide feedback before you invest time.
-2. **Read the standards** — [AGENTS.md](./AGENTS.md) describes the design philosophy, architecture, code style, and verification discipline. All contributions are expected to follow these guidelines.
+2. **Read the standards** — [AGENTS.md](./AGENTS.md) routes contributors to the project contract and relevant skills under `.agent/skills/`. All contributions are expected to follow these guidelines.
 3. **Fork and clone** the repository.
 
 ### Development Workflow
@@ -81,31 +81,35 @@ flowchart TD
     classDef decision fill:#5c1a1a,stroke:#c95a5a,stroke-width:2px,color:#ffffff
     classDef done fill:#333333,stroke:#777777,stroke-width:2px,color:#ffffff
 
-    A[bootstrap.sh]:::entry --> B[orchestrate.sh]:::core
+    A[bootstrap.sh]:::entry --> B[install.sh]:::core
     B --> C[validate-system.sh]:::core
     C --> D[install/prerequisites/gum.sh]:::core
-    D --> E[install/prerequisites/homebrew.sh]:::core
-    E --> F[gather-preferences.sh<br/>All interactive choices]:::interactive
-    F --> G[sudo -v<br/>Refresh credentials]:::core
-    G --> H[provision/general/configure/snapd.sh]:::core
-    H --> I[purge-kdump.sh]:::core
-    I --> J[core/terminal.sh<br/>apt update + all terminal tools]:::terminal
-    J --> K{GNOME detected?}:::decision
-    K -->|No| L[Done]:::done
-    K -->|Yes| M[gnome-session-inhibit<br/>subshell]:::desktop
-    M --> N[core/desktop.sh]:::desktop
-    N --> O[provision/gnome/configure/keybindings.sh]:::desktop
-    O --> P[provision/gnome/install/shell-extensions.sh<br/>Interactive popups]:::interactive
-    P --> Q[All other desktop scripts<br/>via glob loop]:::desktop
-    Q --> R[Reboot prompt]:::interactive
-    R --> L
+    D --> E[gather-preferences.sh<br/>All interactive choices]:::interactive
+    E --> F{GNOME detected?}:::decision
+    F -->|Yes| G[disable-ubuntu-extensions.sh<br/>before replacement install]:::desktop
+    G --> H[install/gnome-shell-extensions.sh<br/>Interactive popups]:::interactive
+    F -->|No| I[sudo -v<br/>Refresh credentials]:::core
+    H --> I
+    I --> J[Homebrew, apps, and system changes]:::core
+    J --> K[core/terminal.sh<br/>terminal tools]:::terminal
+    K --> L{GNOME detected?}:::decision
+    L -->|No| M[Done]:::done
+    L -->|Yes| N[gnome-session-inhibit<br/>subshell]:::desktop
+    N --> O[core/desktop.sh<br/>keybindings and post-install config]:::desktop
+    O --> P[Remaining GNOME install modules]:::desktop
+    P --> Q[Reboot prompt]:::interactive
+    Q --> M
 ```
 
 ---
 
 ## Desktop Phase Ordering
 
-Keybindings and extensions run in a specific order because extensions may override base shortcuts. Running keybindings first establishes the baseline, then extensions can selectively clear or replace those shortcuts without conflicts.
+GNOME replacement extensions run in a specific order because their interactive
+installation and dependent settings have different requirements. Ubuntu's
+bundled extensions are disabled immediately before replacement installation.
+Base keybindings and extension-specific settings run afterward, once the
+relevant extension files and schemas exist.
 
 ```mermaid
 flowchart LR
@@ -114,8 +118,10 @@ flowchart LR
     classDef step2 fill:#5c3d2e,stroke:#d4a373,stroke-width:2px,color:#ffffff
     classDef step3 fill:#2d5016,stroke:#6aa84f,stroke-width:2px,color:#ffffff
 
-    A[provision/gnome/configure/keybindings.sh<br/>Sets Super+1-9 = workspaces<br/>No user interaction]:::step1 --> B[provision/gnome/install/shell-extensions.sh<br/>Space Bar clears Super+1-9<br/>Interactive popups]:::step2
-    B --> C[All other desktop scripts<br/>Glob loop, alphabetical]:::step3
+    A[provision/gnome/configure/disable-ubuntu-extensions.sh<br/>Disable bundled conflicts]:::step1 --> B[provision/gnome/install/gnome-shell-extensions.sh<br/>Install replacements<br/>Interactive popups]:::step2
+    B --> C[provision/gnome/configure/keybindings.sh<br/>Base shortcuts]:::step3
+    C --> D[provision/gnome/configure/shell-extensions.sh<br/>Extension schemas and settings]:::step3
+    D --> E[Other desktop scripts<br/>Glob loop, alphabetical]:::step3
 ```
 
 ---
