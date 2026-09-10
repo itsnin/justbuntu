@@ -38,33 +38,6 @@ justbuntu
 
 The menu provides options for installing additional components, updating JustBuntu itself, reverting individual components, and accessing the documentation.
 
-## Project Structure
-
-| Path | Purpose |
-|------|---------|
-| `install.sh` | Main entry point — full installation orchestrator |
-| `lib/` | Core infrastructure — logging, error handling |
-| `core/` | Sub-orchestrators, validation, preference gathering |
-| `provision/` | Forward action — install and configure (mirrors `revert/`) |
-| `provision/general/install/` | Software installation scripts |
-| `provision/general/install/prerequisites/` | Gum + Homebrew (mandatory dependencies) |
-| `provision/general/install/terminal/` | Terminal tools, languages, dev libraries |
-| `provision/general/install/apps/` | Cross-desktop applications, browsers, AI tools, web apps |
-| `provision/general/install/apps/ai/` | AI assistant installers |
-| `provision/general/install/apps/optional/` | Third-party .deb downloaders (Slack, Discord, JetBrains, etc.) |
-| `provision/gnome/install/` | GNOME-only software (Boxes, Sushi, Tweaks, extensions) |
-| `provision/general/configure/` | System configuration (no package install) |
-| `provision/gnome/configure/` | GNOME-specific settings (keybindings, dock, app grid, default terminal) |
-| `revert/` | Undo action — uninstall and deconfigure (mirrors `provision/`) |
-| `revert/general/uninstall/` | Package removal (37 scripts) |
-| `revert/general/deconfigure/` | Settings reset (13 scripts) |
-| `bin/` | CLI entry points (`justbuntu` command) |
-| `shell/` | Bash environment configuration |
-| `share/` | Desktop entries, icons |
-| `config/` | Bashrc snippet |
-| `skills/` | Agent skill definitions |
-
-
 ## Contributing
 
 Contributions of all types are welcome — bug fixes, new features, documentation improvements, design proposals. Before starting, please read the [contributor guide](./CONTRIBUTING.md) and the [agent standards](./AGENTS.md) which describe the project's design philosophy, architecture, code style, and verification discipline.

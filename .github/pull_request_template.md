@@ -12,7 +12,7 @@ Briefly describe what this PR changes and why.
 
 ## Review Checklist
 
-Reviewer must verify against `skills/code-review-checklist/SKILL.md`. Minimum requirements:
+Reviewer must verify against `.agent/skills/code-review-checklist/SKILL.md`. Minimum requirements:
 
 - [ ] All shell scripts pass `bash -n` syntax check
 - [ ] ShellCheck passes (or warnings are justified)
