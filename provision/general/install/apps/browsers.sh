@@ -5,7 +5,7 @@ if [[ -n "${JUSTBUNTU_FIRST_RUN_BROWSERS:-}" ]]; then
 else
   BROWSER_OPTIONS=("Chrome" "Brave Origin")
   DEFAULT_BROWSER="Chrome"
-  SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 5 --header "Select browsers to install (multi-select enabled)")
+  SELECTED_BROWSERS=$(gum choose "${BROWSER_OPTIONS[@]}" --no-limit --selected "$DEFAULT_BROWSER" --height 5 --show-help=false --header "Select browsers to install (Space: toggle, Enter: confirm)")
 fi
 
 if [[ -z "$SELECTED_BROWSERS" ]]; then

@@ -12,7 +12,7 @@ gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Shift>F11']
 # Use 9 fixed workspaces instead of dynamic mode
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.desktop.wm.preferences num-workspaces 9
-# Set native bindings first. Space Bar takes ownership after its schema loads.
+# Keep native workspace bindings as a core feature, independent of extensions.
 for i in 1 2 3 4 5 6 7 8 9; do
   gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" "['<Super>$i']"
 done

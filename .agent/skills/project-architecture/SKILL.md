@@ -35,8 +35,9 @@ behavior, or revert coverage.
   `gsettings` after compilation.
 - Revert only schema files that are not package-owned, then recompile the
   system schema directory.
-- Keep native GNOME shortcuts as a fallback until extension settings are
-  verified and the replacement extension is enabled.
+- Keep fixed native GNOME `Super+1` through `Super+9` workspace bindings as a
+  core feature. Extensions may add behavior around them, but must not replace
+  or clear those native bindings.
 - Do not let a later directory loop re-run an installer that already ran in an
   earlier phase.
 

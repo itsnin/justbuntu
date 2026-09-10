@@ -5,7 +5,7 @@ if [[ -v JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS"
 else
   AVAILABLE_OPTIONAL=("JetBrains Toolbox" "Slack" "Discord" "GitHub Desktop" "VS Code" "Obsidian" "Element" "Web Apps")
-  selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 12 --header "Select optional applications")
+  selected=$(gum choose "${AVAILABLE_OPTIONAL[@]}" --no-limit --height 12 --show-help=false --header "Select optional applications (Space: toggle, Enter: confirm)")
 fi
 # Always-installed cross-desktop utilities
 source "$JUSTBUNTU_PATH/provision/general/install/apps/vlc.sh"

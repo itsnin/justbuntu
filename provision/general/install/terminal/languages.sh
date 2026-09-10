@@ -7,7 +7,7 @@ if [ -n "${JUSTBUNTU_FIRST_RUN_LANGUAGES:-}" ]; then
   SELECTED="$JUSTBUNTU_FIRST_RUN_LANGUAGES"
 else
   SELECTED_LANGUAGES="Python,Node.js"
-  SELECTED=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --header "Select development tools")
+  SELECTED=$(gum choose "${AVAILABLE_LANGUAGES[@]}" --no-limit --selected "$SELECTED_LANGUAGES" --height 12 --show-help=false --header "Select development tools (Space: toggle, Enter: confirm)")
 fi
 
 export JUSTBUNTU_FIRST_RUN_LANGUAGES="$SELECTED"

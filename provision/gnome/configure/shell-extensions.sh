@@ -105,45 +105,14 @@ set_extension_setting() {
   fi
 }
 
-extension_is_enabled() {
-  local extension="$1"
-  local enabled disabled quoted
-
-  if ! enabled=$(gsettings get org.gnome.shell enabled-extensions 2>/dev/null); then
-    return 1
-  fi
-  if ! disabled=$(gsettings get org.gnome.shell disabled-extensions 2>/dev/null); then
-    return 1
-  fi
-  quoted="'$extension'"
-  [[ "$enabled" == *"$quoted"* && "$disabled" != *"$quoted"* ]]
-}
-
 install_extension_schemas || true
 
 # Space Bar settings use the compiled system schema directory.
 set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.behavior toggle-overview false || true
-space_bar_workspace_settings_ready=true
-if ! set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts true; then
-  space_bar_workspace_settings_ready=false
-fi
-if ! set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true; then
-  space_bar_workspace_settings_ready=false
-fi
-
-# Space Bar owns these workspace shortcuts when its settings are available.
-for i in 1 2 3 4 5 6 7 8 9; do
-  if ! set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts "activate-$i-key" "['<Super>$i']"; then
-    space_bar_workspace_settings_ready=false
-  fi
-done
-if [[ "$space_bar_workspace_settings_ready" == true ]] && extension_is_enabled space-bar@luchrioh; then
-  for i in 1 2 3 4 5 6 7 8 9; do
-    set_global_setting org.gnome.desktop.wm.keybindings "switch-to-workspace-$i" "@as []"
-  done
-else
-  printf 'warning: Space Bar workspace settings are not active; keeping native workspace bindings\n' >&2
-fi
+# Keep native GNOME workspace bindings as the core feature. Space Bar's own
+# activate-workspace shortcuts would otherwise compete with the same keys.
+set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts enable-activate-workspace-shortcuts false || true
+set_extension_setting space-bar@luchrioh org.gnome.shell.extensions.space-bar.shortcuts enable-move-to-workspace-shortcuts true || true
 
 # Just Perfection settings use the compiled system schema directory.
 set_extension_setting just-perfection-desktop@just-perfection org.gnome.shell.extensions.just-perfection dash false || true
