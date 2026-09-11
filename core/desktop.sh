@@ -21,7 +21,7 @@ done
 # installer output is redirected to the private log stream, but this choice
 # must remain visible and interactive.
 restore_tty
-if gum confirm --default=false --affirmative "Yes" --negative "No" \
+if gum confirm --default=true --affirmative "Yes" --negative "No" \
   "Ready to reboot for all settings to take effect?"; then
   enable_logging
   sudo reboot || true

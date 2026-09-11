@@ -62,7 +62,9 @@ jobs:
           done
           grep -Fq 'sudo -n -v </dev/tty' install.sh ||
             fail 'sudo keepalive is not bound to the controlling terminal'
-          grep -Fq 'gum confirm --default=false --affirmative "Yes" --negative "No"' \
+          grep -Fq 'command sudo -v </dev/tty' install.sh ||
+            fail 'foreground sudo timestamp refresh is missing'
+          grep -Fq 'gum confirm --default=true --affirmative "Yes" --negative "No"' \
             core/desktop.sh || fail 'desktop reboot prompt is not explicit and visible'
           grep -Fq 'JUSTBUNTU_FAILURE_MENU_ACTIVE=true' lib/errors/traps.sh ||
             fail 'failure menu state is not set by the failure handler'

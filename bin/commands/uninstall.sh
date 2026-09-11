@@ -13,7 +13,7 @@ fi
 if [[ "$CHOICE" == "Reset All Components"* ]]; then
   if gum confirm "This will revert all provisioned apps and settings. justbuntu core will remain. Continue?"; then
     gum spin --spinner globe --title "Resetting all components..." -- bash -c "source '$JUSTBUNTU_PATH/revert/all.sh'"
-    if gum confirm --default=false --affirmative "Yes" --negative "No" \
+    if gum confirm --default=true --affirmative "Yes" --negative "No" \
       "Reset complete. Reboot for all changes to take effect?"; then
       sudo reboot || true
     fi

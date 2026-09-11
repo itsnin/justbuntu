@@ -8,7 +8,7 @@ export JUSTBUNTU_FAILURE_MENU_ACTIVE
 # Cache sudo credentials FIRST, before any redirects or logging.
 # Password prompt goes directly to clean terminal, not through tee buffer.
 # User enters password once here; all subsequent sudo commands use cache.
-sudo -v
+command sudo -v
 # Load helpers. Logging keeps a redacted copy in the user's private state
 # directory; errors provides recovery with report and log inspection.
 source "$HOME/.local/share/justbuntu/lib/logging.sh"
@@ -43,6 +43,19 @@ start_sudo_keepalive
 # errors.sh installs exit_handler; stop the keepalive before it displays an
 # error menu or retries the installer.
 trap 'stop_sudo_keepalive; exit_handler' EXIT
+
+# Refresh the credential from the foreground shell before each privileged
+# command. This keeps Brave/Python and other sourced installers in the same
+# sudo timestamp context even when the policy keys timestamps by process.
+sudo() {
+  if [[ -r /dev/tty ]]; then
+    command sudo -v </dev/tty
+  else
+    command sudo -v
+  fi
+  command sudo "$@"
+}
+
 # Begin logging. sudo commands inside use cached credentials from above.
 start_install_log
 # Check the distribution name and version. Abort if incompatible.
