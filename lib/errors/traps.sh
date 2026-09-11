@@ -30,6 +30,8 @@ handle_failure() {
   if ! create_failure_report; then
     log_warn 'event=failure_report_unavailable'
   fi
+  JUSTBUNTU_FAILURE_MENU_ACTIVE=true
+  export JUSTBUNTU_FAILURE_MENU_ACTIVE
   failure_menu || true
   exit "$exit_code"
 }

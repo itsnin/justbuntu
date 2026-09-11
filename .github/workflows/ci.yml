@@ -60,6 +60,14 @@ jobs:
             lib/reporting/github-transport.sh; do
             [[ -f "$required_file" ]] || fail "missing logging module: $required_file"
           done
+          grep -Fq 'sudo -n -v </dev/tty' install.sh ||
+            fail 'sudo keepalive is not bound to the controlling terminal'
+          grep -Fq 'gum confirm --default=false --affirmative "Yes" --negative "No"' \
+            core/desktop.sh || fail 'desktop reboot prompt is not explicit and visible'
+          grep -Fq 'JUSTBUNTU_FAILURE_MENU_ACTIVE=true' lib/errors/traps.sh ||
+            fail 'failure menu state is not set by the failure handler'
+          grep -Fq 'Issue submission is available only after an installation failure.' \
+            lib/errors/ui.sh || fail 'issue submission is not guarded to failure flow'
           grep -Eq 'sudo apt install -y .*curl.*git.*unzip.*gh|sudo apt install -y .*gh.*curl.*git.*unzip' \
             core/terminal.sh || fail 'essential package install does not include gh'
           printf '%s\n' 'Workflow pins and repository invariants passed'

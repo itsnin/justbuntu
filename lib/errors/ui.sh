@@ -69,6 +69,15 @@ retry_installation() {
 prompt_submission_token() {
   local github_token="" status
 
+  if [[ "${JUSTBUNTU_FAILURE_MENU_ACTIVE:-false}" != "true" ]]; then
+    printf 'Issue submission is available only after an installation failure.\n' >&2
+    return 1
+  fi
+  if [[ ! -s "${JUSTBUNTU_LAST_REPORT_FILE:-}" ]]; then
+    printf 'No redacted failure report is available for submission.\n' >&2
+    return 1
+  fi
+
   if ! command -v gum >/dev/null 2>&1; then
     printf 'gum is not installed. The redacted report remains at: %s\n' \
       "$JUSTBUNTU_LAST_REPORT_FILE" >&2
@@ -76,8 +85,8 @@ prompt_submission_token() {
   fi
 
   if ! github_token=$(gum input --password \
-    --prompt 'GitHub credential> ' \
-    --header 'API credential for public issue submission; leave empty to cancel'); then
+    --prompt 'GitHub issue token> ' \
+    --header 'Failure-only issue submission; leave empty to cancel'); then
     printf 'Submission cancelled. The redacted report remains at: %s\n' \
       "$JUSTBUNTU_LAST_REPORT_FILE"
     return 0

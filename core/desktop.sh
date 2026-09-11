@@ -17,5 +17,15 @@ for installer in "$HOME/.local/share/justbuntu/provision/gnome/install/"*.sh; do
   run_script "$installer"
 done
 
-# Logout to pick up changes
-if gum confirm "Ready to reboot for all settings to take effect?"; then sudo reboot || true; fi
+# Return Gum to the real terminal before asking the reboot question. Normal
+# installer output is redirected to the private log stream, but this choice
+# must remain visible and interactive.
+restore_tty
+if gum confirm --default=false --affirmative "Yes" --negative "No" \
+  "Ready to reboot for all settings to take effect?"; then
+  enable_logging
+  sudo reboot || true
+else
+  printf '%s\n' 'Installation finished. Reboot skipped.'
+  enable_logging
+fi

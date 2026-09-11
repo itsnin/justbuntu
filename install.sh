@@ -3,6 +3,8 @@
 # -E preserves ERR traps inside functions. Required for error handling.
 set -eEuo pipefail
 export JUSTBUNTU_PATH="${JUSTBUNTU_PATH:-$HOME/.local/share/justbuntu}"
+JUSTBUNTU_FAILURE_MENU_ACTIVE=false
+export JUSTBUNTU_FAILURE_MENU_ACTIVE
 # Cache sudo credentials FIRST, before any redirects or logging.
 # Password prompt goes directly to clean terminal, not through tee buffer.
 # User enters password once here; all subsequent sudo commands use cache.
@@ -13,9 +15,8 @@ source "$HOME/.local/share/justbuntu/lib/logging.sh"
 source "$HOME/.local/share/justbuntu/lib/errors.sh"
 
 # Keep the cached sudo credential alive during long downloads and package
-# installs without prompting again. The loop exits when the credential expires
-# or when the installer exits; the next privileged command then reports the
-# real authentication failure.
+# installs without prompting again. Refresh from the controlling terminal so
+# sudo uses the same timestamp context as the foreground installer.
 SUDO_KEEPALIVE_PID=""
 start_sudo_keepalive() {
   local parent_pid=$$
@@ -23,8 +24,8 @@ start_sudo_keepalive() {
   (
     trap - ERR EXIT
     while kill -0 "$parent_pid" 2>/dev/null; do
-      sudo -n -v >/dev/null 2>&1 || exit 0
-      sleep 60
+      sudo -n -v </dev/tty >/dev/null 2>&1 || exit 0
+      sleep 30
     done
   ) &
   SUDO_KEEPALIVE_PID=$!

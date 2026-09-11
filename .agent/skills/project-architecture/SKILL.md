@@ -35,10 +35,11 @@ behavior, or revert coverage.
   identifying the failed script.
 - Logs and generated reports belong in the user-owned XDG state directory,
   with private directory/file permissions and redaction before persistence.
-- Issue submission is opt-in and must be automatic after the user supplies a
-  masked credential. Submit directly through the API; do not open a browser or
-  invoke `gh`, and never persist the credential. The API requires a compatible
-  token, so keep a rejected or unsupported credential local and explain why.
+- Issue submission is available only from the failure menu, is opt-in, and
+  must be automatic after the user supplies a masked credential. Submit
+  directly through the API; do not open a browser or invoke `gh`, and never
+  persist the credential. The API requires a compatible token, so keep a
+  rejected or unsupported credential local and explain why.
 - Git identity (`user.name` and `user.email`) is separate from optional Git
   HTTPS credentials. If credentials are requested, collect a Git username and
   password or PAT/token for Git. Use the existing Git configuration module and

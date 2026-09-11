@@ -59,16 +59,16 @@ if [[ -z "$GIT_NAME_DEFAULT" ]]; then
 fi
 JUSTBUNTU_GIT_USER_NAME=$(gum input \
   --placeholder "Enter full name (leave empty to skip)" \
-  --value "$GIT_NAME_DEFAULT" --prompt "Name> " --header "Git identity" || true)
+  --value "$GIT_NAME_DEFAULT" --prompt "Name> " --header "Git identity setup" || true)
 JUSTBUNTU_GIT_USER_EMAIL=$(gum input \
   --placeholder "Enter email address (leave empty to skip)" \
-  --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity" || true)
+  --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity setup" || true)
 JUSTBUNTU_GIT_CREDENTIAL_USERNAME=$(gum input \
   --placeholder "Git username (leave empty to skip)" \
-  --prompt "Git username> " --header "Git HTTPS authentication" || true)
+  --prompt "Git username> " --header "Git HTTPS authentication setup" || true)
 JUSTBUNTU_GIT_CREDENTIAL_SECRET=$(gum input --password \
   --placeholder "Git password or personal access token (leave empty to skip)" \
   --prompt "Git password/token> " \
-  --header "Git HTTPS authentication" || true)
+  --header "Git HTTPS authentication setup" || true)
 export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL \
   JUSTBUNTU_GIT_CREDENTIAL_USERNAME JUSTBUNTU_GIT_CREDENTIAL_SECRET
