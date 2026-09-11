@@ -12,6 +12,37 @@ sudo -v
 # errors provides graceful recovery with retry menu and log inspection.
 source "$HOME/.local/share/justbuntu/lib/logging.sh"
 source "$HOME/.local/share/justbuntu/lib/errors.sh"
+
+# Keep the cached sudo credential alive during long downloads and package
+# installs without prompting again. The loop exits when the credential expires
+# or when the installer exits; the next privileged command then reports the
+# real authentication failure.
+SUDO_KEEPALIVE_PID=""
+start_sudo_keepalive() {
+  local parent_pid=$$
+
+  (
+    trap - ERR EXIT
+    while kill -0 "$parent_pid" 2>/dev/null; do
+      sudo -n -v >/dev/null 2>&1 || exit 0
+      sleep 60
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+}
+
+stop_sudo_keepalive() {
+  if [[ -n "${SUDO_KEEPALIVE_PID:-}" ]]; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    wait "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+    SUDO_KEEPALIVE_PID=""
+  fi
+}
+
+start_sudo_keepalive
+# errors.sh installs exit_handler; stop the keepalive before it displays an
+# error menu or retries the installer.
+trap 'stop_sudo_keepalive; exit_handler' EXIT
 # Begin logging. sudo commands inside use cached credentials from above.
 start_install_log
 # Check the distribution name and version. Abort if incompatible.
@@ -38,10 +69,10 @@ enable_logging
 # BEFORE snapd removal and other unattended system changes.
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   run_script "$HOME/.local/share/justbuntu/provision/gnome/install/gnome-shell-extensions.sh"
+  # Configure schemas immediately after extension installation, before the
+  # unrelated application and desktop phases begin.
+  run_script "$HOME/.local/share/justbuntu/provision/gnome/configure/shell-extensions.sh"
 fi
-# Refresh sudo credentials cache. Extension installation popups may have
-# taken some time, and the long unattended phase follows.
-sudo -v
 # Install Homebrew. Mandatory package manager for terminal tools (lazygit, etc.)
 # and AI tool fallbacks. Installed after extensions so interactive popups happen first.
 run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites/homebrew.sh"
@@ -89,8 +120,6 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
       fi
       source '$HOME/.local/share/justbuntu/lib/logging.sh'
       source '$HOME/.local/share/justbuntu/lib/errors.sh'
-      # Refresh sudo credentials in this subshell context
-      sudo -v
       source '$HOME/.local/share/justbuntu/core/desktop.sh'
     "
 else

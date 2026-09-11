@@ -7,6 +7,7 @@ run_script "$HOME/.local/share/justbuntu/provision/gnome/configure/keybindings.s
 for installer in "$HOME/.local/share/justbuntu/provision/gnome/configure/"*.sh; do
   [[ "$installer" == *"disable-ubuntu-extensions.sh" ]] && continue
   [[ "$installer" == *"keybindings.sh" ]] && continue
+  [[ "$installer" == *"shell-extensions.sh" ]] && continue
   run_script "$installer"
 done
 # Extension installation already ran in the parent orchestrator while popups

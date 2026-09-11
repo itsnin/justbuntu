@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install gum via Charm's official apt repository.
 # This gives us the latest version automatically via apt.
-if ! command -v gum >/dev/null 2>&1 || ! gum version-check '>= 0.17.0' >/dev/null 2>&1; then
+if ! command -v gum >/dev/null 2>&1 || ! gum version-check '>= 2.0.1' >/dev/null 2>&1; then
   echo "==> installing gum..."
   sudo mkdir -p /etc/apt/keyrings
   curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg

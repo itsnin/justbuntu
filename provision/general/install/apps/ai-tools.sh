@@ -5,7 +5,7 @@ if [[ -v JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS ]]; then
   selected="$JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS"
 else
   AI_OPTIONS=("Claude Desktop" "Claude Code CLI" "OpenCode CLI" "Antigravity CLI (Google)" "Codex CLI (OpenAI)")
-  selected=$(gum choose "${AI_OPTIONS[@]}" --no-limit --height 8 --show-help=false --header "Space: select/deselect | Enter: confirm | Select AI tools")
+  selected=$(gum choose "${AI_OPTIONS[@]}" --no-limit --height 8 --header "Space: select/deselect | Enter: confirm | Select AI tools")
 fi
 if [[ "$selected" == *"Claude Desktop"* ]]; then
   source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-desktop.sh"

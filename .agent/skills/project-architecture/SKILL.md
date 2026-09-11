@@ -28,8 +28,9 @@ behavior, or revert coverage.
 - Disable conflicting Ubuntu-provided extensions in a dedicated configuration
   module before installing replacement extensions.
 - Run the replacement-extension installer once, during the interactive phase.
-- Apply extension schemas, preferences, and conflict resolution only after the
-  corresponding extension has been installed.
+- Apply extension schemas, preferences, and conflict resolution immediately
+  after the replacement extensions are installed, before unrelated install or
+  desktop phases begin.
 - Validate schemas from each configured extension, install only those schema
   files into the compiled system schema directory, and use ordinary
   `gsettings` after compilation.
