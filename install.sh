@@ -8,7 +8,12 @@ export JUSTBUNTU_FAILURE_MENU_ACTIVE
 # Cache sudo credentials FIRST, before any redirects or logging.
 # Password prompt goes directly to clean terminal, not through tee buffer.
 # User enters password once here; all subsequent sudo commands use cache.
-command sudo -v
+SUDO_BIN="$(command -v sudo)"
+[[ -n "$SUDO_BIN" ]] || {
+  printf 'error: sudo is required to install JustBuntu\n' >&2
+  exit 1
+}
+"$SUDO_BIN" -v
 # Load helpers. Logging keeps a redacted copy in the user's private state
 # directory; errors provides recovery with report and log inspection.
 source "$HOME/.local/share/justbuntu/lib/logging.sh"
