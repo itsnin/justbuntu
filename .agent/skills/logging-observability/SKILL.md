@@ -24,11 +24,11 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
   network action. A report is stored under the private `justbuntu/reports`
   directory.
 - Public issue submission is an explicit user choice. Only after that choice,
-  request a GitHub personal access token in a masked prompt, keep it in memory
-  for one request, and unset it afterward; the flow must not invoke `gh`, open
-  a browser, collect an account password, or store the token in Git
-  configuration. Do not locally reject a token based on a permission label;
-  submit it to the public repository endpoint and explain GitHub's response.
+  request a GitHub credential in a masked prompt, keep it in memory for one
+  request, and unset it afterward; the flow must not invoke `gh`, open a
+  browser, or store the credential in Git configuration. Do not locally reject
+  a credential based on a permission label; submit it to the public repository
+  endpoint and explain GitHub's response.
   GitHub's formal fine-grained-token documentation lists `Issues: write` for
   creating issues, while public-repository access can have broader behavior.
 - A missing token, missing dependency, cancellation, or failed request must

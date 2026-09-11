@@ -102,8 +102,8 @@ prompt_submission_token() {
   fi
 
   if ! github_token=$(gum input --password \
-    --prompt 'GitHub token> ' \
-    --header 'Personal access token for public issue submission; leave empty to cancel'); then
+    --prompt 'GitHub credential> ' \
+    --header 'API credential for public issue submission; leave empty to cancel'); then
     printf 'Submission cancelled. The redacted report remains at: %s\n' \
       "$JUSTBUNTU_LAST_REPORT_FILE"
     return 0

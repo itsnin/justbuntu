@@ -5,10 +5,16 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
     defaults:
@@ -17,6 +23,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Validate workflow action pins and repository invariants
+        run: |
+          set -euo pipefail
+          fail() {
+            printf 'FAIL: %s\n' "$1" >&2
+            exit 1
+          }
+
+          while IFS= read -r action; do
+            [[ "$action" =~ ^[^@[:space:]]+@[0-9a-f]{40}$ ]] ||
+              fail "workflow action is not pinned to a full commit SHA: $action"
+          done < <(
+            sed -n 's/^[[:space:]]*uses:[[:space:]]*//p' .github/workflows/*.yml |
+              sed 's/[[:space:]]*#.*$//' | sed '/^[[:space:]]*$/d'
+          )
+
+          if find provision/general/install/terminal -type f -iname '*github*' -print -quit |
+             grep -q .; then
+            fail 'GitHub CLI must not have a standalone terminal installer'
+          fi
+          [[ ! -e tests ]] || fail 'tests directory must not be committed'
+          [[ ! -e provision/general/install/terminal/general/github-cli.sh ]] ||
+            fail 'GitHub CLI must be installed with essential packages'
+          grep -Eq 'sudo apt install -y .*curl.*git.*unzip.*gh|sudo apt install -y .*gh.*curl.*git.*unzip' \
+            core/terminal.sh || fail 'essential package install does not include gh'
+          printf '%s\n' 'Workflow pins and repository invariants passed'
 
       - name: Check all shell scripts pass syntax validation
         run: |
@@ -26,8 +61,10 @@ jobs:
 
       - name: Run ShellCheck
         run: |
-          shellcheck --severity=error \
-            $(find . -type f -name '*.sh' -not -path './.git/*' -print)
+          mapfile -d '' shell_files < <(
+            find . -type f -name '*.sh' -not -path './.git/*' -print0
+          )
+          shellcheck --severity=error "${shell_files[@]}"
 
       - name: Run logging and reporting smoke checks
         run: |
@@ -133,6 +170,47 @@ jobs:
           fi
           find "$ERROR_STATE/state/justbuntu/reports" -type f -name 'failure.*.txt' -print -quit |
             grep . >/dev/null || fail 'noninteractive failure did not create a report'
+
+          GIT_CONFIG_GLOBAL="$CHECK_DIR/gitconfig"
+          export GIT_CONFIG_GLOBAL
+          JUSTBUNTU_GIT_USER_NAME='CI User'
+          JUSTBUNTU_GIT_USER_EMAIL='ci@example.invalid'
+          JUSTBUNTU_GIT_CREDENTIAL_USERNAME='ci-user'
+          JUSTBUNTU_GIT_CREDENTIAL_SECRET='ci-token'
+          export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL \
+            JUSTBUNTU_GIT_CREDENTIAL_USERNAME JUSTBUNTU_GIT_CREDENTIAL_SECRET
+          GIT_HELPER_RECORD="$CHECK_DIR/git-credentials"
+          export GIT_HELPER_RECORD
+          GIT_CREDENTIAL_HELPER="$CHECK_DIR/git-credential-helper"
+          cat >"$GIT_CREDENTIAL_HELPER" <<'GIT_HELPER'
+          #!/bin/bash
+          set -euo pipefail
+          case "${1:-}" in
+            get|store)
+              if [[ "$1" == 'store' ]]; then
+                cat >"$GIT_HELPER_RECORD"
+              elif [[ -f "$GIT_HELPER_RECORD" ]]; then
+                cat -- "$GIT_HELPER_RECORD"
+              fi
+              ;;
+            erase)
+              rm -f -- "$GIT_HELPER_RECORD"
+              ;;
+          esac
+          GIT_HELPER
+          chmod 700 -- "$GIT_CREDENTIAL_HELPER"
+          git config --global credential.helper "!$GIT_CREDENTIAL_HELPER"
+          source "$ROOT_DIR/provision/general/configure/git.sh"
+          [[ "$(git config --global user.name)" == 'CI User' ]] ||
+            fail 'Git name was not configured'
+          [[ "$(git config --global user.email)" == 'ci@example.invalid' ]] ||
+            fail 'Git email was not configured'
+          CREDENTIALS=$(printf 'protocol=https\nhost=github.com\n\n' | git credential fill)
+          assert_contains <(printf '%s\n' "$CREDENTIALS") 'username=ci-user'
+          assert_contains <(printf '%s\n' "$CREDENTIALS") 'password=ci-token'
+          printf 'protocol=https\nhost=github.com\n\n' | git credential reject
+          unset JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL \
+            JUSTBUNTU_GIT_CREDENTIAL_USERNAME JUSTBUNTU_GIT_CREDENTIAL_SECRET
           printf '%s\n' 'Logging and reporting smoke checks passed.'
 
       - name: Check patch whitespace

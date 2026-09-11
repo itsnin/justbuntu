@@ -43,8 +43,8 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   fi
 fi
 
-# Collect Git identity after all first-run choices and before terminal
-# provisioning begins. Git identity is separate from GitHub authentication.
+# Collect Git identity and optional Git HTTPS credentials after all first-run
+# choices and before terminal provisioning begins.
 GIT_NAME_DEFAULT=""
 GIT_EMAIL_DEFAULT=""
 if command -v git >/dev/null 2>&1; then
@@ -63,12 +63,12 @@ JUSTBUNTU_GIT_USER_NAME=$(gum input \
 JUSTBUNTU_GIT_USER_EMAIL=$(gum input \
   --placeholder "Enter email address (leave empty to skip)" \
   --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity" || true)
-export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL
-
-# GitHub CLI authentication is separate from Git identity and report
-# submission. The actual login runs after gh is installed in terminal setup.
-if gum confirm "Set up GitHub authentication? (uses GitHub's official login flow; no account password is collected)"; then
-  export JUSTBUNTU_GITHUB_AUTH="true"
-else
-  export JUSTBUNTU_GITHUB_AUTH="false"
-fi
+JUSTBUNTU_GIT_CREDENTIAL_USERNAME=$(gum input \
+  --placeholder "Git username (leave empty to skip)" \
+  --prompt "Git username> " --header "Git HTTPS authentication" || true)
+JUSTBUNTU_GIT_CREDENTIAL_SECRET=$(gum input --password \
+  --placeholder "Git password or personal access token (leave empty to skip)" \
+  --prompt "Git password/token> " \
+  --header "Git HTTPS authentication" || true)
+export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL \
+  JUSTBUNTU_GIT_CREDENTIAL_USERNAME JUSTBUNTU_GIT_CREDENTIAL_SECRET

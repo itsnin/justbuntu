@@ -3,7 +3,7 @@
 # Needed for all installers
 sudo apt update -y
 sudo apt upgrade -y
-sudo apt install -y curl git unzip
+sudo apt install -y curl git unzip gh
 
 # Configure shell profile first. Adds ~/.local/bin to PATH for subsequent installers,
 # and sets up bashrc integration so the environment persists after reboot.
@@ -17,5 +17,5 @@ run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/gene
 run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/curl.sh"
 run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/micro.sh"
 run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/lazygit.sh"
-run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/general/github-cli.sh"
+unset JUSTBUNTU_GIT_CREDENTIAL_USERNAME JUSTBUNTU_GIT_CREDENTIAL_SECRET
 run_script "$HOME/.local/share/justbuntu/provision/general/install/terminal/languages.sh"
