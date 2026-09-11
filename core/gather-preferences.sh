@@ -42,3 +42,34 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
     export JUSTBUNTU_INSTALL_EXTENSIONS="false"
   fi
 fi
+
+# Collect Git identity after all first-run choices and before terminal
+# provisioning begins. GitHub tokens are requested only for an explicit report.
+GIT_NAME_DEFAULT=""
+GIT_EMAIL_DEFAULT=""
+if command -v git >/dev/null 2>&1; then
+  GIT_NAME_DEFAULT=$(git config --global user.name 2>/dev/null || true)
+  GIT_EMAIL_DEFAULT=$(git config --global user.email 2>/dev/null || true)
+fi
+if [[ -z "$GIT_NAME_DEFAULT" ]] && command -v getent >/dev/null 2>&1; then
+  GIT_NAME_DEFAULT=$(getent passwd "${USER:-}" | cut -d ':' -f 5 | cut -d ',' -f 1 || true)
+fi
+if [[ -z "$GIT_NAME_DEFAULT" ]]; then
+  GIT_NAME_DEFAULT="${USER:-$(id -un 2>/dev/null || printf 'user')}"
+fi
+JUSTBUNTU_GIT_USER_NAME=$(gum input \
+  --placeholder "Enter full name (leave empty to skip)" \
+  --value "$GIT_NAME_DEFAULT" --prompt "Name> " --header "Git identity" || true)
+JUSTBUNTU_GIT_USER_EMAIL=$(gum input \
+  --placeholder "Enter email address (leave empty to skip)" \
+  --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity" || true)
+export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL
+
+# An optional token is kept in memory for this run only. It is not exported,
+# written to Git configuration, or requested again from the failure menu.
+JUSTBUNTU_GITHUB_TOKEN=""
+if gum confirm "Allow automatic submission of redacted failure reports to GitHub if needed?"; then
+  JUSTBUNTU_GITHUB_TOKEN=$(gum input --password \
+    --prompt "GitHub token> " \
+    --header "Personal access token, not your GitHub account password" || true)
+fi

@@ -22,6 +22,20 @@ behavior, or revert coverage.
   own location. Never depend on the caller's working directory.
 - Keep sourced modules safe to run more than once where practical.
 
+## Logging and reporting boundaries
+
+- Keep logging and failure-report transport in `lib/`; installer phases only
+  provide context and call the shared helpers.
+- Logs and generated reports belong in the user-owned XDG state directory,
+  with private directory/file permissions and redaction before persistence.
+- Issue submission is opt-in and must be automatic after the user supplies a
+  masked personal access token. Do not open a browser, invoke `gh`, collect an
+  account password, or persist the token. If submission cannot authenticate,
+  keep the redacted report locally.
+- Git identity (`user.name` and `user.email`) is separate from GitHub API
+  authentication. A fallback local username is only an identity default; it
+  is never treated as authorization.
+
 ## GNOME Flow
 
 - Gate GNOME-specific commands behind a GNOME environment check.

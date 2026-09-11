@@ -4,56 +4,35 @@
 
 Standard severity levels: DEBUG, INFO, WARN, ERROR.
 
-## Structured Logging Function
+## Runtime contract
 
-```bash
-LOG_LEVEL="${LOG_LEVEL:-INFO}"
+- Use the shared functions in `lib/logging.sh`; do not create another logger
+  in a provisioning script.
+- Keep the terminal output useful while mirroring a redacted copy to the
+  user-owned state file at `${XDG_STATE_HOME:-$HOME/.local/state}/justbuntu/install.log`.
+- Create the state directory with mode `0700` and the log with mode `0600`.
+- Treat command output as untrusted text. Redact credentials before writing,
+  displaying, or including it in a report.
+- Record phase and script boundaries with `run_script`; failure context should
+  identify the phase, script, command, and exit status without exposing input.
+- Use `mktemp` for failure reports and temporary request material. Temporary
+  credential/request files must be mode `0600` and removed after use.
 
-log() {
-    local level="$1"; shift
-    local message="$*"
-    local timestamp
-    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+## Failure reports and issue submission
 
-    local levels=(DEBUG INFO WARN ERROR)
-    local current_idx=-1 msg_idx=-1
-
-    for i in "${!levels[@]}"; do
-        [[ "${levels[$i]}" == "$LOG_LEVEL" ]] && current_idx=$i
-        [[ "${levels[$i]}" == "$level" ]] && msg_idx=$i
-    done
-
-    [[ $msg_idx -ge $current_idx ]] || return 0
-
-    case "$level" in
-        ERROR) printf '[%s] [%s] %s\n' "$timestamp" "$level" "$message" >&2 ;;
-        *)     printf '[%s] [%s] %s\n' "$timestamp" "$level" "$message" ;;
-    esac
-}
-```
-
-## Log to File and Terminal
-
-```bash
-LOG_FILE="/var/log/installer.log"
-exec > >(tee -a "$LOG_FILE") 2>&1
-```
-
-## Verbosity Control
-
-```bash
-VERBOSE="${VERBOSE:-0}"
-verbose_echo() {
-    [[ "$VERBOSE" -eq 1 ]] && echo "$*"
-}
-```
-
-## Command Output Capture
-
-```bash
-output=$(sudo apt install -y btop 2>&1)
-exit_code=$?
-```
+- `lib/reporting.sh` creates a local redacted report before offering any
+  network action. A report is stored under the private `justbuntu/reports`
+  directory.
+- Public issue submission is an explicit user choice. The optional GitHub
+  personal access token is entered once in a masked setup prompt, kept only in
+  memory for that run, and used by `curl` after the user selects submission;
+  the flow must not invoke `gh`, open a browser, collect an account password,
+  or store the token in Git configuration.
+- A missing token, missing dependency, cancellation, or failed request must
+  leave the report locally and explain the reason. Never offer anonymous or
+  generic-identity submission as if it were authenticated.
+- Do not use the installer’s public issue flow for security vulnerabilities;
+  keep security disclosures on the private channel in `SECURITY.md`.
 
 ## What NOT to Log
 

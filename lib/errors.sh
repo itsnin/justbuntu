@@ -1,8 +1,24 @@
 #!/bin/bash
-# Error handling. Graceful recovery with retry menu and log inspection.
-# Requires set -eE for the ERR trap to propagate into functions.
+# Central failure handling for the installer.
+
+if [[ "${JUSTBUNTU_ERRORS_LOADED:-false}" == "true" ]]; then
+  return 0
+fi
+JUSTBUNTU_ERRORS_LOADED=true
+
+JUSTBUNTU_LIB_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+if ! declare -F log_error >/dev/null 2>&1; then
+  source "$JUSTBUNTU_LIB_DIR/logging.sh"
+fi
+source "$JUSTBUNTU_LIB_DIR/reporting.sh"
+
 ERROR_HANDLING=false
-# Drain pending terminal responses (OSC 11, CPR, etc.) left by gum
+JUSTBUNTU_ERROR_CODE=1
+JUSTBUNTU_ERROR_COMMAND="unknown"
+JUSTBUNTU_ERROR_SOURCE="unknown"
+JUSTBUNTU_ERROR_LINE="unknown"
+JUSTBUNTU_ERROR_FUNCTION="unknown"
+
 drain_terminal() {
   if [[ -t 0 ]]; then
     stty -echo 2>/dev/null || true
@@ -11,101 +27,187 @@ drain_terminal() {
   fi
   stty sane 2>/dev/null || true
 }
-# Clear the banner/logo from screen on error
-clear_logo() {
+
+clear_screen() {
   printf '\033[H\033[2J'
 }
-# Build a stack trace using bash's caller builtin. Shows the call chain
-# with line numbers and function names so users can pinpoint failures.
-_build_stack_trace() {
-  local frame=0
-  local trace=""
-  while caller_output=$(caller $frame 2>/dev/null); do
-    local line func file
-    line=$(echo "$caller_output" | awk '{print $1}')
-    func=$(echo "$caller_output" | awk '{print $2}')
-    file=$(echo "$caller_output" | awk '{print $3}')
-    if [[ "$func" == "main" ]]; then
-      trace="${trace}  at ${file}:${line}\n"
-    else
-      trace="${trace}  in ${func}() at ${file}:${line}\n"
-    fi
-    ((frame++))
+
+build_stack_trace() {
+  local frame=0 caller_output line function_name file
+  while caller_output=$(caller "$frame" 2>/dev/null); do
+    read -r line function_name file <<<"$caller_output"
+    printf '  in %s() at %s:%s\n' \
+      "${function_name:-main}" "${file:-unknown}" "${line:-unknown}"
+    ((frame += 1))
   done
-  echo -e "$trace"
 }
 
-catch_errors() {
-  local exit_code=$?
-  local error_lineno="${BASH_LINENO[0]:-unknown}"
-  # If error was already handled in a child process, suppress double fire
-  # but preserve the genuine failure exit code
-  if [[ -f /tmp/justbuntu-error-handled ]]; then
-    rm -f /tmp/justbuntu-error-handled
-    ERROR_HANDLING=true
-    return
+record_error_context() {
+  JUSTBUNTU_ERROR_CODE="${1:-1}"
+  JUSTBUNTU_ERROR_COMMAND="${2:-unknown}"
+  JUSTBUNTU_ERROR_SOURCE="${3:-unknown}"
+  JUSTBUNTU_ERROR_LINE="${4:-unknown}"
+  JUSTBUNTU_ERROR_FUNCTION="${5:-unknown}"
+  export JUSTBUNTU_ERROR_CODE JUSTBUNTU_ERROR_COMMAND JUSTBUNTU_ERROR_SOURCE \
+    JUSTBUNTU_ERROR_LINE JUSTBUNTU_ERROR_FUNCTION
+}
+
+print_failure_summary() {
+  local summary="JustBuntu installation stopped"
+  if command -v gum >/dev/null 2>&1; then
+    gum style --foreground 1 "$summary"
+  else
+    printf '\n%s\n' "$summary" >&2
   fi
-  if [[ $ERROR_HANDLING == true ]]; then
-    return
+  printf 'Phase: %s | Script: %s | Line: %s | Exit code: %s\n' \
+    "$(redact_sensitive_text "${JUSTBUNTU_PHASE:-unknown}")" \
+    "$(redact_sensitive_text "${CURRENT_SCRIPT:-unknown}")" \
+    "$(redact_sensitive_text "$JUSTBUNTU_ERROR_LINE")" \
+    "$(redact_sensitive_text "$JUSTBUNTU_ERROR_CODE")" >&2
+  printf 'Command: %s\n' "$(redact_sensitive_text "$JUSTBUNTU_ERROR_COMMAND")" >&2
+  printf 'Source: %s\n\n' "$(redact_sensitive_text "$JUSTBUNTU_ERROR_SOURCE")" >&2
+}
+
+show_recent_log() {
+  if [[ -f "${JUSTBUNTU_INSTALL_LOG_FILE:-}" ]]; then
+    if command -v less >/dev/null 2>&1; then
+      less -- "$JUSTBUNTU_INSTALL_LOG_FILE"
+    else
+      tail -n 120 -- "$JUSTBUNTU_INSTALL_LOG_FILE"
+    fi
+  else
+    printf 'The session log is unavailable.\n' >&2
   fi
-  ERROR_HANDLING=true
-  set +eE
-  drain_terminal
-  echo
-  clear_logo
-  gum style --foreground 1 "JustBuntu installation stopped!"
-  if [[ -n ${CURRENT_SCRIPT:-} ]]; then
-    gum style "Script: $CURRENT_SCRIPT  |  Line: $error_lineno  |  Exit code: $exit_code"
+}
+
+retry_installation() {
+  local install_path="${JUSTBUNTU_PATH:-$HOME/.local/share/justbuntu}/install.sh"
+  if declare -F stop_sudo_keepalive >/dev/null 2>&1; then
+    stop_sudo_keepalive
   fi
-  if [[ -n ${BASH_COMMAND:-} ]]; then
-    echo ""
-    echo "Command that failed:"
-    echo "  $BASH_COMMAND"
+  if [[ ! -f "$install_path" ]]; then
+    printf 'error: cannot retry; installer was not found at %s\n' "$install_path" >&2
+    return 1
   fi
-  echo ""
-  echo "Stack trace:"
-  _build_stack_trace
-  echo
-  # Show last lines from the log for quick context
-  if [[ -f ${JUSTBUNTU_INSTALL_LOG_FILE:-} ]]; then
-    echo "Recent log output:"
-    tail -10 "$JUSTBUNTU_INSTALL_LOG_FILE" | sed 's/\x1b\[[0-9;]*m//g' | while IFS= read -r line; do
-      echo "  $line"
-    done
-    echo
+  exec bash -- "$install_path"
+}
+
+send_or_explain_report() {
+  local status
+
+  if [[ -z "${JUSTBUNTU_GITHUB_TOKEN:-}" ]]; then
+    printf 'No GitHub token was provided during setup. The redacted report remains at: %s\n' \
+      "$JUSTBUNTU_LAST_REPORT_FILE"
+    return 0
   fi
-  # Options menu. Loops until user retries or exits
-  while true; do
-    local choice
-    choice=$(gum choose \
-      "Retry installation" \
-      "View full log" \
-      "Exit" \
-      --header "What would you like to do?" --height 6) || choice=""
-    case "$choice" in
-    "Retry installation")
-      printf '\033[H\033[2J'
-      exec bash -c "source $HOME/.local/share/justbuntu/install.sh"
+
+  send_failure_report "$JUSTBUNTU_LAST_REPORT_FILE" "$JUSTBUNTU_GITHUB_TOKEN"
+  status=$?
+  if ((status == 0)); then
+    return 0
+  fi
+  case "$status" in
+    2)
+      printf 'curl is not installed. The redacted report remains at: %s\n' \
+        "$JUSTBUNTU_LAST_REPORT_FILE"
+    ;;
+    3)
+      printf 'No GitHub token was available. The redacted report remains at: %s\n' \
+        "$JUSTBUNTU_LAST_REPORT_FILE"
       ;;
-    "View full log")
-      less "$JUSTBUNTU_INSTALL_LOG_FILE" 2>/dev/null || tail -50 "$JUSTBUNTU_INSTALL_LOG_FILE"
+    4)
+      printf 'GitHub rejected the token or it lacks permission to create issues. The redacted report remains at: %s\n' \
+        "$JUSTBUNTU_LAST_REPORT_FILE" >&2
+      ;;
+    5)
+      printf 'GitHub could not be reached or returned an unexpected response. The redacted report remains at: %s\n' \
+        "$JUSTBUNTU_LAST_REPORT_FILE" >&2
       ;;
     *)
-      # Create sentinel so parent process knows error was already handled
-      touch /tmp/justbuntu-error-handled
-      exit 1
+      printf 'The report was not submitted; it remains at: %s\n' \
+        "$JUSTBUNTU_LAST_REPORT_FILE" >&2
       ;;
+  esac
+  return 0
+}
+
+failure_menu() {
+  local choice
+
+  if ! command -v gum >/dev/null 2>&1 || [[ ! -t 0 && ! -t 3 ]]; then
+    printf 'Run the installer again after reviewing the report if needed.\n' >&2
+    return 1
+  fi
+
+  while true; do
+    choice=$(gum choose \
+      'Retry installation' \
+      'View recent log' \
+      'Submit redacted report to GitHub' \
+      'Exit' \
+      --header 'Choose what to do next' --height 8) || choice='Exit'
+    case "$choice" in
+      'Retry installation')
+        clear_screen
+        retry_installation
+        ;;
+      'View recent log')
+        show_recent_log
+        ;;
+      'Submit redacted report to GitHub')
+        send_or_explain_report
+        ;;
+      *)
+        return 1
+        ;;
     esac
   done
 }
-# Exit handler. Triggers error handling on non-zero exit
+
+handle_failure() {
+  local exit_code="$JUSTBUNTU_ERROR_CODE"
+
+  if [[ "$ERROR_HANDLING" == "true" ]]; then
+    return
+  fi
+  ERROR_HANDLING=true
+  trap - ERR
+  set +eE
+  drain_terminal
+  clear_screen
+  finish_install_log "failed"
+  print_failure_summary
+  printf 'Stack trace:\n'
+  build_stack_trace
+  printf '\n'
+  create_failure_report || true
+  failure_menu || true
+  exit "$exit_code"
+}
+
+error_trap() {
+  local exit_code="$1"
+  record_error_context "$exit_code" "${2:-unknown}" "${3:-unknown}" \
+    "${4:-unknown}" "${5:-unknown}"
+  handle_failure
+}
+
+signal_trap() {
+  record_error_context 130 "installer interrupted by SIG$1" \
+    "${CURRENT_SCRIPT_PATH:-install.sh}" "unknown" "signal_handler"
+  handle_failure
+}
+
 exit_handler() {
   local exit_code=$?
-  if (( exit_code != 0 )) && [[ $ERROR_HANDLING != true ]]; then
-    catch_errors
+  if ((exit_code != 0)) && [[ "$ERROR_HANDLING" != "true" ]]; then
+    record_error_context "$exit_code" "${BASH_COMMAND:-unknown}" \
+      "${BASH_SOURCE[0]:-unknown}" "${BASH_LINENO[0]:-unknown}" "exit_handler"
+    handle_failure
   fi
 }
-# Set up traps
-trap catch_errors ERR
-trap 'exit 130' INT TERM
+
+trap 'error_trap "$?" "${BASH_COMMAND:-unknown}" "${CURRENT_SCRIPT_PATH:-${BASH_SOURCE[0]:-unknown}}" "${BASH_LINENO[0]:-unknown}" "${FUNCNAME[0]:-main}"' ERR
+trap 'signal_trap INT' INT
+trap 'signal_trap TERM' TERM
 trap exit_handler EXIT

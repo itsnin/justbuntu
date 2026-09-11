@@ -4,5 +4,5 @@
 
 If you discover a security vulnerability in JustBuntu, please report it responsibly.
 
-- **Public issues:** Open an issue on the [Issues tab](https://github.com/itsnin/justbuntu/issues) with the label `security`.
+- **Public issues:** Do not use public GitHub issues or the installer's report submission for a vulnerability.
 - **Private disclosure:** Email **ninx.sh@gmail.com** with a description of the vulnerability, steps to reproduce, and potential impact.

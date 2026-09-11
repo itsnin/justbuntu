@@ -18,7 +18,7 @@ Before filing a new issue, please search existing issues to avoid duplicates. If
 When reporting a bug, include:
 - Ubuntu version and architecture
 - Whether you are running GNOME or a different desktop environment
-- Relevant log output from `/var/log/justbuntu-install.log`
+- Relevant redacted log output from `~/.local/state/justbuntu/install.log`
 - Steps to reproduce the problem
 
 Issue templates are provided to guide you through the necessary information.

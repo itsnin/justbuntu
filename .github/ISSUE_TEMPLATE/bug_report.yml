@@ -53,7 +53,7 @@ body:
     id: logs
     attributes:
       label: Relevant log output
-      description: Check /var/log/justbuntu-install.log
+      description: Check ~/.local/state/justbuntu/install.log and remove secrets before pasting
       render: shell
   - type: textarea
     id: expected

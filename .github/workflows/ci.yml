@@ -9,13 +9,32 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Check all shell scripts pass syntax validation
         run: |
-          find . -name "*.sh" -exec bash -n {} \;
+          find . -type f -name '*.sh' -not -path './.git/*' -print0 |
+            xargs -0 -r -n1 bash -n
           echo "All shell scripts pass syntax validation"
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck --severity=error \
+            $(find . -type f -name '*.sh' -not -path './.git/*' -print)
+
+      - name: Run focused installer tests
+        run: bash tests/run.sh
+
+      - name: Check patch whitespace
+        run: git diff --check
+
       - name: Verify critical files retain executable permission
         run: |
           MISSING=""
@@ -56,6 +75,6 @@ jobs:
       - name: Summary
         run: |
           echo "=== CI Summary ==="
-          echo "Shell scripts: $(find . -name "*.sh" | wc -l)"
+          echo "Shell scripts: $(find . -type f -name '*.sh' -not -path './.git/*' | wc -l)"
           echo "Total files: $(find . -type f -not -path './.git/*' | wc -l)"
           echo "All checks passed"

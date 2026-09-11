@@ -20,12 +20,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Download actionlint
         run: |
-          curl -sL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash
-          ./actionlint --version
+          version='1.7.12'
+          archive="actionlint_${version}_linux_amd64.tar.gz"
+          curl --fail --location --silent --show-error \
+            --output "$archive" \
+            "https://github.com/rhysd/actionlint/releases/download/v${version}/${archive}"
+          printf '%s  %s\n' \
+            '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8' \
+            "$archive" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive"
+          ./actionlint -version
 
       - name: Run actionlint
         run: ./actionlint -color
