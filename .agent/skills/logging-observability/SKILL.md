@@ -6,15 +6,35 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
 
 ## Runtime contract
 
-- Use the shared functions in `lib/logging.sh`; do not create another logger
-  in a provisioning script.
+- Use the public facades in `lib/logging.sh`, `lib/errors.sh`, and
+  `lib/reporting.sh`; do not create another logger or failure path in a
+  provisioning script.
+- Keep the implementation split by responsibility:
+  - `lib/logging/core.sh` owns levels, redaction, and the private log file.
+  - `lib/logging/session.sh` owns session metadata, stream redirection, TTY
+    restoration, and finalization.
+  - `lib/logging/execution.sh` owns the `run_script` phase boundary.
+  - `lib/errors/context.sh` owns failure state and best-effort call context.
+  - `lib/errors/ui.sh` owns terminal recovery and user-facing actions.
+  - `lib/errors/traps.sh` owns trap installation and failure orchestration.
+  - `lib/reporting/report-builder.sh` creates local redacted reports.
+  - `lib/reporting/github-transport.sh` is the only optional issue transport.
+- Treat `ERR` and `EXIT` traps as a safety net. Explicit wrappers such as
+  `run_script` must record phase and script boundaries because Bash does not
+  invoke `ERR` for every failure context.
 - Keep the terminal output useful while mirroring a redacted copy to the
   user-owned state file at `${XDG_STATE_HOME:-$HOME/.local/state}/justbuntu/install.log`.
+- The session sink must redact before both terminal display and file
+  persistence; interactive prompts may temporarily restore the original TTY.
+- Keep the sink lifetime explicit: use a private temporary FIFO and owned
+  logger process, retain its writer across TTY restoration, and close/wait it
+  before writing the session completion marker.
 - Create the state directory with mode `0700` and the log with mode `0600`.
 - Treat command output as untrusted text. Redact credentials before writing,
   displaying, or including it in a report.
 - Record phase and script boundaries with `run_script`; failure context should
-  identify the phase, script, command, and exit status without exposing input.
+  identify the error ID, phase, script, command, and exit status without
+  exporting raw command context to child processes.
 - Use `mktemp` for failure reports and temporary request material. Temporary
   credential/request files must be mode `0600` and removed after use.
 

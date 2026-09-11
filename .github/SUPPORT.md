@@ -17,7 +17,8 @@ using `gh` or opening a browser. GitHub's REST documentation lists
 access can accept a token with less permission; the installer lets GitHub
 decide and explains a rejection. A normal account password is not an API
 credential, so GitHub may reject it. If you decline or do not provide a
-credential, the report remains in `~/.local/state/justbuntu/reports/`.
+credential, the report remains in `~/.local/state/justbuntu/reports/`. Include
+the displayed error ID and attach that redacted report when asking for help.
 
 ## Requesting a feature
 

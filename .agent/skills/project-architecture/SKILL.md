@@ -26,6 +26,13 @@ behavior, or revert coverage.
 
 - Keep logging and failure-report transport in `lib/`; installer phases only
   provide context and call the shared helpers.
+- Keep the public library facades stable while placing implementation in
+  focused `logging/`, `errors/`, and `reporting/` modules. Do not merge these
+  responsibilities back into one broad library file.
+- Keep session lifecycle, execution boundaries, error context, terminal
+  recovery, local report creation, and network transport separate. Traps are a
+  last-resort safety net; explicit phase wrappers remain responsible for
+  identifying the failed script.
 - Logs and generated reports belong in the user-owned XDG state directory,
   with private directory/file permissions and redaction before persistence.
 - Issue submission is opt-in and must be automatic after the user supplies a
