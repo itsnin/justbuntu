@@ -64,3 +64,11 @@ JUSTBUNTU_GIT_USER_EMAIL=$(gum input \
   --placeholder "Enter email address (leave empty to skip)" \
   --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity" || true)
 export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL
+
+# GitHub CLI authentication is separate from Git identity and report
+# submission. The actual login runs after gh is installed in terminal setup.
+if gum confirm "Set up GitHub authentication? (uses GitHub's official login flow; no account password is collected)"; then
+  export JUSTBUNTU_GITHUB_AUTH="true"
+else
+  export JUSTBUNTU_GITHUB_AUTH="false"
+fi

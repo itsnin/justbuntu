@@ -103,7 +103,7 @@ prompt_submission_token() {
 
   if ! github_token=$(gum input --password \
     --prompt 'GitHub token> ' \
-    --header 'Personal access token with Issues: write; leave empty to cancel'); then
+    --header 'Personal access token for public issue submission; leave empty to cancel'); then
     printf 'Submission cancelled. The redacted report remains at: %s\n' \
       "$JUSTBUNTU_LAST_REPORT_FILE"
     return 0

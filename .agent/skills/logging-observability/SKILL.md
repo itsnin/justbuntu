@@ -27,8 +27,10 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
   request a GitHub personal access token in a masked prompt, keep it in memory
   for one request, and unset it afterward; the flow must not invoke `gh`, open
   a browser, collect an account password, or store the token in Git
-  configuration. The token needs the repository's `Issues: write` permission
-  for the REST create-issue endpoint.
+  configuration. Do not locally reject a token based on a permission label;
+  submit it to the public repository endpoint and explain GitHub's response.
+  GitHub's formal fine-grained-token documentation lists `Issues: write` for
+  creating issues, while public-repository access can have broader behavior.
 - A missing token, missing dependency, cancellation, or failed request must
   leave the report locally and explain the reason. Never offer anonymous or
   generic-identity submission as if it were authenticated.

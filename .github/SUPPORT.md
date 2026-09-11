@@ -11,8 +11,10 @@ Open a bug report issue using the bug report template. It asks for the informati
 
 When the installer offers to submit a redacted failure report, submission is
 optional. If you choose submission, enter a GitHub personal access token in
-the masked prompt. The token must have `Issues: write` permission for the
-repository; no username, email, account password, browser, or manual issue
+the masked prompt. GitHub's REST documentation lists `Issues: write` for
+fine-grained create-issue tokens, but public-repository access can accept a
+token with less permission; the installer lets GitHub decide and explains a
+rejection. No username, email, account password, browser, or manual issue
 writing is needed. If you decline or do not provide a token, the report
 remains in `~/.local/state/justbuntu/reports/`.
 

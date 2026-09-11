@@ -32,6 +32,10 @@ behavior, or revert coverage.
   masked personal access token. Do not open a browser, invoke `gh`, collect an
   account password, or persist the token. If submission cannot authenticate,
   keep the redacted report locally.
+- Optional GitHub CLI authentication is a separate setup choice. Run it only
+  from the GitHub CLI installer after `gh` is installed, use GitHub's official
+  login flow, and let `gh auth setup-git` configure Git credentials. Never
+  collect a GitHub account password in a prompt.
 - Git identity (`user.name` and `user.email`) is separate from GitHub API
   authentication. A fallback local username is only an identity default; it
   is never treated as authorization.
