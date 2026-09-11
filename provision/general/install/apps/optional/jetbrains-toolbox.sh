@@ -12,10 +12,25 @@ fi
   # Query official JetBrains API for latest version download URL
   TOOLBOX_URL=$(curl -fsSL --retry 2 "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true" | python3 -c "
 import json, sys
-data = json.load(sys.stdin)
-tba = data.get('TBA', [])[0]
-print(tba.get('downloads', {}).get('linux', {}).get('link', ''))
-" 2>/dev/null)
+try:
+    data = json.load(sys.stdin)
+except (json.JSONDecodeError, TypeError):
+    sys.exit(0)
+if not isinstance(data, dict):
+    sys.exit(0)
+releases = data.get('TBA')
+if not isinstance(releases, list) or not releases or not isinstance(releases[0], dict):
+    sys.exit(0)
+downloads = releases[0].get('downloads')
+if not isinstance(downloads, dict):
+    sys.exit(0)
+linux = downloads.get('linux')
+if not isinstance(linux, dict):
+    sys.exit(0)
+link = linux.get('link')
+if isinstance(link, str) and link:
+    print(link)
+" 2>/dev/null) || TOOLBOX_URL=""
 
   if [ -z "$TOOLBOX_URL" ]; then
     echo "warning: could not determine latest jetbrains toolbox download url"

@@ -4,21 +4,37 @@
 # Prefer non-xenial assets. Bionic or plain work on newer Ubuntu.
 DEB_URL=$(curl -fsSL --retry 2 "https://api.github.com/repos/TheAssassin/AppImageLauncher/releases?per_page=10" | python3 -c "
 import json, sys
-releases = json.load(sys.stdin)
+try:
+    releases = json.load(sys.stdin)
+except (json.JSONDecodeError, TypeError):
+    sys.exit(0)
+if not isinstance(releases, list):
+    sys.exit(0)
 for release in releases:
+    if not isinstance(release, dict):
+        continue
     if release.get('prerelease', False):
         continue
     assets = release.get('assets', [])
-    candidates = [a for a in assets if a.get('name', '').endswith('.deb') and 'amd64' in a.get('name', '').lower()]
+    if not isinstance(assets, list):
+        continue
+    candidates = [
+        a for a in assets
+        if isinstance(a, dict)
+        and isinstance(a.get('name'), str)
+        and a['name'].endswith('.deb')
+        and 'amd64' in a['name'].lower()
+    ]
     if not candidates:
         continue
     # Prefer non-xenial (bionic or plain) for newer Ubuntu
-    non_xenial = [a for a in candidates if 'xenial' not in a.get('name', '').lower()]
+    non_xenial = [a for a in candidates if 'xenial' not in a['name'].lower()]
     chosen = non_xenial[0] if non_xenial else candidates[0]
-    print(chosen['browser_download_url'])
-    sys.exit(0)
-sys.exit(1)
-" 2>/dev/null)
+    url = chosen.get('browser_download_url')
+    if isinstance(url, str) and url:
+        print(url)
+        break
+" 2>/dev/null) || DEB_URL=""
 
 if [ -z "$DEB_URL" ]; then
   echo "warning: could not find an appimagelauncher .deb release"

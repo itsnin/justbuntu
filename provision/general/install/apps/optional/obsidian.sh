@@ -2,20 +2,34 @@
 # Obsidian is a multi-platform note taking application. See https://obsidian.md
 # Find the latest release that actually has a .deb asset
 # Some releases are mobile-only and only ship an APK
-RELEASES=$(curl -s "https://api.github.com/repos/obsidianmd/obsidian-releases/releases?per_page=10")
+RELEASES=$(curl -fsSL --retry 2 "https://api.github.com/repos/obsidianmd/obsidian-releases/releases?per_page=10") || RELEASES=""
 DEB_URL=$(echo "$RELEASES" | python3 -c "
 import json, sys
-releases = json.load(sys.stdin)
+try:
+    releases = json.load(sys.stdin)
+except (json.JSONDecodeError, TypeError):
+    sys.exit(0)
+if not isinstance(releases, list):
+    sys.exit(0)
 for release in releases:
+    if not isinstance(release, dict):
+        continue
     if release.get('prerelease', False):
         continue
-    for asset in release.get('assets', []):
+    assets = release.get('assets', [])
+    if not isinstance(assets, list):
+        continue
+    for asset in assets:
+        if not isinstance(asset, dict) or not isinstance(asset.get('name'), str):
+            continue
         name = asset.get('name', '')
         if name.endswith('_amd64.deb'):
-            print(asset['browser_download_url'])
-            sys.exit(0)
-sys.exit(1)
-")
+            url = asset.get('browser_download_url')
+            if isinstance(url, str) and url:
+                print(url)
+                sys.exit(0)
+sys.exit(0)
+") || DEB_URL=""
 
 if [ -z "$DEB_URL" ]; then
   echo "warning: could not find a .deb release for obsidian"
