@@ -23,11 +23,12 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
 - `lib/reporting.sh` creates a local redacted report before offering any
   network action. A report is stored under the private `justbuntu/reports`
   directory.
-- Public issue submission is an explicit user choice. The optional GitHub
-  personal access token is entered once in a masked setup prompt, kept only in
-  memory for that run, and used by `curl` after the user selects submission;
-  the flow must not invoke `gh`, open a browser, collect an account password,
-  or store the token in Git configuration.
+- Public issue submission is an explicit user choice. Only after that choice,
+  request a GitHub personal access token in a masked prompt, keep it in memory
+  for one request, and unset it afterward; the flow must not invoke `gh`, open
+  a browser, collect an account password, or store the token in Git
+  configuration. The token needs the repository's `Issues: write` permission
+  for the REST create-issue endpoint.
 - A missing token, missing dependency, cancellation, or failed request must
   leave the report locally and explain the reason. Never offer anonymous or
   generic-identity submission as if it were authenticated.

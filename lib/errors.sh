@@ -92,25 +92,40 @@ retry_installation() {
   exec bash -- "$install_path"
 }
 
-send_or_explain_report() {
-  local status
+prompt_submission_token() {
+  local github_token="" status
 
-  if [[ -z "${JUSTBUNTU_GITHUB_TOKEN:-}" ]]; then
-    printf 'No GitHub token was provided during setup. The redacted report remains at: %s\n' \
+  if ! command -v gum >/dev/null 2>&1; then
+    printf 'gum is not installed. The redacted report remains at: %s\n' \
+      "$JUSTBUNTU_LAST_REPORT_FILE" >&2
+    return 0
+  fi
+
+  if ! github_token=$(gum input --password \
+    --prompt 'GitHub token> ' \
+    --header 'Personal access token with Issues: write; leave empty to cancel'); then
+    printf 'Submission cancelled. The redacted report remains at: %s\n' \
+      "$JUSTBUNTU_LAST_REPORT_FILE"
+    return 0
+  fi
+  if [[ -z "$github_token" ]]; then
+    printf 'No GitHub token was provided. The redacted report remains at: %s\n' \
       "$JUSTBUNTU_LAST_REPORT_FILE"
     return 0
   fi
 
-  send_failure_report "$JUSTBUNTU_LAST_REPORT_FILE" "$JUSTBUNTU_GITHUB_TOKEN"
+  send_failure_report "$JUSTBUNTU_LAST_REPORT_FILE" "$github_token"
   status=$?
-  if ((status == 0)); then
-    return 0
-  fi
+  unset github_token
+
   case "$status" in
+    0)
+      return 0
+      ;;
     2)
       printf 'curl is not installed. The redacted report remains at: %s\n' \
         "$JUSTBUNTU_LAST_REPORT_FILE"
-    ;;
+      ;;
     3)
       printf 'No GitHub token was available. The redacted report remains at: %s\n' \
         "$JUSTBUNTU_LAST_REPORT_FILE"
@@ -129,6 +144,10 @@ send_or_explain_report() {
       ;;
   esac
   return 0
+}
+
+send_or_explain_report() {
+  prompt_submission_token
 }
 
 failure_menu() {

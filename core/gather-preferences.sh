@@ -44,7 +44,7 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
 fi
 
 # Collect Git identity after all first-run choices and before terminal
-# provisioning begins. GitHub tokens are requested only for an explicit report.
+# provisioning begins. Git identity is separate from GitHub authentication.
 GIT_NAME_DEFAULT=""
 GIT_EMAIL_DEFAULT=""
 if command -v git >/dev/null 2>&1; then
@@ -64,12 +64,3 @@ JUSTBUNTU_GIT_USER_EMAIL=$(gum input \
   --placeholder "Enter email address (leave empty to skip)" \
   --value "$GIT_EMAIL_DEFAULT" --prompt "Email> " --header "Git identity" || true)
 export JUSTBUNTU_GIT_USER_NAME JUSTBUNTU_GIT_USER_EMAIL
-
-# An optional token is kept in memory for this run only. It is not exported,
-# written to Git configuration, or requested again from the failure menu.
-JUSTBUNTU_GITHUB_TOKEN=""
-if gum confirm "Allow automatic submission of redacted failure reports to GitHub if needed?"; then
-  JUSTBUNTU_GITHUB_TOKEN=$(gum input --password \
-    --prompt "GitHub token> " \
-    --header "Personal access token, not your GitHub account password" || true)
-fi
