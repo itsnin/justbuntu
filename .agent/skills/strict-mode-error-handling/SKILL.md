@@ -70,7 +70,7 @@ trap cleanup EXIT ERR INT TERM
 
 ```bash
 # Non-critical operations
-sudo apt autoremove -y 2>/dev/null || true
+sudo apt autoremove -y --purge 2>/dev/null || true
 
 # Conditional paths
 if ! command -v ghostty >/dev/null 2>&1; then

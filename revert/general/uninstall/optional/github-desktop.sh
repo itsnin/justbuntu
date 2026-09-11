@@ -1,3 +1,3 @@
 #!/bin/bash
 # Revert GitHub Desktop
-sudo apt remove -y github-desktop 2>/dev/null || true
+sudo apt purge -y github-desktop 2>/dev/null || true

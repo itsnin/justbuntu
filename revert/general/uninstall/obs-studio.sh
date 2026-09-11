@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo apt remove -y obs-studio
+sudo apt purge -y obs-studio

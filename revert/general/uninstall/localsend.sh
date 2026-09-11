@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo apt remove -y localsend
+sudo apt purge -y localsend

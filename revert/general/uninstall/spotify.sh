@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo apt remove -y spotify-client
+sudo apt purge -y spotify-client

@@ -1,3 +1,3 @@
 #!/bin/bash
 # Revert AppImageLauncher
-sudo apt remove -y appimagelauncher 2>/dev/null || true
+sudo apt purge -y appimagelauncher 2>/dev/null || true

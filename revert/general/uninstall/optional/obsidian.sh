@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo apt remove --purge -y obsidian
+sudo apt purge -y obsidian

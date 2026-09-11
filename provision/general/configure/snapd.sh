@@ -12,7 +12,7 @@ if [[ "$SNAPD_CHOICE" == "Remove snapd"* ]]; then
   # Hold, not just remove. Stops apt upgrade from pulling snapd back via ubuntu-server's recommends.
   echo "==> removing snapd"
   if command -v snap >/dev/null 2>&1 || dpkg -s snapd >/dev/null 2>&1; then
-    sudo apt-get remove -y --purge snapd
+    sudo apt-get purge -y snapd
     sudo apt-mark hold snapd
     echo "successfully removed snaps"
   else
