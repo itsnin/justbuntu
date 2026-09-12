@@ -80,6 +80,12 @@ JustBuntu is a one-command setup script for Ubuntu 26.04 LTS and newer
 desktop releases. It keeps Ubuntu close to stock, makes optional choices
 explicit, and supports GNOME while degrading gracefully for other environments.
 
+All application source is rooted at `src/`. The Rust terminal application and
+the existing Bash command, core, library, provision, revert, configuration,
+migration, and shell trees live there together. `bin/justbuntu` remains the
+stable launcher, and the installed terminal application is also named
+`justbuntu`.
+
 The durable architecture, install/revert boundaries, and GNOME extension phase
 ordering live in
 [`project-architecture`](.agent/skills/project-architecture/SKILL.md).
@@ -104,9 +110,11 @@ directory is the source of truth for the available skills.
 ## Working Rules
 
 - Keep the entry point as wiring; component logic belongs in its module.
+- Keep terminal interaction behind the shared Rust application protocol; do
+  not add a second shell UI or direct UI dependency calls in provisioners.
 - Keep installation, configuration, and revert responsibilities separate.
-- Use Bash only, quote paths, use strict mode, and make changes idempotent where
-  practical.
+- Use Bash for shell modules and Rust for the terminal application; quote shell
+  paths, use strict mode, and make changes idempotent where practical.
 - Explain why in comments, not what the code already says. Avoid LLM-smell
   wording and unrelated cleanup.
 - Inspect all callers and search for the same bug pattern elsewhere before

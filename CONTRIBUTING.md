@@ -83,7 +83,7 @@ flowchart TD
 
     A[bootstrap.sh]:::entry --> B[install.sh]:::core
     B --> C[validate-system.sh]:::core
-    C --> D[install/prerequisites/gum.sh]:::core
+    C --> D[install/prerequisites/runtime.sh]:::core
     D --> E[gather-preferences.sh<br/>All interactive choices]:::interactive
     E --> F{GNOME detected?}:::decision
     F -->|Yes| G[disable-ubuntu-extensions.sh<br/>before replacement install]:::desktop
@@ -91,11 +91,11 @@ flowchart TD
     F -->|No| I[sudo -v<br/>Refresh credentials]:::core
     H --> I
     I --> J[Homebrew, apps, and system changes]:::core
-    J --> K[core/terminal.sh<br/>terminal tools]:::terminal
+    J --> K[src/core/terminal.sh<br/>terminal tools]:::terminal
     K --> L{GNOME detected?}:::decision
     L -->|No| M[Done]:::done
     L -->|Yes| N[gnome-session-inhibit<br/>subshell]:::desktop
-    N --> O[core/desktop.sh<br/>keybindings and post-install config]:::desktop
+    N --> O[src/core/desktop.sh<br/>keybindings and post-install config]:::desktop
     O --> P[Remaining GNOME install modules]:::desktop
     P --> Q[Reboot prompt]:::interactive
     Q --> M
@@ -118,9 +118,9 @@ flowchart LR
     classDef step2 fill:#5c3d2e,stroke:#d4a373,stroke-width:2px,color:#ffffff
     classDef step3 fill:#2d5016,stroke:#6aa84f,stroke-width:2px,color:#ffffff
 
-    A[provision/gnome/configure/disable-ubuntu-extensions.sh<br/>Disable bundled conflicts]:::step1 --> B[provision/gnome/install/gnome-shell-extensions.sh<br/>Install replacements<br/>Interactive popups]:::step2
-    B --> C[provision/gnome/configure/keybindings.sh<br/>Base shortcuts]:::step3
-    C --> D[provision/gnome/configure/shell-extensions.sh<br/>Extension schemas and settings]:::step3
+    A[src/provision/gnome/configure/disable-ubuntu-extensions.sh<br/>Disable bundled conflicts]:::step1 --> B[src/provision/gnome/install/gnome-shell-extensions.sh<br/>Install replacements<br/>Interactive popups]:::step2
+    B --> C[src/provision/gnome/configure/keybindings.sh<br/>Base shortcuts]:::step3
+    C --> D[src/provision/gnome/configure/shell-extensions.sh<br/>Extension schemas and settings]:::step3
     D --> E[Other desktop scripts<br/>Glob loop, alphabetical]:::step3
 ```
 

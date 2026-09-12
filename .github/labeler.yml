@@ -2,34 +2,34 @@ provisioning:
   - changed-files:
       - any-glob-to-any-file:
           - install.sh
-          - core/terminal.sh
-          - core/desktop.sh
-          - lib/**
+          - src/core/terminal.sh
+          - src/core/desktop.sh
+          - src/lib/**
           - bootstrap.sh
 core:
   - changed-files:
       - any-glob-to-any-file:
-          - core/**
+          - src/core/**
 terminal tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/general/install/terminal/**
-          - provision/general/install/prerequisites/**
-          - provision/general/configure/git.sh
-          - provision/general/configure/shell-profile.sh
+          - src/provision/general/install/terminal/**
+          - src/provision/general/install/prerequisites/**
+          - src/provision/general/configure/git.sh
+          - src/provision/general/configure/shell-profile.sh
 desktop tools:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/gnome/configure/**
-          - provision/gnome/install/**
+          - src/provision/gnome/configure/**
+          - src/provision/gnome/install/**
 extensions:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/gnome/install/misc/**
+          - src/provision/gnome/install/misc/**
 apps:
   - changed-files:
       - any-glob-to-any-file:
-          - provision/general/install/apps/**
+          - src/provision/general/install/apps/**
 shared assets:
   - changed-files:
       - any-glob-to-any-file:
@@ -37,8 +37,8 @@ shared assets:
 shell configuration:
   - changed-files:
       - any-glob-to-any-file:
-          - shell/**
-          - config/**
+          - src/shell/**
+          - src/config/**
 cli management:
   - changed-files:
       - any-glob-to-any-file:
@@ -46,7 +46,7 @@ cli management:
 revert:
   - changed-files:
       - any-glob-to-any-file:
-          - revert/**
+          - src/revert/**
 documentation:
   - changed-files:
       - any-glob-to-any-file:

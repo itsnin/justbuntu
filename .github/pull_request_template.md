@@ -24,7 +24,7 @@ Reviewer must verify against `.agent/skills/code-review-checklist/SKILL.md`. Min
 - [ ] GNOME extension schemas are validated, compiled system-wide, and preserve a native fallback until verified
 - [ ] Homebrew-installed tools have `brew uninstall` in their revert scripts
 - [ ] Downloads and `cd` operations are failure-protected (mktemp -d, retries)
-- [ ] `gum confirm` is never standalone (always in `if` or `&&` chain)
+- [ ] Interactive choices use the shared terminal-application protocol
 - [ ] Directory = context, filenames do not repeat action prefixes
 - [ ] Tested on Ubuntu 26.04 LTS (or equivalent)
 

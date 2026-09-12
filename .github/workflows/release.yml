@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Build release binary
+        run: |
+          set -euo pipefail
+          cargo build --release --locked
+          install -m 0755 -- target/release/justbuntu justbuntu
+          sha256sum -- justbuntu > justbuntu.sha256
+
+      - name: Create or reuse GitHub release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+          GH_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          api="https://api.github.com/repos/$GH_REPOSITORY"
+          auth_header="Authorization: Bearer $GH_TOKEN"
+          release=$(curl --fail --silent --show-error --location \
+            --header "$auth_header" \
+            --header 'Accept: application/vnd.github+json' \
+            "$api/releases/tags/$GH_TAG" || true)
+          if [[ -z "$release" || "$(jq -r '.id // empty' <<<"$release")" == "" ]]; then
+            release=$(curl --fail --silent --show-error --location \
+              --request POST \
+              --header "$auth_header" \
+              --header 'Accept: application/vnd.github+json' \
+              --header 'Content-Type: application/json' \
+              --data "$(jq -cn --arg tag "$GH_TAG" '{tag_name:$tag,name:$tag,draft:false,prerelease:false}')" \
+              "$api/releases")
+          fi
+          upload_url=$(jq -r '.upload_url' <<<"$release" | sed 's/{?name,label}$//')
+          [[ "$upload_url" == https://uploads.github.com/* ]] || {
+            echo 'error: GitHub returned an unexpected release upload URL' >&2
+            exit 1
+          }
+          printf 'upload_url=%s\n' "$upload_url" >>"$GITHUB_OUTPUT"
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+          RELEASE_UPLOAD_URL: ${{ steps.release.outputs.upload_url }}
+        run: |
+          set -euo pipefail
+          auth_header="Authorization: Bearer $GH_TOKEN"
+          for asset in justbuntu justbuntu.sha256; do
+            curl --fail --silent --show-error --location \
+              --request POST \
+              --header "$auth_header" \
+              --header 'Accept: application/vnd.github+json' \
+              --header 'Content-Type: application/octet-stream' \
+              --data-binary "@$asset" \
+              "$RELEASE_UPLOAD_URL?name=$asset" >/dev/null
+          done

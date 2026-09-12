@@ -1,0 +1,14 @@
+#!/bin/bash
+source "$JUSTBUNTU_PATH/lib/interactive.sh"
+
+# Install GNOME-specific optional add-ons. Wayland scroll factor uses
+# GNOME/mutter dconf and is not portable to other desktop environments.
+if [[ -v JUSTBUNTU_FIRST_RUN_GNOME_EXTRAS ]]; then
+  selected="$JUSTBUNTU_FIRST_RUN_GNOME_EXTRAS"
+else
+  GNOME_OPTIONAL=("Wayland Scroll Factor")
+  selected=$(justbuntu_select "GNOME add-ons" "" multiple "${GNOME_OPTIONAL[@]}")
+fi
+if [[ "$selected" == *"Wayland Scroll Factor"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/gnome/install/misc/wayland-scroll-factor.sh"
+fi

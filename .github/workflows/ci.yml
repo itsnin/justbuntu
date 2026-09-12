@@ -42,36 +42,36 @@ jobs:
               sed 's/[[:space:]]*#.*$//' | sed '/^[[:space:]]*$/d'
           )
 
-          if find provision/general/install/terminal -type f -iname '*github*' -print -quit |
+          if find src/provision/general/install/terminal -type f -iname '*github*' -print -quit |
              grep -q .; then
             fail 'GitHub CLI must not have a standalone terminal installer'
           fi
           [[ ! -e tests ]] || fail 'tests directory must not be committed'
-          [[ ! -e provision/general/install/terminal/general/github-cli.sh ]] ||
+          [[ ! -e src/provision/general/install/terminal/general/github-cli.sh ]] ||
             fail 'GitHub CLI must be installed with essential packages'
           for required_file in \
-            lib/logging/core.sh \
-            lib/logging/session.sh \
-            lib/logging/execution.sh \
-            lib/errors/context.sh \
-            lib/errors/ui.sh \
-            lib/errors/traps.sh \
-            lib/reporting/report-builder.sh \
-            lib/reporting/github-transport.sh; do
+            src/lib/logging/core.sh \
+            src/lib/logging/session.sh \
+            src/lib/logging/execution.sh \
+            src/lib/errors/context.sh \
+            src/lib/errors/ui.sh \
+            src/lib/errors/traps.sh \
+            src/lib/reporting/report-builder.sh \
+            src/lib/reporting/github-transport.sh; do
             [[ -f "$required_file" ]] || fail "missing logging module: $required_file"
           done
           grep -Fq 'sudo -n -v </dev/tty' install.sh ||
             fail 'sudo keepalive is not bound to the controlling terminal'
           grep -Fq 'command sudo -v </dev/tty' install.sh ||
             fail 'foreground sudo timestamp refresh is missing'
-          grep -Fq 'gum confirm --default=true --affirmative "Yes" --negative "No"' \
-            core/desktop.sh || fail 'desktop reboot prompt is not explicit and visible'
-          grep -Fq 'JUSTBUNTU_FAILURE_MENU_ACTIVE=true' lib/errors/traps.sh ||
+          grep -Fq 'justbuntu_confirm "Ready to reboot for all settings to take effect?" yes' \
+            src/core/desktop.sh || fail 'desktop reboot prompt is not explicit and visible'
+          grep -Fq 'JUSTBUNTU_FAILURE_MENU_ACTIVE=true' src/lib/errors/traps.sh ||
             fail 'failure menu state is not set by the failure handler'
           grep -Fq 'Issue submission is available only after an installation failure.' \
-            lib/errors/ui.sh || fail 'issue submission is not guarded to failure flow'
+            src/lib/errors/ui.sh || fail 'issue submission is not guarded to failure flow'
           grep -Eq 'sudo apt install -y .*curl.*git.*unzip.*gh|sudo apt install -y .*gh.*curl.*git.*unzip' \
-            core/terminal.sh || fail 'essential package install does not include gh'
+            src/core/terminal.sh || fail 'essential package install does not include gh'
           printf '%s\n' 'Workflow pins and repository invariants passed'
 
       - name: Check all shell scripts pass syntax validation
@@ -79,6 +79,13 @@ jobs:
           find . -type f -name '*.sh' -not -path './.git/*' -print0 |
             xargs -0 -r -n1 bash -n
           echo "All shell scripts pass syntax validation"
+
+      - name: Check Rust terminal application
+        run: |
+          cargo fmt --all -- --check
+          cargo check --locked
+          cargo clippy --all-targets --all-features --locked -- -D warnings
+          cargo test --all-targets --locked
 
       - name: Run ShellCheck
         run: |
@@ -114,8 +121,8 @@ jobs:
           export XDG_STATE_HOME="$CHECK_DIR/state"
           export JUSTBUNTU_INSTALL_LOG_FILE="$CHECK_DIR/state/justbuntu/install.log"
           mkdir -p -- "$HOME"
-          source ./lib/logging.sh
-          source ./lib/reporting.sh
+          source ./src/lib/logging.sh
+          source ./src/lib/reporting.sh
 
           start_install_log
           log_info 'token=do-not-write-this password=also-private'
@@ -141,7 +148,7 @@ jobs:
           SINK_OUTPUT="$CHECK_DIR/sink-output"
           HOME="$SINK_HOME" XDG_STATE_HOME="$SINK_STATE" \
             JUSTBUNTU_INSTALL_LOG_FILE="$SINK_LOG" \
-            bash -c 'set -euo pipefail; source ./lib/logging.sh; start_install_log; printf "Authorization: Bearer sink-fixture\\n"; restore_tty; printf "interactive-fixture\\n"; enable_logging; printf "post-interactive-fixture\\n"; finish_install_log completed' \
+            bash -c 'set -euo pipefail; source ./src/lib/logging.sh; start_install_log; printf "Authorization: Bearer sink-fixture\\n"; restore_tty; printf "interactive-fixture\\n"; enable_logging; printf "post-interactive-fixture\\n"; finish_install_log completed' \
             bash >"$SINK_OUTPUT" 2>&1
           assert_not_contains "$SINK_OUTPUT" 'sink-fixture'
           assert_not_contains "$SINK_LOG" 'sink-fixture'
@@ -206,7 +213,7 @@ jobs:
           SOURCE_FAILURE="$CHECK_DIR/source-failure.sh"
           printf '#!/bin/bash\nfalse\n' >"$SOURCE_FAILURE"
           SOURCE_DRIVER="$CHECK_DIR/source-driver.sh"
-          printf "#!/bin/bash\nset -eEuo pipefail\nsource ./lib/logging.sh\nsource ./lib/errors.sh\nrun_script \"\$1\"\n" >"$SOURCE_DRIVER"
+          printf "#!/bin/bash\nset -eEuo pipefail\nsource ./src/lib/logging.sh\nsource ./src/lib/errors.sh\nrun_script \"\$1\"\n" >"$SOURCE_DRIVER"
           SOURCE_ERROR_STATE="$CHECK_DIR/source-error-state"
           mkdir -p -- "$SOURCE_ERROR_STATE/home"
           if HOME="$SOURCE_ERROR_STATE/home" XDG_STATE_HOME="$SOURCE_ERROR_STATE/state" \
@@ -223,7 +230,7 @@ jobs:
           mkdir -p -- "$ERROR_STATE/home"
           if HOME="$ERROR_STATE/home" XDG_STATE_HOME="$ERROR_STATE/state" \
              JUSTBUNTU_INSTALL_LOG_FILE="$ERROR_STATE/state/justbuntu/install.log" \
-             bash -c 'set -eEuo pipefail; source ./lib/logging.sh; source ./lib/errors.sh; false' \
+             bash -c 'set -eEuo pipefail; source ./src/lib/logging.sh; source ./src/lib/errors.sh; false' \
              bash; then
             fail 'noninteractive failure test unexpectedly succeeded'
           fi
@@ -261,7 +268,7 @@ jobs:
           GIT_HELPER
           chmod 700 -- "$GIT_CREDENTIAL_HELPER"
           git config --global credential.helper "!$GIT_CREDENTIAL_HELPER"
-          source ./provision/general/configure/git.sh
+          source ./src/provision/general/configure/git.sh
           [[ "$(git config --global user.name)" == 'CI User' ]] ||
             fail 'Git name was not configured'
           [[ "$(git config --global user.email)" == 'ci@example.invalid' ]] ||

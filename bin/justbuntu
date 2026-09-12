@@ -3,10 +3,14 @@
 # auto-detect justbuntu path if not already set in environment
 # this makes the cli robust when invoked from contexts that may not
 # have the shell profile (e.g., desktop entry via terminal emulator)
+if [[ -z "${JUSTBUNTU_ROOT:-}" ]]; then
+  JUSTBUNTU_ROOT="$(dirname "$(dirname "$(readlink -f "$0")")")"
+  export JUSTBUNTU_ROOT
+fi
 if [[ -z "${JUSTBUNTU_PATH:-}" ]]; then
-  JUSTBUNTU_PATH="$(dirname "$(dirname "$(readlink -f "$0")")")"
+  JUSTBUNTU_PATH="$JUSTBUNTU_ROOT/src"
   export JUSTBUNTU_PATH
 fi
 
-source "$JUSTBUNTU_PATH/bin/commands/header.sh"
-source "$JUSTBUNTU_PATH/bin/commands/menu.sh"
+source "$JUSTBUNTU_PATH/commands/header.sh"
+source "$JUSTBUNTU_PATH/commands/menu.sh"

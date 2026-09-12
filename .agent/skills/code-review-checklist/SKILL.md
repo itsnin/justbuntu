@@ -19,7 +19,7 @@ Every bash script change must pass this review.
 - [ ] **`trap` cleanup** for temp files and resources
 - [ ] **`cd` failures handled** — `cd /path || exit 1` or wrapped in subshell
 - [ ] **Downloads wrapped** in conditionals with graceful fallback
-- [ ] **`gum confirm` in conditionals** — never standalone
+- [ ] **Interactive choices through the shared protocol** — no direct terminal input in shell modules
 - [ ] **`command -v` checks** for required dependencies before use
 - [ ] **Argument validation** — count, format, and allowlist checks
 

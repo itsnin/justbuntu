@@ -1,0 +1,26 @@
+#!/bin/bash
+source "$JUSTBUNTU_PATH/lib/interactive.sh"
+
+# Install AI tools. Cross-desktop — CLIs work on any DE, Claude Desktop
+# needs a graphical environment but not specifically GNOME.
+if [[ -v JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS ]]; then
+  selected="$JUSTBUNTU_FIRST_RUN_AI_ASSISTANTS"
+else
+  AI_OPTIONS=("Claude Desktop" "Claude Code CLI" "OpenCode CLI" "Antigravity CLI (Google)" "Codex CLI (OpenAI)")
+  selected=$(justbuntu_select "Select AI tools" "" multiple "${AI_OPTIONS[@]}")
+fi
+if [[ "$selected" == *"Claude Desktop"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-desktop.sh"
+fi
+if [[ "$selected" == *"Claude Code CLI"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/claude-code-cli.sh"
+fi
+if [[ "$selected" == *"OpenCode CLI"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/opencode-cli.sh"
+fi
+if [[ "$selected" == *"Antigravity CLI"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/antigravity-cli.sh"
+fi
+if [[ "$selected" == *"Codex CLI"* ]]; then
+  source "$JUSTBUNTU_PATH/provision/general/install/apps/ai/codex-cli.sh"
+fi

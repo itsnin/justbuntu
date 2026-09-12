@@ -67,6 +67,8 @@ tmp/
 # misc
 # node_modules (if any javascript tooling is used locally)
 node_modules/
+# rust build output
+target/
 # python (if any local tooling)
 __pycache__/
 *.pyc

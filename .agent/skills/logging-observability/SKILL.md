@@ -6,19 +6,19 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
 
 ## Runtime contract
 
-- Use the public facades in `lib/logging.sh`, `lib/errors.sh`, and
-  `lib/reporting.sh`; do not create another logger or failure path in a
+- Use the public facades in `src/lib/logging.sh`, `src/lib/errors.sh`, and
+  `src/lib/reporting.sh`; do not create another logger or failure path in a
   provisioning script.
 - Keep the implementation split by responsibility:
-  - `lib/logging/core.sh` owns levels, redaction, and the private log file.
-  - `lib/logging/session.sh` owns session metadata, stream redirection, TTY
+  - `src/lib/logging/core.sh` owns levels, redaction, and the private log file.
+  - `src/lib/logging/session.sh` owns session metadata, stream redirection, TTY
     restoration, and finalization.
-  - `lib/logging/execution.sh` owns the `run_script` phase boundary.
-  - `lib/errors/context.sh` owns failure state and best-effort call context.
-  - `lib/errors/ui.sh` owns terminal recovery and user-facing actions.
-  - `lib/errors/traps.sh` owns trap installation and failure orchestration.
-  - `lib/reporting/report-builder.sh` creates local redacted reports.
-  - `lib/reporting/github-transport.sh` is the only optional issue transport.
+  - `src/lib/logging/execution.sh` owns the `run_script` phase boundary.
+  - `src/lib/errors/context.sh` owns failure state and best-effort call context.
+  - `src/lib/errors/ui.sh` owns terminal recovery and user-facing actions.
+  - `src/lib/errors/traps.sh` owns trap installation and failure orchestration.
+  - `src/lib/reporting/report-builder.sh` creates local redacted reports.
+  - `src/lib/reporting/github-transport.sh` is the only optional issue transport.
 - Treat `ERR` and `EXIT` traps as a safety net. Explicit wrappers such as
   `run_script` must record phase and script boundaries because Bash does not
   invoke `ERR` for every failure context.
@@ -40,7 +40,7 @@ Standard severity levels: DEBUG, INFO, WARN, ERROR.
 
 ## Failure reports and issue submission
 
-- `lib/reporting.sh` creates a local redacted report before offering any
+- `src/lib/reporting.sh` creates a local redacted report before offering any
   network action. A report is stored under the private `justbuntu/reports`
   directory.
 - Public issue submission is an explicit user choice. Only after that choice,

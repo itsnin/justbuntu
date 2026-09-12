@@ -2,7 +2,8 @@
 # Exit immediately if a command exits with a non-zero status.
 # -E preserves ERR traps inside functions. Required for error handling.
 set -eEuo pipefail
-export JUSTBUNTU_PATH="${JUSTBUNTU_PATH:-$HOME/.local/share/justbuntu}"
+export JUSTBUNTU_ROOT="${JUSTBUNTU_ROOT:-$HOME/.local/share/justbuntu}"
+export JUSTBUNTU_PATH="${JUSTBUNTU_PATH:-$JUSTBUNTU_ROOT/src}"
 JUSTBUNTU_FAILURE_MENU_ACTIVE=false
 export JUSTBUNTU_FAILURE_MENU_ACTIVE
 # Cache sudo credentials FIRST, before any redirects or logging.
@@ -16,8 +17,9 @@ SUDO_BIN="$(command -v sudo)"
 "$SUDO_BIN" -v
 # Load helpers. Logging keeps a redacted copy in the user's private state
 # directory; errors provides recovery with report and log inspection.
-source "$HOME/.local/share/justbuntu/lib/logging.sh"
-source "$HOME/.local/share/justbuntu/lib/errors.sh"
+source "$JUSTBUNTU_PATH/lib/logging.sh"
+source "$JUSTBUNTU_PATH/lib/errors.sh"
+source "$JUSTBUNTU_PATH/lib/interactive.sh"
 
 # Keep the cached sudo credential alive during long downloads and package
 # installs without prompting again. Refresh from the controlling terminal so
@@ -66,24 +68,24 @@ start_install_log
 # Check the distribution name and version. Abort if incompatible.
 JUSTBUNTU_PHASE="validation"
 export JUSTBUNTU_PHASE
-run_script "$HOME/.local/share/justbuntu/core/validate-system.sh"
-# Install gum first, needed for interactive prompts
+run_script "$JUSTBUNTU_PATH/core/validate-system.sh"
+# Install the prebuilt terminal application before interactive prompts.
 JUSTBUNTU_PHASE="prerequisites"
 export JUSTBUNTU_PHASE
-run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites/gum.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/prerequisites/runtime.sh"
 # ALL INTERACTIVE CHOICES HAPPEN HERE
 # Gather all preferences upfront before any system modifications begin.
-# Restore direct TTY access so gum TUI renders properly (bypasses tee buffer).
+# Restore direct TTY access so the terminal application receives raw keyboard input.
 restore_tty
 echo ""
-gum style --bold "==> A few quick choices before we begin"
+printf '%s\n' '==> A few quick choices before we begin'
 echo "    Use arrow keys to navigate, Space to select/deselect, Enter to confirm."
 echo "    The last question will ask about GNOME extensions — you will see"
 echo "    some popup confirmations immediately after if you accept."
 echo ""
 JUSTBUNTU_PHASE="interactive"
 export JUSTBUNTU_PHASE
-run_script "$HOME/.local/share/justbuntu/core/gather-preferences.sh"
+run_script "$JUSTBUNTU_PATH/core/gather-preferences.sh"
 # Re-enable logging redirect
 enable_logging
 # END OF INTERACTIVE CHOICES
@@ -94,44 +96,44 @@ enable_logging
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   JUSTBUNTU_PHASE="gnome-extensions"
   export JUSTBUNTU_PHASE
-  run_script "$HOME/.local/share/justbuntu/provision/gnome/install/gnome-shell-extensions.sh"
+  run_script "$JUSTBUNTU_PATH/provision/gnome/install/gnome-shell-extensions.sh"
   # Configure schemas immediately after extension installation, before the
   # unrelated application and desktop phases begin.
-  run_script "$HOME/.local/share/justbuntu/provision/gnome/configure/shell-extensions.sh"
+  run_script "$JUSTBUNTU_PATH/provision/gnome/configure/shell-extensions.sh"
 fi
 # Install Homebrew. Mandatory package manager for terminal tools (lazygit, etc.)
 # and AI tool fallbacks. Installed after extensions so interactive popups happen first.
 JUSTBUNTU_PHASE="applications"
 export JUSTBUNTU_PHASE
-run_script "$HOME/.local/share/justbuntu/provision/general/install/prerequisites/homebrew.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/prerequisites/homebrew.sh"
 
 # Cross-desktop applications and AI tools. Run regardless of DE.
 # Slack, Discord, Spotify, JetBrains, etc. do not need GNOME.
 # AI CLIs (Codex, Claude Code, etc.) work in any terminal.
-export JUSTBUNTU_PATH="$HOME/.local/share/justbuntu"
+export JUSTBUNTU_PATH="$JUSTBUNTU_ROOT/src"
 
 # Browsers first. Web apps depend on having a Chromium-based browser.
 echo "Installing browsers..."
-run_script "$HOME/.local/share/justbuntu/provision/general/install/apps/browsers.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/apps/browsers.sh"
 # Ghostty is the default terminal emulator — always installed
-run_script "$HOME/.local/share/justbuntu/provision/general/install/apps/ghostty.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/apps/ghostty.sh"
 echo "Installing cross-desktop applications..."
-run_script "$HOME/.local/share/justbuntu/provision/general/install/apps/apps.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/apps/apps.sh"
 echo "Installing AI tools..."
-run_script "$HOME/.local/share/justbuntu/provision/general/install/apps/ai-tools.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/install/apps/ai-tools.sh"
 # Web apps. Need browser installed first; creates .desktop entries.
 if [[ "$JUSTBUNTU_FIRST_RUN_OPTIONAL_APPS" == *"Web Apps"* ]]; then
   echo "Installing web apps..."
-  run_script "$HOME/.local/share/justbuntu/provision/general/install/apps/web-apps.sh"
+  run_script "$JUSTBUNTU_PATH/provision/general/install/apps/web-apps.sh"
 fi
 # Now apply unattended system changes based on gathered preferences
-run_script "$HOME/.local/share/justbuntu/provision/general/configure/snapd.sh"
-run_script "$HOME/.local/share/justbuntu/provision/general/configure/kdump.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/configure/snapd.sh"
+run_script "$JUSTBUNTU_PATH/provision/general/configure/kdump.sh"
 # Install terminal tools (always)
 echo "Installing terminal tools..."
 JUSTBUNTU_PHASE="terminal"
 export JUSTBUNTU_PHASE
-run_script "$HOME/.local/share/justbuntu/core/terminal.sh"
+run_script "$JUSTBUNTU_PATH/core/terminal.sh"
 # Desktop software and tweaks will only be installed if we're running GNOME
 if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
   echo "Installing desktop tools and tweaks..."
@@ -150,9 +152,9 @@ if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]]; then
       elif [ -x \"\$HOME/.linuxbrew/bin/brew\" ]; then
         eval \"\$( \"\$HOME/.linuxbrew/bin/brew\" shellenv bash)\"
       fi
-      source '$HOME/.local/share/justbuntu/lib/logging.sh'
+      source '$JUSTBUNTU_PATH/lib/logging.sh'
       # The parent installer owns failure reporting for this child process.
-      source '$HOME/.local/share/justbuntu/core/desktop.sh'
+      source '$JUSTBUNTU_PATH/core/desktop.sh'
     "
 else
   echo "GNOME not detected. Skipping desktop-specific tools and tweaks."

@@ -11,20 +11,37 @@ behavior, or revert coverage.
 - Keep setup changes understandable from the responsible module.
 - Prefer small, single-purpose modules over broad orchestration files.
 
-## Module Boundaries
+## Source Layout and Module Boundaries
+
+- Keep all application source under the root `src/` directory. Rust terminal
+  modules live beside the existing Bash source trees; do not create a second
+  Rust-only source root.
+- Keep `bin/justbuntu` as the stable shell launcher. The Cargo package and
+  compiled terminal application are both named `justbuntu`; the installed
+  binary lives in the private runtime directory and is invoked through the
+  shared interactive facade.
+- Keep `src/commands/`, `src/core/`, `src/lib/`, `src/provision/`,
+  `src/revert/`, `src/config/`, `src/migrate/`, and `src/shell/` aligned with
+  their existing responsibilities. Do not put shell commands under
+  `src/bin/`, which Cargo reserves for additional Rust binaries.
+- Users must not need Rust installed. Development and CI may build the Rust
+  application, while installation consumes a release binary verified against
+  its published SHA-256 checksum.
 
 - Keep `install.sh` as wiring for validation, preferences, logging, and phases.
-- Keep shared infrastructure in `lib/` and orchestration in `core/`.
+- Keep shared infrastructure in `src/lib/` and orchestration in `src/core/`.
 - Keep software installation separate from system configuration under
-  `provision/`.
-- Keep cleanup and settings restoration under `revert/`.
+  `src/provision/`.
+- Keep cleanup and settings restoration under `src/revert/`.
+- Keep shell interaction behind `src/lib/interactive.sh`; shell modules must
+  not call a terminal UI dependency directly.
 - Resolve paths from the project root, home directory, or the sourced file's
   own location. Never depend on the caller's working directory.
 - Keep sourced modules safe to run more than once where practical.
 
 ## Logging and reporting boundaries
 
-- Keep logging and failure-report transport in `lib/`; installer phases only
+- Keep logging and failure-report transport in `src/lib/`; installer phases only
   provide context and call the shared helpers.
 - Keep the public library facades stable while placing implementation in
   focused `logging/`, `errors/`, and `reporting/` modules. Do not merge these
