@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - '20*.*.*'
 
 permissions:
   contents: write
@@ -22,8 +22,19 @@ jobs:
           persist-credentials: false
 
       - name: Build release binary
+        env:
+          GH_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          version="$(<version)"
+          [[ "$GH_TAG" =~ ^[0-9]{4}\.(0[1-9]|1[0-2])\.0*[1-9][0-9]*$ ]] || {
+            echo "error: tag is not a calendar release identifier: $GH_TAG" >&2
+            exit 1
+          }
+          [[ "$GH_TAG" == "$version" ]] || {
+            echo "error: tag $GH_TAG does not match version file $version" >&2
+            exit 1
+          }
           cargo build --release --locked
           install -m 0755 -- target/release/justbuntu justbuntu
           sha256sum -- justbuntu > justbuntu.sha256
@@ -48,8 +59,17 @@ jobs:
               --header "$auth_header" \
               --header 'Accept: application/vnd.github+json' \
               --header 'Content-Type: application/json' \
-              --data "$(jq -cn --arg tag "$GH_TAG" '{tag_name:$tag,name:$tag,draft:false,prerelease:false}')" \
+              --data "$(jq -cn --arg tag "$GH_TAG" '{tag_name:$tag,name:$tag,draft:false,prerelease:false,generate_notes:true}')" \
               "$api/releases")
+          elif [[ "$(jq -r '.draft // false' <<<"$release")" == 'true' ]]; then
+            release_id="$(jq -r '.id' <<<"$release")"
+            release=$(curl --fail --silent --show-error --location \
+              --request PATCH \
+              --header "$auth_header" \
+              --header 'Accept: application/vnd.github+json' \
+              --header 'Content-Type: application/json' \
+              --data '{"draft":false}' \
+              "$api/releases/$release_id")
           fi
           upload_url=$(jq -r '.upload_url' <<<"$release" | sed 's/{?name,label}$//')
           [[ "$upload_url" == https://uploads.github.com/* ]] || {

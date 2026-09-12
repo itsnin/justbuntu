@@ -100,6 +100,8 @@ Read these first for every non-trivial change:
   what belongs in agent guidance and what must stay out of it.
 - [`verification-discipline`](.agent/skills/verification-discipline/SKILL.md)
   for evidence, scope, testing, and reporting claims.
+- [`release-versioning`](.agent/skills/release-versioning/SKILL.md) for
+  calendar release identifiers, patch sequencing, and tag/release workflow.
 
 Then read the focused skill for the code being changed: shell style, strict
 mode, defensive programming, security, quoting, functions, control flow,

@@ -303,7 +303,12 @@ jobs:
             echo "ERROR: version file is missing or empty"
             exit 1
           fi
-          echo "Version: $(cat version)"
+          version="$(<version)"
+          if [[ ! "$version" =~ ^[0-9]{4}\.(0[1-9]|1[0-2])\.0*[1-9][0-9]*$ ]]; then
+            echo "ERROR: version must use YYYY.MM.PATCH with a valid month and positive patch"
+            exit 1
+          fi
+          echo "Version: $version"
 
       - name: Check README has MIT license link
         run: |
